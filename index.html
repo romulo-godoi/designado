@@ -10,106 +10,197 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
-            --midnight-bg: #0d0d10; --midnight-surface: #1c1c21; --midnight-surface-lighter: #25252b;
-            --midnight-border: #333338; --completed-item-bg: #101012;
-            --midnight-text-primary: #eaeaf0; --midnight-text-secondary: #90909c;
-            --midnight-accent-primary: #8a9ff9; --midnight-accent-secondary: #5c6db5; --midnight-accent-alt: #f2c079;
+            --border-radius-outer: 12px; --border-radius-inner: 10px; --font-family: 'Inter', sans-serif;
+            --transition-speed-fast: 0.2s; --transition-speed-med: 0.3s; --transition-speed-slow: 0.5s;
             --error-color: #e680a7; --success-color: #74c7a3;
             --list-color-1: #2f588f; --list-color-2: #457c7c; --list-color-3: #7d5c9e;
             --list-color-4: #82a05e; --list-color-5: #bc906d;
-            --border-radius-outer: 12px; --border-radius-inner: 10px; --font-family: 'Inter', sans-serif;
-            --transition-speed-fast: 0.2s; --transition-speed-med: 0.3s; --transition-speed-slow: 0.5s;
+        }
+        [data-theme="dark"] {
+            --page-bg: #030304;
+            --container-bg: #0d0d10; --surface-bg: #1c1c21; --surface-lighter-bg: #25252b;
+            --border-color: #333338; --completed-item-bg: #101012;
+            --text-primary: #eaeaf0; --text-secondary: #90909c; --text-tertiary: #767683;
+            --accent-primary: #8a9ff9; --accent-secondary: #5c6db5; --accent-alt: #f2c079;
+            --input-bg: var(--container-bg); --input-border: var(--border-color);
+            --modal-backdrop: rgba(10,10,15,0.8); --modal-shadow: rgba(0,0,0,0.5);
+            --button-primary-text: #fff; --button-secondary-text: #111;
+            --shadow-color-soft: rgba(0,0,0,0.3); --shadow-color-medium: rgba(0,0,0,0.4);
+            --shadow-color-focus: rgba(122,145,232,0.2);
+            --header-gradient-start: var(--surface-bg); --header-gradient-end: var(--container-bg);
+            --scrollbar-thumb: var(--accent-secondary); --scrollbar-track: transparent;
+            --filter-invert-indicator: 0.7;
+        }
+        [data-theme="light"] {
+            --page-bg: #f4f4f8;
+            --container-bg: #ffffff; --surface-bg: #fdfdff; --surface-lighter-bg: #f0f0f5;
+            --border-color: #d5d5e0; --completed-item-bg: #e8e8ee;
+            --text-primary: #1f1f2f; --text-secondary: #5a5a6e; --text-tertiary: #78788d;
+            --accent-primary: #4a65d1; --accent-secondary: #718bf0; --accent-alt: #d18f34;
+            --input-bg: #ffffff; --input-border: var(--border-color);
+            --modal-backdrop: rgba(50,50,70,0.6); --modal-shadow: rgba(80,80,100,0.25);
+            --button-primary-text: #ffffff; --button-secondary-text: #1f1f2f;
+            --shadow-color-soft: rgba(50,50,70,0.15); --shadow-color-medium: rgba(50,50,70,0.2);
+            --shadow-color-focus: rgba(74,101,209,0.2);
+            --header-gradient-start: #ffffff; --header-gradient-end: #f8f8fc;
+            --scrollbar-thumb: #b0b0c0; --scrollbar-track: #f0f0f0;
+            --filter-invert-indicator: 0;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; } html { scroll-behavior: smooth; height: 100%; }
-        body { font-family:var(--font-family); background-color: #030304; color:var(--midnight-text-primary); min-height:100vh; -webkit-tap-highlight-color:transparent; position: relative; overflow-x: hidden; }
-        .mobile-view-container { background-color:var(--midnight-bg); width: 100%; height: 100vh; display:flex; flex-direction:column; overflow:hidden; z-index: 1; position: relative; }
-        header.main-header { background: linear-gradient(180deg, var(--midnight-surface), var(--midnight-bg)); padding:18px 20px; border-bottom:1px solid var(--midnight-border); flex-shrink:0; text-align:center; z-index: 10;}
-        header.main-header h1 { color:var(--midnight-accent-primary); font-size: 1.4em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
-        .content-scroll { flex-grow:1; overflow-y:auto; scrollbar-width: thin; scrollbar-color: var(--midnight-accent-secondary) transparent; } .content-scroll::-webkit-scrollbar { width: 8px; } .content-scroll::-webkit-scrollbar-track { background: transparent; } .content-scroll::-webkit-scrollbar-thumb { background-color: var(--midnight-accent-secondary); border-radius: 4px; border: 2px solid var(--midnight-bg); }
-        .dashboard-section, .collapsible-section { border-bottom: 1px solid var(--midnight-border); } .dashboard-section { padding: 20px; background-color: var(--midnight-surface); position: relative; /* Needed for tooltip positioning context */ }
-        .section-header h2, .dashboard-section > h3 { font-size: 0.8em; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; color: var(--midnight-text-secondary); margin: 15px 0 8px 0; padding-bottom: 5px; border-bottom: 1px solid var(--midnight-border); } .section-header h2 { color: var(--midnight-accent-primary); margin: 0; padding: 0; border-bottom: none; flex-grow: 1; font-weight: 600; letter-spacing: 1px; }
-        #weeklyCalendarContainer > h3 { text-align: center; color: var(--midnight-accent-alt); border-bottom: none; margin-bottom: 8px; font-weight: 600; letter-spacing: 1px;}
-        .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } .calendar-nav button { background: none; border: 1px solid var(--midnight-border); color: var(--midnight-text-secondary); padding: 4px 10px; border-radius: var(--border-radius-inner); font-size: 0.8em; cursor: pointer; transition: all var(--transition-speed-fast); } .calendar-nav button:hover { background-color: var(--midnight-accent-primary); color: #fff; border-color: var(--midnight-accent-primary); transform: translateY(-1px); } .calendar-nav button:active { transform: scale(0.97); } #calendarWeekLabel { font-size: 1em; font-weight: 600; color: var(--midnight-accent-alt); flex-grow: 1; text-align: center; }
-        #upcomingListContainer > h3 { color: var(--midnight-text-secondary); }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; } .day-header{font-size:0.7em;text-align:center;color:var(--midnight-text-secondary);padding-bottom:5px;font-weight:500;text-transform:uppercase;border-bottom:1px solid var(--midnight-border);margin-bottom:5px;} .day-cell{font-size:0.8em;text-align:center;background-color:var(--midnight-bg);border-radius:var(--border-radius-inner);padding:8px 4px;min-height:65px;display:flex;flex-direction:column;align-items:center;border:1px solid transparent; transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast); position: relative; /* Needed for marker child */ } .day-cell:hover { background-color: var(--midnight-surface-lighter); transform: scale(1.03);} .day-cell.today{border-color:var(--midnight-accent-alt);background-color:var(--midnight-surface-lighter); box-shadow: 0 0 8px rgba(240, 184, 121, 0.3);} .day-number{font-weight:600;margin-bottom:4px;color:var(--midnight-text-primary);} .day-cell.today .day-number{color:var(--midnight-accent-alt);} .day-assignments{list-style:none;padding:0;width:100%;}
-        .assignment-marker{display:block;font-size:0.7em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background-color:var(--midnight-accent-secondary);color:var(--midnight-text-primary);padding:3px 5px;margin-top:4px;border-radius:4px;text-align:left; box-shadow: 0 1px 2px rgba(0,0,0,0.3); cursor: pointer; /* Indicate clickable */ }
-        #upcomingList{list-style:none;padding:0;} .upcoming-item{display:flex;justify-content:space-between;align-items:center;font-size:0.9em;padding:10px 5px;border-bottom:1px dashed var(--midnight-border); transition: background-color var(--transition-speed-fast);} .upcoming-item:last-child{border-bottom:none;} .upcoming-item:hover { background-color: rgba(255, 255, 255, 0.03); } .upcoming-item .date{color:var(--midnight-text-secondary);font-size:0.9em;white-space:nowrap;margin-left:10px;} .upcoming-item .type{font-weight:500;}
-        .collapsible-section{background-color:var(--midnight-surface);} .section-header{padding:18px 20px;cursor:pointer;transition: background-color var(--transition-speed-fast), box-shadow var(--transition-speed-fast);position:relative;z-index:1; display: flex; align-items: center;} .section-header:hover{background-color:var(--midnight-surface-lighter); box-shadow: inset 0 0 10px rgba(0,0,0,0.2); } .section-header i{font-size:0.9em;transition:transform var(--transition-speed-med) ease-out;color:var(--midnight-accent-primary);flex-shrink:0; margin-left: 10px;} .collapsible-section.is-open .section-header i{transform:rotate(90deg);} .section-content{max-height:0;overflow:hidden;transition: max-height var(--transition-speed-med) ease-out, padding var(--transition-speed-med) ease-out, border-top var(--transition-speed-med);padding:0 20px;background-color:var(--midnight-surface-lighter); border-top: 1px solid transparent;} .collapsible-section.is-open .section-content{max-height:2000px;padding:25px;transition:max-height var(--transition-speed-slow) ease-in-out, padding var(--transition-speed-slow) ease-in-out, border-top var(--transition-speed-slow); border-top: 1px solid var(--midnight-border); } #listSection.is-open .section-content{background-color:var(--midnight-bg);padding:0;}
-        #assignmentForm{display:flex;flex-direction:column;gap:18px;} .form-group{display:flex;flex-direction:column;} .form-group#customTypeGroup{display:none;margin-top:-5px;padding-left:15px;border-left:3px solid var(--midnight-accent-primary);padding-top:10px; margin-left: 5px;} .form-group#customTypeGroup label{font-size:0.8em;} label{margin-bottom:6px;font-weight:500;font-size:0.85em;color:var(--midnight-text-secondary);letter-spacing: 0.5px;} select,input[type="date"],input[type="text"]{padding:14px 16px;background-color:var(--midnight-bg);border:1px solid var(--midnight-border);border-radius:var(--border-radius-inner);color:var(--midnight-text-primary);font-family:inherit;font-size:1rem;width:100%;transition: all var(--transition-speed-fast); box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);} select:hover, input:hover { border-color: var(--midnight-text-secondary); } select:focus,input:focus{outline:none;border-color:var(--midnight-accent-primary);background-color: var(--midnight-surface); box-shadow:0 0 0 3px rgba(122,145,232,0.2), inset 0 1px 3px rgba(0,0,0,0.1);} select option,select optgroup{background-color:var(--midnight-bg);color:var(--midnight-text-primary);font-weight:normal;} select optgroup{padding:6px 0; font-weight: 600;} select optgroup[label="Mais Usados"]{font-style:normal;font-weight:bold;color:var(--midnight-accent-primary);} input[type="date"]{color: var(--midnight-text-secondary); } input[type="date"]:focus, input[type="date"]:valid { color: var(--midnight-text-primary); } input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(0.7);cursor:pointer;opacity:0.7;transition:opacity var(--transition-speed-fast);} input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1;} button[type="submit"]{padding:15px 20px;background:linear-gradient(45deg, var(--midnight-accent-primary), var(--midnight-accent-secondary));color:#fff;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-size:1.05rem;font-weight:600;text-align:center;width:100%;margin-top:8px;transition: all var(--transition-speed-fast); box-shadow: 0 3px 8px rgba(0,0,0,0.3);} button[type="submit"]:hover{opacity:0.9; box-shadow: 0 5px 12px rgba(122, 145, 232, 0.3);} button[type="submit"]:active{transform:scale(0.97); box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
+        body { font-family:var(--font-family); background-color: var(--page-bg); color:var(--text-primary); min-height:100vh; -webkit-tap-highlight-color:transparent; position: relative; overflow-x: hidden; transition: background-color var(--transition-speed-fast), color var(--transition-speed-fast); }
+        .mobile-view-container { background-color:var(--container-bg); width: 100%; height: 100vh; display:flex; flex-direction:column; overflow:hidden; z-index: 1; position: relative; transition: background-color var(--transition-speed-fast); }
+        header.main-header { background: linear-gradient(180deg, var(--header-gradient-start), var(--header-gradient-end)); padding: 18px 15px 18px 20px; border-bottom:1px solid var(--border-color); flex-shrink:0; display: flex; justify-content: space-between; align-items: center; z-index: 10;}
+        header.main-header h1 { color:var(--accent-primary); font-size: 1.4em; font-weight: 700; text-shadow: 0 1px 3px var(--shadow-color-soft); flex-grow: 1; text-align: center; margin-left: 30px; /* Make space for button */}
+        .theme-toggle-btn { background: none; border: none; color: var(--accent-alt); font-size: 1.4em; cursor: pointer; padding: 0 5px; transition: color var(--transition-speed-fast), transform var(--transition-speed-fast); width: 30px; /* Fixed width */}
+        .theme-toggle-btn:hover { transform: scale(1.1); color: var(--accent-primary); }
+        .content-scroll { flex-grow:1; overflow-y:auto; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); } .content-scroll::-webkit-scrollbar { width: 8px; } .content-scroll::-webkit-scrollbar-track { background: var(--scrollbar-track); } .content-scroll::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 4px; border: 2px solid var(--container-bg); }
+        .dashboard-section, .collapsible-section { border-bottom: 1px solid var(--border-color); } .dashboard-section { padding: 20px; background-color: var(--surface-bg); position: relative; }
+        .section-header h2, .dashboard-section > h3 { font-size: 0.8em; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary); margin: 15px 0 8px 0; padding-bottom: 5px; border-bottom: 1px solid var(--border-color); } .section-header h2 { color: var(--accent-primary); margin: 0; padding: 0; border-bottom: none; flex-grow: 1; font-weight: 600; letter-spacing: 1px; }
+        #weeklyCalendarContainer > h3 { text-align: center; color: var(--accent-alt); border-bottom: none; margin-bottom: 8px; font-weight: 600; letter-spacing: 1px;}
+        .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } .calendar-nav button { background: none; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 4px 10px; border-radius: var(--border-radius-inner); font-size: 0.8em; cursor: pointer; transition: all var(--transition-speed-fast); } .calendar-nav button:hover:not(:disabled) { background-color: var(--accent-primary); color: var(--button-primary-text); border-color: var(--accent-primary); transform: translateY(-1px); } .calendar-nav button:active:not(:disabled) { transform: scale(0.97); } .calendar-nav button:disabled { opacity: 0.4; cursor: not-allowed; } #calendarWeekLabel { font-size: 1em; font-weight: 600; color: var(--accent-alt); flex-grow: 1; text-align: center; }
+        #upcomingListContainer > h3 { color: var(--text-secondary); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; } .day-header{font-size:0.7em;text-align:center;color:var(--text-secondary);padding-bottom:5px;font-weight:500;text-transform:uppercase;border-bottom:1px solid var(--border-color);margin-bottom:5px;} .day-cell{font-size:0.8em;text-align:center;background-color:var(--container-bg);border-radius:var(--border-radius-inner);padding:8px 4px;min-height:65px;display:flex;flex-direction:column;align-items:center;border:1px solid transparent; transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast); position: relative; } .day-cell:hover { background-color: var(--surface-lighter-bg); transform: scale(1.03);} .day-cell.today{border-color:var(--accent-alt);background-color:var(--surface-lighter-bg); box-shadow: 0 0 8px var(--shadow-color-medium);} .day-number{font-weight:600;margin-bottom:4px;color:var(--text-primary);} .day-cell.today .day-number{color:var(--accent-alt);} .day-assignments{list-style:none;padding:0;width:100%;}
+        .assignment-marker{display:block;font-size:0.7em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background-color:var(--accent-secondary);color:var(--text-primary);padding:3px 5px;margin-top:4px;border-radius:4px;text-align:left; box-shadow: 0 1px 2px var(--shadow-color-soft); cursor: pointer; transition: background-color 0.15s; }
+        .assignment-marker:hover { background-color: var(--accent-primary); }
+        #upcomingList{list-style:none;padding:0;} .upcoming-item{display:flex;justify-content:space-between;align-items:center;font-size:0.9em;padding:10px 5px;border-bottom:1px dashed var(--border-color); transition: background-color var(--transition-speed-fast);} .upcoming-item:last-child{border-bottom:none;} .upcoming-item:hover { background-color: rgba(0, 0, 0, 0.03); } .upcoming-item .date{color:var(--text-secondary);font-size:0.9em;white-space:nowrap;margin-left:10px;} .upcoming-item .type{font-weight:500;}
+        .collapsible-section{background-color:var(--surface-bg);} .section-header{padding:18px 20px;cursor:pointer;transition: background-color var(--transition-speed-fast), box-shadow var(--transition-speed-fast);position:relative;z-index:1; display: flex; align-items: center;} .section-header:hover{background-color:var(--surface-lighter-bg); box-shadow: inset 0 0 10px var(--shadow-color-medium); } .section-header i{font-size:0.9em;transition:transform var(--transition-speed-med) ease-out;color:var(--accent-primary);flex-shrink:0; margin-left: 10px;} .collapsible-section.is-open .section-header i{transform:rotate(90deg);} .section-content{max-height:0;overflow:hidden;transition: max-height var(--transition-speed-med) ease-out, padding var(--transition-speed-med) ease-out, border-top var(--transition-speed-med);padding:0 20px;background-color:var(--surface-lighter-bg); border-top: 1px solid transparent;} .collapsible-section.is-open .section-content{max-height:2000px;padding:25px;transition:max-height var(--transition-speed-slow) ease-in-out, padding var(--transition-speed-slow) ease-in-out, border-top var(--transition-speed-slow); border-top: 1px solid var(--border-color); } #listSection.is-open .section-content{background-color:var(--container-bg);padding:0;}
+        #assignmentForm{display:flex;flex-direction:column;gap:18px;} .form-group{display:flex;flex-direction:column;} .form-group#customTypeGroup{display:none;margin-top:-5px;padding-left:15px;border-left:3px solid var(--accent-primary);padding-top:10px; margin-left: 5px;} .form-group#customTypeGroup label{font-size:0.8em;} label{margin-bottom:6px;font-weight:500;font-size:0.85em;color:var(--text-secondary);letter-spacing: 0.5px;} select,input[type="date"],input[type="text"]{padding:14px 16px;background-color:var(--input-bg);border:1px solid var(--input-border);border-radius:var(--border-radius-inner);color:var(--text-primary);font-family:inherit;font-size:1rem;width:100%;transition: all var(--transition-speed-fast); box-shadow: inset 0 1px 3px var(--shadow-color-soft);} select:hover, input:hover { border-color: var(--text-secondary); } select:focus,input:focus{outline:none;border-color:var(--accent-primary);background-color: var(--surface-lighter-bg); box-shadow:0 0 0 3px var(--shadow-color-focus), inset 0 1px 3px var(--shadow-color-soft);} select option,select optgroup{background-color:var(--container-bg);color:var(--text-primary);font-weight:normal;} select optgroup{padding:6px 0; font-weight: 600;} select optgroup[label="Mais Usados"]{font-style:normal;font-weight:bold;color:var(--accent-primary);} input[type="date"]{color: var(--text-secondary); } input[type="date"]:focus, input[type="date"]:valid { color: var(--text-primary); } input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(var(--filter-invert-indicator));cursor:pointer;opacity:0.7;transition:opacity var(--transition-speed-fast);} input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1;} button[type="submit"]{padding:15px 20px;background:linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));color:var(--button-primary-text);border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-size:1.05rem;font-weight:600;text-align:center;width:100%;margin-top:8px;transition: all var(--transition-speed-fast); box-shadow: 0 3px 8px var(--shadow-color-soft);} button[type="submit"]:hover{opacity:0.9; box-shadow: 0 5px 12px var(--shadow-color-focus);} button[type="submit"]:active{transform:scale(0.97); box-shadow: 0 1px 3px var(--shadow-color-soft);}
 
         .assignment-list { list-style: none; padding: 0; }
         .assignment-item {
             display: flex; flex-direction: column; align-items: center; text-align: center;
-            padding: 18px 15px; color: var(--midnight-text-primary); border-bottom: 1px solid var(--midnight-border);
+            padding: 18px 15px; color: var(--text-primary); border-bottom: 1px solid var(--border-color);
             cursor: pointer; transition: all var(--transition-speed-fast); position: relative;
         }
         .assignment-item:last-child { border-bottom: none; }
-        .assignment-item:not(.assignment-item[data-iscelebration="true"]):hover { transform: translateY(-2px); filter: brightness(1.15); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .assignment-item:not(.assignment-item[data-iscelebration="true"]):hover { transform: translateY(-2px); filter: brightness(1.15); box-shadow: 0 4px 12px var(--shadow-color-medium); }
         .assignment-item[data-iscelebration="true"] { cursor: default; background-color: #4a2f4a; }
+        [data-theme="light"] .assignment-item[data-iscelebration="true"] { background-color: #ffe8cc; }
         .assignment-item[data-iscelebration="true"]:hover { background-color: #553655; }
+        [data-theme="light"] .assignment-item[data-iscelebration="true"]:hover { background-color: #ffddb3; }
+
         .assignment-item:nth-child(5n+1):not([data-iscelebration="true"]){background-color:var(--list-color-1);} .assignment-item:nth-child(5n+2):not([data-iscelebration="true"]){background-color:var(--list-color-2);} .assignment-item:nth-child(5n+3):not([data-iscelebration="true"]){background-color:var(--list-color-3);} .assignment-item:nth-child(5n+4):not([data-iscelebration="true"]){background-color:var(--list-color-4);} .assignment-item:nth-child(5n):not([data-iscelebration="true"]){background-color:var(--list-color-5);}
-        .assignment-item.is-completed { background-color: var(--completed-item-bg) !important; opacity: 0.55; filter: grayscale(30%); cursor: default; }
+        [data-theme="light"] .assignment-item:nth-child(5n+1):not([data-iscelebration="true"]){background-color: #eaf0fa;} [data-theme="light"] .assignment-item:nth-child(5n+2):not([data-iscelebration="true"]){background-color: #eafafa;} [data-theme="light"] .assignment-item:nth-child(5n+3):not([data-iscelebration="true"]){background-color: #f3eafa;} [data-theme="light"] .assignment-item:nth-child(5n+4):not([data-iscelebration="true"]){background-color: #f1faea;} [data-theme="light"] .assignment-item:nth-child(5n):not([data-iscelebration="true"]){background-color: #fcf4ed;}
+        [data-theme="light"] .assignment-item:not(.assignment-item[data-iscelebration="true"]):hover { filter: brightness(0.98); box-shadow: 0 4px 12px var(--shadow-color-medium); }
+        .assignment-item.is-completed { background-color: var(--completed-item-bg) !important; opacity: 0.55; filter: grayscale(30%); cursor: default; color: var(--text-secondary); }
         .assignment-item.is-completed:hover{ transform: translateY(0); filter: grayscale(30%) brightness(1); box-shadow: none;}
+        [data-theme="light"] .assignment-item.is-completed { opacity: 0.6; filter: none; }
         .assignment-emoji { font-size: 1.9em; margin-bottom: 8px; line-height: 1; display: block; transition: transform var(--transition-speed-fast); }
         .assignment-item:not([data-iscelebration="true"]):hover .assignment-emoji { transform: scale(1.1); }
-        .assignment-type { font-size: 1em; font-weight: 600; margin-bottom: 6px; color: var(--midnight-text-primary); line-height: 1.3; display: block; }
-        .assignment-date { font-size: 0.85em; font-weight: 500; color: var(--midnight-text-secondary); display: block; margin-bottom: 4px; }
+        .assignment-type { font-size: 1em; font-weight: 600; margin-bottom: 6px; color: inherit; /* Inherit color */ line-height: 1.3; display: block; }
+        .assignment-date { font-size: 0.85em; font-weight: 500; color: var(--text-tertiary); display: block; margin-bottom: 4px; }
         .assignment-item.is-completed .assignment-emoji { filter: grayscale(80%); opacity: 0.7; transform: scale(1);}
-        .assignment-item.is-completed .assignment-type { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--midnight-text-secondary); }
-        .assignment-notes { font-size: 0.75em; color: var(--midnight-text-secondary); margin-top: 4px; font-style: italic; }
+        [data-theme="light"] .assignment-item.is-completed .assignment-emoji { opacity: 0.5; filter: grayscale(50%);}
+        .assignment-item.is-completed .assignment-type { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--text-tertiary); font-weight: 400; }
+        .assignment-notes { font-size: 0.75em; color: var(--text-tertiary); margin-top: 4px; font-style: italic; }
 
-        .modal-overlay{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(10,10,15,0.8);backdrop-filter:blur(3px);justify-content:center;align-items:center;opacity:0;transition:opacity var(--transition-speed-med) ease-out;} .modal-overlay.is-visible{display:flex;opacity:1;} .modal-content{background-color:var(--midnight-surface);padding:30px;border-radius:var(--border-radius-inner);box-shadow:0 8px 25px rgba(0,0,0,0.5);width:90%;max-width:400px;position:relative;display:flex;flex-direction:column;gap:18px;border:1px solid var(--midnight-border);transform:scale(0.95);transition:transform var(--transition-speed-med) ease-out 0.1s;} .modal-overlay.is-visible .modal-content{transform:scale(1);} .modal-content h4{color:var(--midnight-accent-primary);margin-bottom:8px;text-align:center;font-size:1.2em;font-weight:600;word-break:break-word;} .modal-content .action-buttons,.modal-content .edit-view{display:flex;flex-direction:column;gap:12px;} .modal-content button{padding:12px 18px;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-weight:600;font-size:0.95em;transition:all var(--transition-speed-fast);width:100%;text-transform:uppercase;letter-spacing:0.5px;box-shadow:0 2px 5px rgba(0,0,0,0.2);} .modal-content button:hover:not(:disabled){opacity:0.9;box-shadow:0 4px 10px rgba(0,0,0,0.3);transform:translateY(-1px);} .modal-content button:active:not(:disabled){transform:scale(0.97);box-shadow:0 1px 2px rgba(0,0,0,0.1);} #modalBtnComplete{background-color:var(--success-color);color:#111;} #modalBtnComplete:disabled { background-color: var(--midnight-text-secondary); color: var(--midnight-surface-lighter); cursor: not-allowed; opacity: 0.7; } #modalBtnEdit{background-color:var(--midnight-accent-alt);color:#111;} #modalBtnDelete{background-color:var(--error-color);color:#fff;} #modalBtnCancel,#modalBtnCancelEdit{background-color:var(--midnight-surface-lighter);color:var(--midnight-text-primary);border:1px solid var(--midnight-border);} .edit-view{display:none;} .edit-view .form-group{width:100%;} .edit-view label{font-size:0.8em;} #modalBtnSaveEdit{background-color:var(--success-color);color:#111;}
-        .no-assignments, .no-upcoming{font-size:0.9em;text-align:center;color:var(--midnight-text-secondary);padding:30px 20px;font-style:italic;background:transparent;} .no-assignments{padding:40px 20px;}
-        #confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2000;} .confetti-piece{position:absolute;width:10px;height:15px;opacity:0.9;animation:fallFadeOut 3.5s ease-in forwards;border-radius:3px;background-image:linear-gradient(45deg,var(--midnight-accent-primary),var(--success-color),var(--midnight-accent-alt));} @keyframes fallFadeOut{0%{transform:translateY(-30px) rotate(0deg) scale(1);opacity:1;}100%{transform:translateY(110vh) rotate(1080deg) scale(0.5);opacity:0;}}
+        .modal-overlay{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:var(--modal-backdrop);backdrop-filter:blur(3px);justify-content:center;align-items:center;opacity:0;transition:opacity var(--transition-speed-med) ease-out;} .modal-overlay.is-visible{display:flex;opacity:1;} .modal-content{background-color:var(--surface-bg);padding:30px;border-radius:var(--border-radius-inner);box-shadow:0 8px 25px var(--modal-shadow);width:90%;max-width:400px;position:relative;display:flex;flex-direction:column;gap:18px;border:1px solid var(--border-color);transform:scale(0.95);transition:transform var(--transition-speed-med) ease-out 0.1s;} .modal-overlay.is-visible .modal-content{transform:scale(1);} .modal-content h4{color:var(--accent-primary);margin-bottom:8px;text-align:center;font-size:1.2em;font-weight:600;word-break:break-word;} .modal-content .action-buttons,.modal-content .edit-view{display:flex;flex-direction:column;gap:12px;} .modal-content button{padding:12px 18px;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-weight:600;font-size:0.95em;transition:all var(--transition-speed-fast);width:100%;text-transform:uppercase;letter-spacing:0.5px;box-shadow:0 2px 5px var(--shadow-color-soft);} .modal-content button:hover:not(:disabled){opacity:0.9;box-shadow:0 4px 10px var(--shadow-color-medium);transform:translateY(-1px);} .modal-content button:active:not(:disabled){transform:scale(0.97);box-shadow:0 1px 2px var(--shadow-color-soft);} #modalBtnComplete{background-color:var(--success-color);color:var(--button-secondary-text);} #modalBtnComplete:disabled { background-color: var(--text-secondary); color: var(--surface-lighter-bg); cursor: not-allowed; opacity: 0.7; } #modalBtnEdit{background-color:var(--accent-alt);color:var(--button-secondary-text);} #modalBtnDelete{background-color:var(--error-color);color:var(--button-primary-text);} #modalBtnCancel,#modalBtnCancelEdit{background-color:var(--surface-lighter-bg);color:var(--text-primary);border:1px solid var(--border-color);} .edit-view{display:none;} .edit-view .form-group{width:100%;} .edit-view label{font-size:0.8em;} #modalBtnSaveEdit{background-color:var(--success-color);color:var(--button-secondary-text);}
+        .no-assignments, .no-upcoming{font-size:0.9em;text-align:center;color:var(--text-secondary);padding:30px 20px;font-style:italic;background:transparent;} .no-assignments{padding:40px 20px;}
+        #confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2000;} .confetti-piece{position:absolute;width:10px;height:15px;opacity:0.9;animation:fallFadeOut 3.5s ease-in forwards;border-radius:3px;background-image:linear-gradient(45deg,var(--accent-primary),var(--success-color),var(--accent-alt));} @keyframes fallFadeOut{0%{transform:translateY(-30px) rotate(0deg) scale(1);opacity:1;}100%{transform:translateY(110vh) rotate(1080deg) scale(0.5);opacity:0;}}
 
-        /* Styles for the custom calendar tooltip */
+        /* Tooltip - adapts to theme */
         .calendar-tooltip {
-            position: absolute;
-            display: none; /* Hidden by default */
-            background-color: var(--midnight-surface-lighter);
-            color: var(--midnight-text-primary);
-            border: 1px solid var(--midnight-border);
-            padding: 8px 12px;
-            border-radius: var(--border-radius-inner);
-            font-size: 0.8em;
-            z-index: 1010; /* Above other elements */
-            pointer-events: none; /* Prevent it interfering with clicks */
-            white-space: normal; /* Allow wrapping */
-            max-width: 150px; /* Prevent very wide tooltips */
-            box-shadow: 0 3px 8px rgba(0,0,0,0.4);
-            opacity: 0;
-            transform: translateY(5px);
-            transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+            position: absolute; display: none; background-color: var(--surface-lighter-bg); color: var(--text-primary);
+            border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--border-radius-inner);
+            font-size: 0.8em; z-index: 1010; pointer-events: none; white-space: normal;
+            max-width: 150px; box-shadow: 0 3px 8px var(--shadow-color-medium);
+            opacity: 0; transform: translateY(5px); transition: opacity 0.15s ease-out, transform 0.15s ease-out;
         }
-        .calendar-tooltip.is-visible {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .calendar-tooltip.is-visible { display: block; opacity: 1; transform: translateY(0); }
 
     </style>
 </head>
-<body>
-     <div class="mobile-view-container"><header class="main-header"><h1>Minhas Designações</h1></header><div class="content-scroll"><div class="dashboard-section"><div id="weeklyCalendarContainer"><div class="calendar-nav"><button id="prevWeekBtn">< Ant</button><span id="calendarWeekLabel"></span><button id="nextWeekBtn">Próx ></button></div><div id="weeklyCalendar" class="calendar-grid"></div></div><div id="upcomingListContainer"><h3>Próximos 7 dias</h3><ul id="upcomingList"><li class="no-upcoming">...</li></ul></div></div><div class="collapsible-section" id="formSection"><div class="section-header" onclick="toggleSection('formSection')"><h2>Adicionar Nova</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><form id="assignmentForm"><div class="form-group"><label for="assignmentType">Tipo</label><select id="assignmentType" name="assignmentType" required><option value="" disabled selected>...</option></select></div><div class="form-group" id="customTypeGroup"><label for="customAssignmentType">Nome</label><input type="text" id="customAssignmentType" name="customAssignmentType" placeholder="..."></div><div class="form-group"><label for="assignmentDate">Data</label><input type="date" id="assignmentDate" name="assignmentDate" required></div><div class="form-group"><label for="assignmentNotes">Obs</label><input type="text" id="assignmentNotes" name="assignmentNotes" placeholder="..."></div><button type="submit">Adicionar</button></form></div></div><div class="collapsible-section is-open" id="listSection"><div class="section-header" onclick="toggleSection('listSection')"><h2>Todas Designações</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><ul id="assignmentsList" class="assignment-list"><li class="no-assignments">...</li></ul></div></div></div></div>
+<body data-theme="dark"> <!-- Default theme -->
+     <div class="mobile-view-container">
+        <header class="main-header">
+             <h1>Minhas Designações</h1>
+             <button id="themeToggleBtn" class="theme-toggle-btn" title="Mudar Tema">
+                 <i class="fas fa-sun"></i> <!-- Initial icon, updated by JS -->
+             </button>
+        </header>
+        <div class="content-scroll">
+            <div class="dashboard-section">
+                <div id="weeklyCalendarContainer">
+                     <!-- Nav and Grid are the same -->
+                     <div class="calendar-nav">
+                         <button id="prevWeekBtn">< Ant</button>
+                         <span id="calendarWeekLabel"></span>
+                         <button id="nextWeekBtn">Próx ></button>
+                    </div>
+                    <div id="weeklyCalendar" class="calendar-grid"></div>
+                </div>
+                <div id="upcomingListContainer">
+                    <h3>Próximos 7 dias</h3>
+                    <ul id="upcomingList"><li class="no-upcoming">...</li></ul>
+                </div>
+            </div>
+            <!-- Collapsible Sections remain the same -->
+             <div class="collapsible-section" id="formSection">
+                <div class="section-header" onclick="toggleSection('formSection')">
+                    <h2>Adicionar Nova</h2><i class="fas fa-chevron-right"></i>
+                </div>
+                <div class="section-content">
+                    <form id="assignmentForm">
+                        <div class="form-group">
+                             <label for="assignmentType">Tipo</label>
+                             <select id="assignmentType" name="assignmentType" required><option value="" disabled selected>...</option></select>
+                        </div>
+                        <div class="form-group" id="customTypeGroup">
+                            <label for="customAssignmentType">Nome</label>
+                            <input type="text" id="customAssignmentType" name="customAssignmentType" placeholder="...">
+                        </div>
+                        <div class="form-group">
+                            <label for="assignmentDate">Data</label>
+                            <input type="date" id="assignmentDate" name="assignmentDate" required>
+                        </div>
+                        <div class="form-group">
+                             <label for="assignmentNotes">Obs</label>
+                             <input type="text" id="assignmentNotes" name="assignmentNotes" placeholder="...">
+                         </div>
+                         <button type="submit">Adicionar</button>
+                     </form>
+                 </div>
+            </div>
+            <div class="collapsible-section is-open" id="listSection">
+                <div class="section-header" onclick="toggleSection('listSection')">
+                    <h2>Todas Designações</h2><i class="fas fa-chevron-right"></i>
+                </div>
+                 <div class="section-content">
+                     <ul id="assignmentsList" class="assignment-list"><li class="no-assignments">...</li></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal remains the same -->
      <div id="actionModal" class="modal-overlay"><div class="modal-content"><h4 id="modalTitle">...</h4><input type="hidden" id="modalAssignmentId"><div class="action-buttons"><button id="modalBtnComplete"></button><button id="modalBtnEdit">Editar</button><button id="modalBtnDelete">Excluir</button><button id="modalBtnCancel">Cancelar</button></div><div class="edit-view"><div class="form-group"><label for="modalEditDate">Data</label><input type="date" id="modalEditDate"></div><div class="form-group"><label for="modalEditNotes">Obs</label><input type="text" id="modalEditNotes" placeholder="..."></div><button id="modalBtnSaveEdit">Salvar</button><button id="modalBtnCancelEdit">Cancelar</button></div></div></div>
      <div id="confetti-container"></div>
-     <!-- Custom Tooltip Element -->
      <div id="calendar-tooltip" class="calendar-tooltip"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Element References ---
+            const bodyElement = document.body;
             const assignmentForm = document.getElementById('assignmentForm'); const assignmentTypeInput = document.getElementById('assignmentType'); const assignmentDateInput = document.getElementById('assignmentDate'); const assignmentNotesInput = document.getElementById('assignmentNotes'); const assignmentsListContainer = document.querySelector('#listSection .section-content ul'); const upcomingList = document.getElementById('upcomingList'); const customTypeGroup = document.getElementById('customTypeGroup'); const customAssignmentTypeInput = document.getElementById('customAssignmentType'); const weeklyCalendarGrid = document.getElementById('weeklyCalendar'); const actionModal = document.getElementById('actionModal'); const modalTitle = document.getElementById('modalTitle'); const modalAssignmentIdInput = document.getElementById('modalAssignmentId'); const modalActionButtonsDiv = actionModal.querySelector('.action-buttons'); const modalEditViewDiv = actionModal.querySelector('.edit-view'); const modalEditDateInput = document.getElementById('modalEditDate'); const modalEditNotesInput = document.getElementById('modalEditNotes'); const modalBtnComplete = document.getElementById('modalBtnComplete'); const modalBtnEdit = document.getElementById('modalBtnEdit'); const modalBtnDelete = document.getElementById('modalBtnDelete'); const prevWeekBtn = document.getElementById('prevWeekBtn'); const nextWeekBtn = document.getElementById('nextWeekBtn'); const calendarWeekLabel = document.getElementById('calendarWeekLabel'); const confettiContainer = document.getElementById('confetti-container');
-            const calendarTooltip = document.getElementById('calendar-tooltip'); // Get tooltip element
+            const calendarTooltip = document.getElementById('calendar-tooltip');
+            const themeToggleButton = document.getElementById('themeToggleBtn');
+            const themeToggleIcon = themeToggleButton.querySelector('i');
 
+            // --- Constants & Configuration ---
             const ASSIGNMENTS_STORAGE_KEY = 'jw_assignments_data_black_v1_final_cele';
+            const THEME_STORAGE_KEY = 'jw_assignments_theme_pref';
+            const NOTIFICATION_SCHEDULED_TODAY_KEY = 'jw_assignments_notif_sched_today'; // Use sessionStorage
             const UPCOMING_DAYS = 7; const TOP_N_FREQUENT = 5; const CONFETTI_COUNT = 50;
             const CELEBRATION_DATES = [ { date: '2026-04-02', year: 2026 }, { date: '2027-03-22', year: 2027 }, ];
             const CELEBRATION_TYPE = "Celebração"; const CELEBRATION_EMOJI = "🍷";
             const BASE_ASSIGNMENT_OPTIONS = { "Preparação e Organização":["Presidente", "Dirigente de Campo", "Indicador (Entrada)", "Indicador (Auditório)", "Limpeza", "Áudio", "Vídeo"], "Reunião de Congregação":["Condutor", "Leitura da Bíblia", "Estudo Bíblico da Congregação (Leitor)", "Estudo Bíblico da Congregação (Dirigente)", "Discurso Público", "Discurso (Nossa vida Cristã)", "Tesouros (Discurso 10 minutos)", "Joias Espirituais", "Faça seu melhor no ministério", "Estudo de A Sentinela (Leitor)", "Estudo de A Sentinela (Dirigente)", "Oração Final"], "Eventos Especiais":["Assembleia", "Congresso", "Visita a Betel"], "Outros":["Personalizado"] };
             const ASSIGNMENT_EMOJIS = { "Presidente": "🧑‍⚖️", "Dirigente de Campo": "🗺️", "Indicador (Entrada)": "🚪", "Indicador (Auditório)": "🏛️", "Limpeza": "🧹", "Áudio": "🔊", "Vídeo": "📽️", "Condutor": "🎤", "Leitura da Bíblia": "📖", "Estudo Bíblico da Congregação (Leitor)": "🤓", "Estudo Bíblico da Congregação (Dirigente)": "🧑‍🏫", "Discurso Público": "🗣️", "Discurso (Nossa vida Cristã)": "💖", "Tesouros (Discurso 10 minutos)": "💎", "Joias Espirituais": "✨", "Faça seu melhor no ministério": "💪", "Estudo de A Sentinela (Leitor)": "👀", "Estudo de A Sentinela (Dirigente)": "🧐", "Oração Final": "🙏", "Assembleia": "🏟️", "Congresso": "🧑‍🤝‍🧑", "Visita a Betel": "🏢", [CELEBRATION_TYPE]: CELEBRATION_EMOJI };
             const SHORT_ASSIGNMENT_NAMES = { "Estudo Bíblico da Congregação (Leitor)": "Est. Cong. (L)", "Estudo Bíblico da Congregação (Dirigente)": "Est. Cong. (D)", "Faça seu melhor no ministério": "Melhor Min.", "Indicador (Entrada)": "Indic. (E)", "Indicador (Auditório)": "Indic. (A)", "Tesouros (Discurso 10 minutos)": "Tesouros", "Discurso (Nossa vida Cristã)": "Vida Cristã", "Estudo de A Sentinela (Leitor)": "Sent. (L)", "Estudo de A Sentinela (Dirigente)": "Sent. (D)", "Congresso (Dia 1)": "Cong. D1", "Congresso (Dia 2)": "Cong. D2", "Congresso (Dia 3)": "Cong. D3", "Dirigente de Campo": "Dir. Campo" };
-            let appData = { assignments: [], frequency: {} }; let calendarWeekOffset = 0; let activeTooltipMarker = null;
 
+            // --- State Variables ---
+            let appData = { assignments: [], frequency: {} }; let calendarWeekOffset = 0; let activeTooltipMarker = null;
+            let notificationTimeoutId = null;
+
+            // --- Utility Functions ---
             function loadAppData(){ const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY); if(s){try{const p=JSON.parse(s); appData.assignments=Array.isArray(p.assignments)?p.assignments:[]; appData.frequency=typeof p.frequency==='object'&&p.frequency!==null?p.frequency:{}; appData.assignments=appData.assignments.filter(a=>a.type !== CELEBRATION_TYPE || a.isCelebration);} catch(e){appData={assignments:[],frequency:{}};}} else{appData={assignments:[],frequency:{}};}}
             function saveAppData(){ try{localStorage.setItem(ASSIGNMENTS_STORAGE_KEY,JSON.stringify(appData));} catch(e){console.error("Falha ao salvar dados:", e);}}
             function getEmojiForType(type){return ASSIGNMENT_EMOJIS[type]||'❓';}
@@ -118,113 +209,240 @@
             function getTodayDateString(){const d=new Date(); return dateToYyyyMmDd(d);}
             function formatRelativeDate(ds){try{const t=new Date();t.setUTCHours(0,0,0,0);const tg=new Date(`${ds}T00:00:00Z`);if(isNaN(tg.getTime()))return ds;const diff=tg-t;const days=Math.ceil(diff/(1e3*60*60*24));const wk=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];const twk=wk[tg.getUTCDay()];if(days<0)return formatDate(ds);if(days===0)return"Hoje";if(days===1)return"Amanhã";if(days===2)return"Dep. Amanhã";if(days<=6)return`Próx ${twk}`;return formatDate(ds,{day:'2-digit',month:'short'});}catch(e){return formatDate(ds);}}
             function updateFrequency(t){if(t&&t!=='Personalizado'&&!t.startsWith('Congresso (Dia')&&t!==CELEBRATION_TYPE){appData.frequency[t]=(appData.frequency[t]||0)+1;}else if(t==='Congresso'){appData.frequency['Congresso']=(appData.frequency['Congresso']||0)+1;}}
-            function triggerConfetti(){const c=['var(--midnight-accent-primary)','var(--midnight-accent-alt)','var(--success-color)','var(--error-color)','var(--list-color-1)','var(--list-color-3)','var(--list-color-5)'];for(let i=0;i<CONFETTI_COUNT;i++){const p=document.createElement('div');p.classList.add('confetti-piece');p.style.background=c[Math.floor(Math.random()*c.length)];p.style.left=Math.random()*100+'vw';p.style.top=-10-Math.random()*30+'px';p.style.animationDuration=2.5+Math.random()*1.5+'s';p.style.animationDelay=Math.random()*0.5+'s';p.style.transform=`rotate(${Math.random()*360}deg) scale(${0.8+Math.random()*0.4})`;confettiContainer.appendChild(p);setTimeout(()=>{p.remove();},4500);}}
+            function triggerConfetti(){const c=['var(--accent-primary)','var(--accent-alt)','var(--success-color)','var(--error-color)','var(--list-color-1)','var(--list-color-3)','var(--list-color-5)'];for(let i=0;i<CONFETTI_COUNT;i++){const p=document.createElement('div');p.classList.add('confetti-piece');p.style.background=c[Math.floor(Math.random()*c.length)];p.style.left=Math.random()*100+'vw';p.style.top=-10-Math.random()*30+'px';p.style.animationDuration=2.5+Math.random()*1.5+'s';p.style.animationDelay=Math.random()*0.5+'s';p.style.transform=`rotate(${Math.random()*360}deg) scale(${0.8+Math.random()*0.4})`;confettiContainer.appendChild(p);setTimeout(()=>{p.remove();},4500);}}
+            window.toggleSection = (id, forceState = null) => { const el = document.getElementById(id); if(el) { if (forceState === true) el.classList.add('is-open'); else if (forceState === false) el.classList.remove('is-open'); else el.classList.toggle('is-open'); } };
 
-             function getNextCelebrationDate(todayStr) { const today = new Date(todayStr + 'T00:00:00Z'); for (const cel of CELEBRATION_DATES) { const celDate = new Date(cel.date + 'T00:00:00Z'); if (celDate >= today) { return cel; } } return CELEBRATION_DATES[CELEBRATION_DATES.length - 1] || null; }
-             function ensureCelebrationExists() { const todayStr = getTodayDateString(); const nextCelebration = getNextCelebrationDate(todayStr); let existingCelebrationIndex = appData.assignments.findIndex(a => a.isCelebration); let needsSave = false; if (!nextCelebration) { if (existingCelebrationIndex !== -1) {} return; } const celebrationId = `celebration-${nextCelebration.year}`; if (existingCelebrationIndex !== -1) { const current = appData.assignments[existingCelebrationIndex]; if (current.date !== nextCelebration.date || current.id !== celebrationId) { current.date = nextCelebration.date; current.id = celebrationId; if (!current.id.endsWith(String(nextCelebration.year))) { current.completed = false; } needsSave = true; } } else { const newCelebration = { id: celebrationId, type: CELEBRATION_TYPE, date: nextCelebration.date, notes: "Próxima Celebração", completed: false, isCelebration: true }; appData.assignments.push(newCelebration); needsSave = true; } if (needsSave) { saveAppData(); } }
-             function updateDropdownOrder() { const select=assignmentTypeInput;const currentSelection=select.value;select.innerHTML='<option value="" disabled selected>Selecione</option>';let allOptions=[];for(const g in BASE_ASSIGNMENT_OPTIONS){BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(o!=='Personalizado' && o !== CELEBRATION_TYPE){allOptions.push({value:o,text:o,group:g,freq:appData.frequency[o]||0});}});}allOptions.sort((a,b)=>(b.freq!==a.freq)?b.freq-a.freq:a.text.localeCompare(b.text));const topFreq=allOptions.slice(0,TOP_N_FREQUENT).filter(o=>o.freq>0).map(o=>o.value);const addedFreq=new Set();if(topFreq.length>0){const fg=document.createElement('optgroup');fg.label='Mais Usados';allOptions.forEach(o=>{if(topFreq.includes(o.value)){const op=document.createElement('option');op.value=o.value;op.textContent=`${getEmojiForType(o.value)} ${o.value==='Congresso'?'Congresso (3d)':o.text}`;fg.appendChild(op);addedFreq.add(o.value);}});if(fg.childElementCount>0)select.appendChild(fg);}for(const g in BASE_ASSIGNMENT_OPTIONS){const grp=document.createElement('optgroup');grp.label=g;let hasOpt=false;BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(!addedFreq.has(o)&&o!=='Personalizado' && o !== CELEBRATION_TYPE){const op=document.createElement('option');op.value=o;op.textContent=`${getEmojiForType(o)} ${o==='Congresso'?'Congresso (3d)':o}`;grp.appendChild(op);hasOpt=true;}});if(g==='Outros'){const custOpt=document.createElement('option');custOpt.value='Personalizado';custOpt.textContent='Personalizado';grp.appendChild(custOpt);hasOpt=true;}if(hasOpt){select.appendChild(grp);}}select.value=currentSelection||"";if(!select.value){select.querySelector('option[disabled]').selected=true;}select.dispatchEvent(new Event('change'));}
+            // --- Theme Management ---
+            function applyTheme(theme) {
+                bodyElement.dataset.theme = theme;
+                themeToggleIcon.className = `fas fa-${theme === 'dark' ? 'sun' : 'moon'}`;
+            }
+            function toggleTheme() {
+                const currentTheme = bodyElement.dataset.theme === 'dark' ? 'light' : 'dark';
+                applyTheme(currentTheme);
+                try { localStorage.setItem(THEME_STORAGE_KEY, currentTheme); }
+                catch (e) { console.warn("Falha ao salvar preferência de tema."); }
+            }
+            function loadAndApplyTheme() {
+                const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+                const preferredTheme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : 'dark'; // Default to dark
+                applyTheme(preferredTheme);
+            }
+
+            // --- Celebration & Dropdown Logic ---
+            function getNextCelebrationDate(todayStr) { const today = new Date(todayStr + 'T00:00:00Z'); for (const cel of CELEBRATION_DATES) { const celDate = new Date(cel.date + 'T00:00:00Z'); if (celDate >= today) { return cel; } } return CELEBRATION_DATES[CELEBRATION_DATES.length - 1] || null; }
+            function ensureCelebrationExists() { const todayStr = getTodayDateString(); const nextCelebration = getNextCelebrationDate(todayStr); let existingCelebrationIndex = appData.assignments.findIndex(a => a.isCelebration); let needsSave = false; if (!nextCelebration) { if (existingCelebrationIndex !== -1) {} return; } const celebrationId = `celebration-${nextCelebration.year}`; if (existingCelebrationIndex !== -1) { const current = appData.assignments[existingCelebrationIndex]; if (current.date !== nextCelebration.date || current.id !== celebrationId) { current.date = nextCelebration.date; current.id = celebrationId; if (!current.id.endsWith(String(nextCelebration.year))) { current.completed = false; } needsSave = true; } } else { const newCelebration = { id: celebrationId, type: CELEBRATION_TYPE, date: nextCelebration.date, notes: "Próxima Celebração", completed: false, isCelebration: true }; appData.assignments.push(newCelebration); needsSave = true; } if (needsSave) { saveAppData(); } }
+            function updateDropdownOrder() { const select=assignmentTypeInput;const currentSelection=select.value;select.innerHTML='<option value="" disabled selected>Selecione</option>';let allOptions=[];for(const g in BASE_ASSIGNMENT_OPTIONS){BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(o!=='Personalizado' && o !== CELEBRATION_TYPE){allOptions.push({value:o,text:o,group:g,freq:appData.frequency[o]||0});}});}allOptions.sort((a,b)=>(b.freq!==a.freq)?b.freq-a.freq:a.text.localeCompare(b.text));const topFreq=allOptions.slice(0,TOP_N_FREQUENT).filter(o=>o.freq>0).map(o=>o.value);const addedFreq=new Set();if(topFreq.length>0){const fg=document.createElement('optgroup');fg.label='Mais Usados';allOptions.forEach(o=>{if(topFreq.includes(o.value)){const op=document.createElement('option');op.value=o.value;op.textContent=`${getEmojiForType(o.value)} ${o==='Congresso'?'Congresso (3d)':o.text}`;fg.appendChild(op);addedFreq.add(o.value);}});if(fg.childElementCount>0)select.appendChild(fg);}for(const g in BASE_ASSIGNMENT_OPTIONS){const grp=document.createElement('optgroup');grp.label=g;let hasOpt=false;BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(!addedFreq.has(o)&&o!=='Personalizado' && o !== CELEBRATION_TYPE){const op=document.createElement('option');op.value=o;op.textContent=`${getEmojiForType(o)} ${o==='Congresso'?'Congresso (3d)':o}`;grp.appendChild(op);hasOpt=true;}});if(g==='Outros'){const custOpt=document.createElement('option');custOpt.value='Personalizado';custOpt.textContent='Personalizado';grp.appendChild(custOpt);hasOpt=true;}if(hasOpt){select.appendChild(grp);}}select.value=currentSelection||"";if(!select.value){select.querySelector('option[disabled]').selected=true;}select.dispatchEvent(new Event('change'));}
+
+            // --- Rendering Functions ---
              function renderWeeklyCalendar(){
-                 weeklyCalendarGrid.innerHTML=''; hideCalendarTooltip(); // Hide tooltip when rerendering
-                 const today=new Date(); today.setUTCHours(0,0,0,0);
+                 weeklyCalendarGrid.innerHTML=''; hideCalendarTooltip();
+                 const today=new Date(); today.setUTCHours(0,0,0,0); const todayStr = getTodayDateString();
+
+                 // *** Modification: Ensure offset doesn't go below 0 ***
+                 if (calendarWeekOffset < 0) { calendarWeekOffset = 0; }
+                 prevWeekBtn.disabled = calendarWeekOffset <= 0; // Disable 'Previous' if on current week
+
                  const baseWeek=new Date(today); baseWeek.setUTCDate(today.getUTCDate()+(calendarWeekOffset*7));
                  const dow=(baseWeek.getUTCDay()+6)%7; const start=new Date(baseWeek); start.setUTCDate(baseWeek.getUTCDate()-dow); start.setUTCHours(0,0,0,0);
                  const end=new Date(start); end.setUTCDate(start.getUTCDate()+6);
 
-                 if(calendarWeekOffset===0){calendarWeekLabel.textContent="Esta Semana";} else if(calendarWeekOffset===1){calendarWeekLabel.textContent="Próxima Semana";} else if(calendarWeekOffset===-1){calendarWeekLabel.textContent="Semana Anterior";} else {calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'2-digit'})}-${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'2-digit'})}`;}
+                 if(calendarWeekOffset===0){calendarWeekLabel.textContent="Esta Semana";} else if(calendarWeekOffset===1){calendarWeekLabel.textContent="Próxima Semana";} else {calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'2-digit'})}-${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'2-digit'})}`;}
                  const hds=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom']; hds.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
 
                  for(let i=0;i<7;i++){
                     const currentDate = new Date(start); currentDate.setUTCDate(start.getUTCDate()+i); const dateStr = dateToYyyyMmDd(currentDate);
-                    const cellElement = document.createElement('div'); cellElement.className='day-cell'; if(calendarWeekOffset===0 && dateStr===getTodayDateString()) cellElement.classList.add('today');
+                    const cellElement = document.createElement('div'); cellElement.className='day-cell';
+                    if (calendarWeekOffset === 0 && dateStr === todayStr) cellElement.classList.add('today'); // Highlight today only on current week view
+
                     const numberSpan=document.createElement('span'); numberSpan.className='day-number'; numberSpan.textContent=currentDate.getUTCDate(); cellElement.appendChild(numberSpan);
                     const assignmentsUl = document.createElement('ul'); assignmentsUl.className='day-assignments'; cellElement.appendChild(assignmentsUl);
                     const todaysAssignments = appData.assignments.filter(a => a.date === dateStr && !a.completed);
+
                     todaysAssignments.forEach(a => {
                         const li = document.createElement('li'); li.className = 'assignment-marker';
-                        const fullType = a.type; const shortType = SHORT_ASSIGNMENT_NAMES[fullType] || fullType;
-                        const emoji = getEmojiForType(fullType);
-                        li.textContent = `${emoji} ${shortType}`;
-                        li.dataset.fullName = fullType; // Store full name
-                        if (a.notes) { li.dataset.notes = a.notes; } // Store notes if they exist
+                        const fullType = a.type;
+                        const shortType = SHORT_ASSIGNMENT_NAMES[fullType] || fullType;
+                        // *** Modification: Remove emoji from marker text, keep it for tooltip data ***
+                        li.textContent = shortType;
+                        li.dataset.fullName = fullType;
+                        li.dataset.emoji = getEmojiForType(fullType); // Store emoji separately if needed by tooltip
+                        if (a.notes) { li.dataset.notes = a.notes; }
                         assignmentsUl.appendChild(li);
                     });
                     weeklyCalendarGrid.appendChild(cellElement);
                  }
              }
-             function renderUpcomingList(){upcomingList.innerHTML='';const today=new Date();today.setUTCHours(0,0,0,0);const cutoff=new Date(today);cutoff.setUTCDate(today.getUTCDate()+UPCOMING_DAYS);const upcoming=appData.assignments.filter(a=>{try{const d=new Date(a.date+'T00:00:00Z');return !isNaN(d)&&d>=today&&d<cutoff&&!a.completed;}catch(e){return false;}}).sort((a,b)=>new Date(a.date+'T00:00:00Z')-new Date(b.date+'T00:00:00Z'));if(upcoming.length===0){upcomingList.innerHTML='<li class="no-upcoming">Nada p/ '+UPCOMING_DAYS+' dias</li>';}else{upcoming.forEach(a=>{const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=getEmojiForType(a.type)+' '+a.type;const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li);});}}
-             function renderAssignments() { const container = assignmentsListContainer; container.innerHTML = ''; if (appData.assignments.length === 0) { container.innerHTML = '<li class="no-assignments">Nada cadastrado</li>'; return; } const sorted = [...appData.assignments].sort((a,b)=>{ if (a.completed !== b.completed) return a.completed ? 1 : -1; try { return new Date(a.date+'T00:00:00Z') - new Date(b.date+'T00:00:00Z'); } catch (e) { return 0; } }); sorted.forEach(a => { const li = document.createElement('li'); li.className = 'assignment-item'; li.dataset.id = a.id; if (a.isCelebration) li.dataset.iscelebration = "true"; if (a.completed) li.classList.add('is-completed'); const emojiSpan = document.createElement('span'); emojiSpan.className = 'assignment-emoji'; emojiSpan.textContent = getEmojiForType(a.type); li.appendChild(emojiSpan); const typeSpan = document.createElement('span'); typeSpan.className = 'assignment-type'; typeSpan.textContent = a.type; li.appendChild(typeSpan); const dateSpan = document.createElement('span'); dateSpan.className = 'assignment-date'; dateSpan.textContent = formatRelativeDate(a.date); li.appendChild(dateSpan); if (a.notes && !a.isCelebration) { const notesSpan = document.createElement('span'); notesSpan.className = 'assignment-notes'; notesSpan.textContent = `(${a.notes})`; li.appendChild(notesSpan); } else if (a.isCelebration && a.date){ const yearSpan = document.createElement('span'); yearSpan.className = 'assignment-notes'; try { yearSpan.textContent = `(${new Date(a.date + 'T00:00:00Z').getUTCFullYear()})`; li.appendChild(yearSpan); } catch (e) {} } li.addEventListener('click', (e) => { const item = e.currentTarget; if (item.dataset.id) { showActionModal(item.dataset.id); } }); container.appendChild(li); }); if (container.children.length === 0) { container.innerHTML = '<li class="no-assignments">Nada cadastrado</li>'; } }
-             function addAssignment(event){event.preventDefault();let tS=assignmentTypeInput.value;const bDS=assignmentDateInput.value;const n=assignmentNotesInput.value.trim();let fT=tS;let tFF=tS;const todayS=getTodayDateString();if(tS===CELEBRATION_TYPE){alert('A Celebração é adicionada automaticamente.');return;}if(bDS&&bDS<todayS){alert('Data no passado não permitida.');assignmentDateInput.focus();return;}if(tS!=='Personalizado'&&tS!=='Congresso'){const exists=appData.assignments.some(a=>a.type===tS&&a.date===bDS&&!a.isCelebration);if(exists){alert(`"${getEmojiForType(tS)} ${tS}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Personalizado'){fT=customAssignmentTypeInput.value.trim();tFF=fT;if(!fT){alert('Defina um nome para o tipo personalizado.');customAssignmentTypeInput.focus();return;}const cE=appData.assignments.some(a=>a.type===fT&&a.date===bDS&&!a.isCelebration);if(cE){alert(`"${fT}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Congresso'){const a1E=appData.assignments.some(a=>a.type==='Congresso (Dia 1)'&&a.date===bDS);if(a1E){alert(`Congresso já cadastrado começando em ${formatDate(bDS)}.`);return;}}if(tS==='Congresso'){if(!bDS){alert('Selecione a data do PRIMEIRO dia do Congresso.');assignmentDateInput.focus();return;}const sd=new Date(`${bDS}T00:00:00Z`);if(isNaN(sd.getTime())){alert('Data inválida.');return;}let added=0;for(let i=0;i<3;i++){const cd=new Date(sd);cd.setUTCDate(sd.getUTCDate()+i);const cds=dateToYyyyMmDd(cd);const ass={id:Date.now()+Math.random()+i,type:`Congresso (Dia ${i+1})`,date:cds,notes:n,completed:false, isCelebration:false};appData.assignments.push(ass);added++;}if(added===3){updateFrequency('Congresso');saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false);}else{alert("Erro ao adicionar dias do Congresso.");}return;}if(!fT||fT==='Personalizado'||!bDS){alert('Verifique se selecionou Tipo e Data válidos.');if(!bDS)assignmentDateInput.focus();else if(!fT&&tS!=='Personalizado')assignmentTypeInput.focus();return;}if(!/^\d{4}-\d{2}-\d{2}$/.test(bDS)){alert('Formato de data inválido.');return;}const nA={id:Date.now()+Math.random(),type:fT,date:bDS,notes:n,completed:false, isCelebration: false};appData.assignments.push(nA);updateFrequency(tFF);saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false);}
+            function renderUpcomingList(){upcomingList.innerHTML='';const today=new Date();today.setUTCHours(0,0,0,0);const cutoff=new Date(today);cutoff.setUTCDate(today.getUTCDate()+UPCOMING_DAYS);const upcoming=appData.assignments.filter(a=>{try{const d=new Date(a.date+'T00:00:00Z');return !isNaN(d)&&d>=today&&d<cutoff&&!a.completed;}catch(e){return false;}}).sort((a,b)=>new Date(a.date+'T00:00:00Z')-new Date(b.date+'T00:00:00Z'));if(upcoming.length===0){upcomingList.innerHTML='<li class="no-upcoming">Nada p/ '+UPCOMING_DAYS+' dias</li>';}else{upcoming.forEach(a=>{const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=getEmojiForType(a.type)+' '+a.type;const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li);});}}
+            function renderAssignments() { const container = assignmentsListContainer; container.innerHTML = ''; if (appData.assignments.length === 0) { container.innerHTML = '<li class="no-assignments">Nada cadastrado</li>'; return; } const sorted = [...appData.assignments].sort((a,b)=>{ if (a.completed !== b.completed) return a.completed ? 1 : -1; try { return new Date(a.date+'T00:00:00Z') - new Date(b.date+'T00:00:00Z'); } catch (e) { return 0; } }); sorted.forEach(a => { const li = document.createElement('li'); li.className = 'assignment-item'; li.dataset.id = a.id; if (a.isCelebration) li.dataset.iscelebration = "true"; if (a.completed) li.classList.add('is-completed'); const emojiSpan = document.createElement('span'); emojiSpan.className = 'assignment-emoji'; emojiSpan.textContent = getEmojiForType(a.type); li.appendChild(emojiSpan); const typeSpan = document.createElement('span'); typeSpan.className = 'assignment-type'; typeSpan.textContent = a.type; li.appendChild(typeSpan); const dateSpan = document.createElement('span'); dateSpan.className = 'assignment-date'; dateSpan.textContent = formatRelativeDate(a.date); li.appendChild(dateSpan); if (a.notes && !a.isCelebration) { const notesSpan = document.createElement('span'); notesSpan.className = 'assignment-notes'; notesSpan.textContent = `(${a.notes})`; li.appendChild(notesSpan); } else if (a.isCelebration && a.date){ const yearSpan = document.createElement('span'); yearSpan.className = 'assignment-notes'; try { yearSpan.textContent = `(${new Date(a.date + 'T00:00:00Z').getUTCFullYear()})`; li.appendChild(yearSpan); } catch (e) {} } li.addEventListener('click', (e) => { const item = e.currentTarget; if (item.dataset.id) { showActionModal(item.dataset.id); } }); container.appendChild(li); }); if (container.children.length === 0) { container.innerHTML = '<li class="no-assignments">Nada cadastrado</li>'; } }
+
+            // --- CRUD Functions ---
+            function addAssignment(event){event.preventDefault();let tS=assignmentTypeInput.value;const bDS=assignmentDateInput.value;const n=assignmentNotesInput.value.trim();let fT=tS;let tFF=tS;const todayS=getTodayDateString();if(tS===CELEBRATION_TYPE){alert('A Celebração é adicionada automaticamente.');return;}if(bDS&&bDS<todayS){alert('Data no passado não permitida.');assignmentDateInput.focus();return;}if(tS!=='Personalizado'&&tS!=='Congresso'){const exists=appData.assignments.some(a=>a.type===tS&&a.date===bDS&&!a.isCelebration);if(exists){alert(`"${getEmojiForType(tS)} ${tS}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Personalizado'){fT=customAssignmentTypeInput.value.trim();tFF=fT;if(!fT){alert('Defina um nome para o tipo personalizado.');customAssignmentTypeInput.focus();return;}const cE=appData.assignments.some(a=>a.type===fT&&a.date===bDS&&!a.isCelebration);if(cE){alert(`"${fT}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Congresso'){const a1E=appData.assignments.some(a=>a.type==='Congresso (Dia 1)'&&a.date===bDS);if(a1E){alert(`Congresso já cadastrado começando em ${formatDate(bDS)}.`);return;}}if(tS==='Congresso'){if(!bDS){alert('Selecione a data do PRIMEIRO dia do Congresso.');assignmentDateInput.focus();return;}const sd=new Date(`${bDS}T00:00:00Z`);if(isNaN(sd.getTime())){alert('Data inválida.');return;}let added=0;for(let i=0;i<3;i++){const cd=new Date(sd);cd.setUTCDate(sd.getUTCDate()+i);const cds=dateToYyyyMmDd(cd);const ass={id:Date.now()+Math.random()+i,type:`Congresso (Dia ${i+1})`,date:cds,notes:n,completed:false, isCelebration:false};appData.assignments.push(ass);added++;}if(added===3){updateFrequency('Congresso');saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false); scheduleTodayNotifications(); /* Reschedule check */}else{alert("Erro ao adicionar dias do Congresso.");}return;}if(!fT||fT==='Personalizado'||!bDS){alert('Verifique se selecionou Tipo e Data válidos.');if(!bDS)assignmentDateInput.focus();else if(!fT&&tS!=='Personalizado')assignmentTypeInput.focus();return;}if(!/^\d{4}-\d{2}-\d{2}$/.test(bDS)){alert('Formato de data inválido.');return;}const nA={id:Date.now()+Math.random(),type:fT,date:bDS,notes:n,completed:false, isCelebration: false};appData.assignments.push(nA);updateFrequency(tFF);saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false); scheduleTodayNotifications(); /* Reschedule check */ }
             function showActionModal(id){const a=appData.assignments.find(x=>x.id==id);if(!a)return;modalAssignmentIdInput.value=id;modalTitle.textContent=`${getEmojiForType(a.type)} ${a.type}`;modalActionButtonsDiv.style.display='flex';modalEditViewDiv.style.display='none';modalBtnComplete.textContent=a.completed?'Desmarcar Conclusão':'Marcar Concluída';modalBtnComplete.disabled=false;modalBtnComplete.title='';modalBtnEdit.style.display=a.isCelebration?'none':'block';modalBtnDelete.style.display=a.isCelebration?'none':'block';if(a.isCelebration){const todayStr=getTodayDateString();if(a.date>todayStr){modalBtnComplete.disabled=true;modalBtnComplete.title='Só pode marcar na data ou após.';}}actionModal.classList.add('is-visible');}
             function hideActionModal(){actionModal.classList.remove('is-visible');modalAssignmentIdInput.value='';modalEditDateInput.value='';modalEditNotesInput.value='';}
             function handleCompleteToggle(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1)return;const a=appData.assignments[idx];if(a.isCelebration){const todayStr=getTodayDateString();if(a.date>todayStr){console.warn("Tentativa de completar celebração antes da data.");return;}}const willBeCompleted=!a.completed;appData.assignments[idx].completed=willBeCompleted;saveAppData();renderAll();if(willBeCompleted){triggerConfetti();}hideActionModal();}
             function handleEditRequest(){const id=modalAssignmentIdInput.value;const a=appData.assignments.find(x=>x.id==id);if(!a || a.isCelebration)return;modalEditDateInput.value=a.date;modalEditNotesInput.value=a.notes||'';modalActionButtonsDiv.style.display='none';modalEditViewDiv.style.display='flex';}
-            function handleSaveEdit(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1 || appData.assignments[idx].isCelebration) return; const nd=modalEditDateInput.value;const nn=modalEditNotesInput.value.trim();const todayS=getTodayDateString();if(!nd||!/^\d{4}-\d{2}-\d{2}$/.test(nd)){alert("Data inválida.");modalEditDateInput.focus();return;}if(nd<todayS&&!appData.assignments[idx].completed){alert("Não é possível definir uma data passada para uma tarefa não concluída.");modalEditDateInput.focus();return;}appData.assignments[idx].date=nd;appData.assignments[idx].notes=nn;saveAppData();renderAll();hideActionModal();}
-            function deleteAssignment(id){ const a=appData.assignments.find(x=>x.id == id); if (!a || a.isCelebration) return; appData.assignments=appData.assignments.filter(x=>x.id != id); saveAppData(); renderAll();}
+            function handleSaveEdit(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1 || appData.assignments[idx].isCelebration) return; const nd=modalEditDateInput.value;const nn=modalEditNotesInput.value.trim();const todayS=getTodayDateString();if(!nd||!/^\d{4}-\d{2}-\d{2}$/.test(nd)){alert("Data inválida.");modalEditDateInput.focus();return;}if(nd<todayS&&!appData.assignments[idx].completed){alert("Não é possível definir uma data passada para uma tarefa não concluída.");modalEditDateInput.focus();return;}const originalDate = appData.assignments[idx].date; appData.assignments[idx].date=nd; appData.assignments[idx].notes=nn;saveAppData();renderAll();hideActionModal(); if (originalDate === todayS || nd === todayS) { scheduleTodayNotifications(); } /* Reschedule check if today's date changed */ }
+            function deleteAssignment(id){ const a=appData.assignments.find(x=>x.id == id); if (!a || a.isCelebration) return; const todayS = getTodayDateString(); const wasToday = a.date === todayS; appData.assignments=appData.assignments.filter(x=>x.id != id); saveAppData(); renderAll(); if(wasToday) { scheduleTodayNotifications(); } /* Reschedule check if today's task deleted */}
             function handleDeleteRequest(){ const id = modalAssignmentIdInput.value; deleteAssignment(id); hideActionModal();}
-            function renderAll() { ensureCelebrationExists(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar(); }
-            window.toggleSection = (id, forceState = null) => { const el = document.getElementById(id); if(el) { if (forceState === true) el.classList.add('is-open'); else if (forceState === false) el.classList.remove('is-open'); else el.classList.toggle('is-open'); } };
+            function renderAll() { ensureCelebrationExists(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar(); scheduleTodayNotifications(); }
 
-             // --- Tooltip Functions ---
-             function showCalendarTooltip(markerElement) {
+            // --- Tooltip Functions ---
+            function showCalendarTooltip(markerElement) {
                  const fullName = markerElement.dataset.fullName;
+                 const emoji = markerElement.dataset.emoji; // Use the stored emoji
                  const notes = markerElement.dataset.notes;
-                 if (!fullName) return; // No full name stored
+                 if (!fullName) return;
 
-                 let content = getEmojiForType(fullName) + ' ' + fullName;
-                 if (notes) { content += ` (${notes})`; } // Add notes if available
+                 let content = (emoji ? emoji + ' ' : '') + fullName; // Prepend emoji if available
+                 if (notes) { content += ` (${notes})`; }
 
                  calendarTooltip.textContent = content;
                  const markerRect = markerElement.getBoundingClientRect();
-                 const gridRect = weeklyCalendarGrid.getBoundingClientRect(); // Get grid container position
+                 const gridRect = weeklyCalendarGrid.getBoundingClientRect();
 
-                 // Position tooltip below the marker, relative to the grid container
-                 let top = markerRect.bottom - gridRect.top + 5 + weeklyCalendarGrid.scrollTop; // Add scroll offset
+                 let top = markerRect.bottom - gridRect.top + 5 + weeklyCalendarGrid.scrollTop;
                  let left = markerRect.left - gridRect.left + (markerRect.width / 2);
 
                  calendarTooltip.style.top = `${top}px`;
                  calendarTooltip.style.left = `${left}px`;
-                 // Basic centering below - translate X by -50%
                  calendarTooltip.style.transform = 'translateX(-50%) translateY(0)';
                  calendarTooltip.classList.add('is-visible');
-                 activeTooltipMarker = markerElement; // Track the marker that triggered the tooltip
+                 activeTooltipMarker = markerElement;
 
-                 // Ensure tooltip stays within grid bounds (simple horizontal check)
+                 // Bounds check (simple horizontal)
                  const tooltipRect = calendarTooltip.getBoundingClientRect();
                  if (tooltipRect.left < gridRect.left) {
-                     calendarTooltip.style.left = `${left + (gridRect.left - tooltipRect.left) + 5}px`; // Adjust right
-                     calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; // Re-center approximately
+                     calendarTooltip.style.left = `${left + (gridRect.left - tooltipRect.left) + 5}px`;
+                     calendarTooltip.style.transform = 'translateX(-50%) translateY(0)';
                  } else if (tooltipRect.right > gridRect.right) {
-                     calendarTooltip.style.left = `${left - (tooltipRect.right - gridRect.right) - 5}px`; // Adjust left
-                     calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; // Re-center approximately
+                     calendarTooltip.style.left = `${left - (tooltipRect.right - gridRect.right) - 5}px`;
+                     calendarTooltip.style.transform = 'translateX(-50%) translateY(0)';
                  }
-
-
-                 // Hide after a delay
-                 setTimeout(hideCalendarTooltip, 2500); // Hide after 2.5 seconds
-             }
-
-             function hideCalendarTooltip() {
+                 // Simple auto-hide
+                 // setTimeout(hideCalendarTooltip, 2500); // Maybe not needed if using marker click toggle
+            }
+            function hideCalendarTooltip() {
                  calendarTooltip.classList.remove('is-visible');
                  activeTooltipMarker = null;
-             }
-
+            }
              function handleCalendarMarkerClick(event) {
                 const marker = event.target.closest('.assignment-marker');
                 if (marker) {
-                    // If clicking the same marker that has an active tooltip, hide it
-                    if(marker === activeTooltipMarker) {
-                         hideCalendarTooltip();
-                    } else {
-                        hideCalendarTooltip(); // Hide any previous tooltip
-                        showCalendarTooltip(marker);
-                    }
+                    if(marker === activeTooltipMarker) { hideCalendarTooltip(); }
+                    else { hideCalendarTooltip(); showCalendarTooltip(marker); }
                 } else if (!event.target.closest('.calendar-tooltip')) {
-                    // If click is not on a marker and not inside the tooltip itself, hide it
                     hideCalendarTooltip();
                 }
              }
 
-            // Event Listeners Setup
+            // --- Notification Functions ---
+            function requestNotificationPermission() {
+                if ('Notification' in window) {
+                    if (Notification.permission === 'default') {
+                         Notification.requestPermission().then(permission => {
+                            if (permission === 'granted') {
+                                console.log("Permissão de notificação concedida.");
+                                scheduleTodayNotifications(); // Schedule immediately after permission granted
+                            } else {
+                                console.warn("Permissão de notificação negada.");
+                            }
+                         });
+                    } else if (Notification.permission === 'granted') {
+                        scheduleTodayNotifications(); // Already granted, proceed to schedule
+                    } else {
+                         // Permission is denied, can't do anything. Maybe inform user subtly?
+                         console.warn("Permissão de notificação está bloqueada.");
+                    }
+                } else {
+                    console.warn("Este navegador não suporta notificações desktop.");
+                }
+            }
+
+            function showNotification(assignments) {
+                 if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+                 const title = assignments.length > 1 ? 'Designações Hoje!' : `Designação Hoje: ${assignments[0].type}`;
+                 let body = `Você tem ${assignments.length} designação(ões) marcada(s) para hoje:\n`;
+                 assignments.forEach(a => {
+                     body += `- ${getEmojiForType(a.type)} ${a.type}${a.notes ? ` (${a.notes})` : ''}\n`;
+                 });
+                 body = body.trim();
+
+                 const notification = new Notification(title, {
+                     body: body,
+                     icon: '/path/to/your/icon.png' // Optional: Add an icon path if you have one
+                 });
+
+                 notification.onclick = () => {
+                     window.focus(); // Bring window to front on click
+                     // You could add navigation logic here if needed
+                 };
+             }
+
+            function scheduleTodayNotifications() {
+                 if (!('Notification' in window) || Notification.permission !== 'granted') {
+                     // If permission is not granted, we might want to request it if it's 'default'
+                     if ('Notification' in window && Notification.permission === 'default') {
+                         // Optionally, prompt here, or wait for user action
+                         // requestNotificationPermission(); // Decided to call this on init instead
+                     }
+                     return; // Exit if no permission or support
+                 }
+
+                 const todayStr = getTodayDateString();
+                 const alreadyScheduled = sessionStorage.getItem(NOTIFICATION_SCHEDULED_TODAY_KEY) === todayStr;
+
+                 if (alreadyScheduled) {
+                     // console.log("Notificação para hoje já agendada/mostrada nesta sessão.");
+                     return;
+                 }
+
+                 // Clear any previous timeout (important if this function is called multiple times)
+                 if (notificationTimeoutId) {
+                     clearTimeout(notificationTimeoutId);
+                     notificationTimeoutId = null;
+                 }
+
+                 const assignmentsForToday = appData.assignments.filter(a => a.date === todayStr && !a.completed);
+
+                 if (assignmentsForToday.length > 0) {
+                     const now = new Date();
+                     const noonToday = new Date();
+                     noonToday.setHours(12, 0, 0, 0); // Set to 12:00:00.000 today
+
+                     const msUntilNoon = noonToday.getTime() - now.getTime();
+
+                     if (msUntilNoon > 0) { // Only schedule if 12:00 PM is in the future
+                         console.log(`Agendando notificação para ${assignmentsForToday.length} tarefa(s) às 12:00.`);
+                         notificationTimeoutId = setTimeout(() => {
+                             showNotification(assignmentsForToday);
+                             // Mark as shown for today in this session
+                             sessionStorage.setItem(NOTIFICATION_SCHEDULED_TODAY_KEY, todayStr);
+                         }, msUntilNoon);
+
+                         // Mark as *scheduled* for today in this session
+                         sessionStorage.setItem(NOTIFICATION_SCHEDULED_TODAY_KEY, todayStr);
+
+                     } else {
+                         // It's already past noon, maybe show immediately if not yet shown?
+                         // Or just log it / do nothing according to requirements.
+                         // Current logic: Only show AT 12:00, so do nothing if past.
+                         console.log("Já passou das 12:00, nenhuma notificação agendada.");
+                         // Mark as 'dealt with' for today in this session, even if past noon, to avoid rescheduling attempts.
+                         sessionStorage.setItem(NOTIFICATION_SCHEDULED_TODAY_KEY, todayStr);
+                     }
+                 } else {
+                     // No assignments today, clear any potential scheduled marker if date changes
+                     const sessionDate = sessionStorage.getItem(NOTIFICATION_SCHEDULED_TODAY_KEY);
+                     if(sessionDate && sessionDate !== todayStr) {
+                         sessionStorage.removeItem(NOTIFICATION_SCHEDULED_TODAY_KEY);
+                     }
+                 }
+            }
+
+            // --- Event Listeners Setup ---
+            themeToggleButton.addEventListener('click', toggleTheme);
             actionModal.addEventListener('click',(e)=>{if(e.target===actionModal){hideActionModal();}});
             modalBtnComplete.addEventListener('click',handleCompleteToggle);
             modalBtnEdit.addEventListener('click',handleEditRequest);
@@ -235,20 +453,20 @@
             window.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&actionModal.classList.contains('is-visible')){hideActionModal();}});
             assignmentTypeInput.addEventListener('change',()=>{if(assignmentTypeInput.value==='Personalizado'){customTypeGroup.style.display='flex';customAssignmentTypeInput.required=true;setTimeout(()=>customAssignmentTypeInput.focus(),50);}else{customTypeGroup.style.display='none';customAssignmentTypeInput.required=false;customAssignmentTypeInput.value='';}});
             assignmentForm.addEventListener('submit',addAssignment);
-            prevWeekBtn.addEventListener('click',()=>{calendarWeekOffset--;renderWeeklyCalendar();}); // Re-render calendar on navigation
-            nextWeekBtn.addEventListener('click',()=>{calendarWeekOffset++;renderWeeklyCalendar();}); // Re-render calendar on navigation
-
-            // Listen for clicks on the calendar grid for tooltips
+            prevWeekBtn.addEventListener('click',()=>{ if(calendarWeekOffset > 0) { calendarWeekOffset--; renderWeeklyCalendar();} }); // Check before changing
+            nextWeekBtn.addEventListener('click',()=>{calendarWeekOffset++;renderWeeklyCalendar();});
             weeklyCalendarGrid.addEventListener('click', handleCalendarMarkerClick);
-            // Add a listener to hide the tooltip if clicked outside (optional, timeout handles it)
-            // document.addEventListener('click', (e) => {
-            //    if (!weeklyCalendarGrid.contains(e.target) && !calendarTooltip.contains(e.target)) {
-            //       hideCalendarTooltip();
-            //    }
-            // });
 
-
-            function initializeApp() { loadAppData(); ensureCelebrationExists(); updateDropdownOrder(); renderAll(); assignmentTypeInput.dispatchEvent(new Event('change')); }
+            // --- Initialization ---
+            function initializeApp() {
+                loadAppData();
+                loadAndApplyTheme(); // Load and apply theme first
+                ensureCelebrationExists();
+                updateDropdownOrder();
+                renderAll(); // Initial render includes calendar nav update and notification check
+                assignmentTypeInput.dispatchEvent(new Event('change'));
+                requestNotificationPermission(); // Request permission early if needed
+            }
             initializeApp();
         });
     </script>
