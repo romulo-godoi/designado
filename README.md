@@ -1,4 +1,4 @@
-# 🗓️ My Assignments PWA ✨
+# 🗓️ Designado ✨
 
 A sleek and intuitive Progressive Web App (PWA) designed to help you effortlessly keep track of your theocratic assignments, meeting parts, and important dates. Built with vanilla JavaScript for speed and simplicity.
 
