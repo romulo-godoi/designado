@@ -9,17 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        /* --- CSS Completo da Versão Anterior --- */
-        :root { /* Tema Black Midnight */
-             --midnight-bg: #0d0d10; --midnight-surface: #1c1c21; --midnight-surface-lighter: #25252b;
-             --midnight-border: #333338; --completed-item-bg: #101012;
-             --midnight-text-primary: #eaeaf0; --midnight-text-secondary: #90909c;
-             --midnight-accent-primary: #8a9ff9; --midnight-accent-secondary: #5c6db5; --midnight-accent-alt: #f2c079;
-             --error-color: #e680a7; --success-color: #74c7a3;
-             --list-color-1: #2f588f; --list-color-2: #457c7c; --list-color-3: #7d5c9e;
-             --list-color-4: #82a05e; --list-color-5: #bc906d;
-             --border-radius-outer: 24px; --border-radius-inner: 10px; --font-family: 'Inter', sans-serif;
-             --transition-speed-fast: 0.2s; --transition-speed-med: 0.3s; --transition-speed-slow: 0.5s;
+        :root {
+            --midnight-bg: #0d0d10; --midnight-surface: #1c1c21; --midnight-surface-lighter: #25252b;
+            --midnight-border: #333338; --completed-item-bg: #101012;
+            --midnight-text-primary: #eaeaf0; --midnight-text-secondary: #90909c;
+            --midnight-accent-primary: #8a9ff9; --midnight-accent-secondary: #5c6db5; --midnight-accent-alt: #f2c079;
+            --error-color: #e680a7; --success-color: #74c7a3;
+            --list-color-1: #2f588f; --list-color-2: #457c7c; --list-color-3: #7d5c9e;
+            --list-color-4: #82a05e; --list-color-5: #bc906d;
+            --border-radius-outer: 24px; --border-radius-inner: 10px; --font-family: 'Inter', sans-serif;
+            --transition-speed-fast: 0.2s; --transition-speed-med: 0.3s; --transition-speed-slow: 0.5s;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; } html { scroll-behavior: smooth; height: 100%; }
         body { font-family:var(--font-family); background-color: #030304; color:var(--midnight-text-primary); display:flex; justify-content:center; align-items:center; padding:15px; min-height:100vh; -webkit-tap-highlight-color:transparent; position: relative; overflow-x: hidden; }
@@ -43,121 +42,94 @@
     </style>
 </head>
 <body>
-    <div class="mobile-view-container">
-        <header class="main-header"><h1>Minhas Designações</h1></header>
-        <div class="content-scroll">
-            <div class="dashboard-section">
-                <div id="weeklyCalendarContainer"><div class="calendar-nav"><button id="prevWeekBtn">< Ant</button><span id="calendarWeekLabel"></span><button id="nextWeekBtn">Próx ></button></div><div id="weeklyCalendar" class="calendar-grid"></div></div>
-                <div id="upcomingListContainer"><h3>Próximos 7 dias</h3><ul id="upcomingList"><li class="no-upcoming">...</li></ul></div>
-            </div>
-            <div class="collapsible-section" id="formSection"><div class="section-header" onclick="toggleSection('formSection')"><h2>Adicionar Nova</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><form id="assignmentForm"><div class="form-group"><label for="assignmentType">Tipo</label><select id="assignmentType" name="assignmentType" required><option value="" disabled selected>...</option></select></div><div class="form-group" id="customTypeGroup"><label for="customAssignmentType">Nome</label><input type="text" id="customAssignmentType" name="customAssignmentType" placeholder="..."></div>
-             <!-- MODIFICADO: Label da Data simplificada -->
-             <div class="form-group"><label for="assignmentDate">Data</label><input type="date" id="assignmentDate" name="assignmentDate" required></div>
-             <div class="form-group"><label for="assignmentNotes">Obs</label><input type="text" id="assignmentNotes" name="assignmentNotes" placeholder="..."></div><button type="submit">Adicionar</button></form></div></div>
-            <div class="collapsible-section is-open" id="listSection"><div class="section-header" onclick="toggleSection('listSection')"><h2>Todas Designações</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><ul id="assignmentsList" class="assignment-list"><li class="no-assignments">...</li></ul></div></div>
-        </div>
-    </div>
-     <div id="actionModal" class="modal-overlay"><div class="modal-content"><h4 id="modalTitle">...</h4><input type="hidden" id="modalAssignmentId"><div class="action-buttons"><button id="modalBtnComplete"></button><button id="modalBtnEdit">Editar</button><button id="modalBtnDelete">Excluir</button><button id="modalBtnCancel">Cancelar</button></div><div class="edit-view"><div class="form-group"><label for="modalEditDate">Data</label><input type="date" id="modalEditDate"></div><div class="form-group"><label for="modalEditNotes">Obs</label><input type="text" id="modalEditNotes" placeholder="..."></div><button id="modalBtnSaveEdit">Salvar</button><button id="modalBtnCancelEdit">Cancelar</button></div></div></div>
-     <div id="confetti-container"></div>
+    <!-- HTML Body Completo da Versão Anterior -->
+    <div class="mobile-view-container"><header class="main-header"><h1>Minhas Designações</h1></header><div class="content-scroll"><div class="dashboard-section"><div id="weeklyCalendarContainer"><div class="calendar-nav"><button id="prevWeekBtn" title="Semana Anterior">< Ant</button><span id="calendarWeekLabel">Esta Semana</span><button id="nextWeekBtn" title="Próxima Semana">Próx ></button></div><div id="weeklyCalendar" class="calendar-grid"></div></div><div id="upcomingListContainer"><h3>Próximos 7 dias</h3><ul id="upcomingList"><li class="no-upcoming">...</li></ul></div></div><div class="collapsible-section" id="formSection"><div class="section-header" onclick="toggleSection('formSection')"><h2>Adicionar Nova</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><form id="assignmentForm"><div class="form-group"><label for="assignmentType">Tipo</label><select id="assignmentType" name="assignmentType" required><option value="" disabled selected>...</option></select></div><div class="form-group" id="customTypeGroup"><label for="customAssignmentType">Nome</label><input type="text" id="customAssignmentType" name="customAssignmentType" placeholder="..."></div>
+     <!-- Label da Data Simplificada -->
+    <div class="form-group"><label for="assignmentDate">Data</label><input type="date" id="assignmentDate" name="assignmentDate" required></div>
+     <div class="form-group"><label for="assignmentNotes">Obs</label><input type="text" id="assignmentNotes" name="assignmentNotes" placeholder="..."></div><button type="submit">Adicionar</button></form></div></div><div class="collapsible-section is-open" id="listSection"><div class="section-header" onclick="toggleSection('listSection')"><h2>Todas Designações</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><ul id="assignmentsList" class="assignment-list"><li class="no-assignments">...</li></ul></div></div></div></div>
+    <div id="actionModal" class="modal-overlay"><div class="modal-content"><h4 id="modalTitle">...</h4><input type="hidden" id="modalAssignmentId"><div class="action-buttons"><button id="modalBtnComplete"></button><button id="modalBtnEdit">Editar</button><button id="modalBtnDelete">Excluir</button><button id="modalBtnCancel">Cancelar</button></div><div class="edit-view"><div class="form-group"><label for="modalEditDate">Data</label><input type="date" id="modalEditDate"></div><div class="form-group"><label for="modalEditNotes">Obs</label><input type="text" id="modalEditNotes" placeholder="..."></div><button id="modalBtnSaveEdit">Salvar</button><button id="modalBtnCancelEdit">Cancelar</button></div></div></div>
+    <div id="confetti-container"></div>
 
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Referências DOM (Mantidas) ---
-            const assignmentForm=document.getElementById('assignmentForm');const assignmentTypeInput=document.getElementById('assignmentType');const assignmentDateInput=document.getElementById('assignmentDate');const assignmentNotesInput=document.getElementById('assignmentNotes');const assignmentsListContainer=document.querySelector('#listSection .section-content ul');const upcomingList=document.getElementById('upcomingList');const customTypeGroup=document.getElementById('customTypeGroup');const customAssignmentTypeInput=document.getElementById('customAssignmentType');const weeklyCalendarGrid=document.getElementById('weeklyCalendar');const actionModal=document.getElementById('actionModal');const modalTitle=document.getElementById('modalTitle');const modalAssignmentIdInput=document.getElementById('modalAssignmentId');const modalActionButtonsDiv=actionModal.querySelector('.action-buttons');const modalEditViewDiv=actionModal.querySelector('.edit-view');const modalEditDateInput=document.getElementById('modalEditDate');const modalEditNotesInput=document.getElementById('modalEditNotes');const prevWeekBtn=document.getElementById('prevWeekBtn');const nextWeekBtn=document.getElementById('nextWeekBtn');const calendarWeekLabel=document.getElementById('calendarWeekLabel');const confettiContainer=document.getElementById('confetti-container');
+            const assignmentForm = document.getElementById('assignmentForm'); const assignmentTypeInput = document.getElementById('assignmentType'); const assignmentDateInput = document.getElementById('assignmentDate'); const assignmentNotesInput = document.getElementById('assignmentNotes'); const assignmentsListContainer = document.querySelector('#listSection .section-content ul'); const upcomingList = document.getElementById('upcomingList'); const customTypeGroup = document.getElementById('customTypeGroup'); const customAssignmentTypeInput = document.getElementById('customAssignmentType'); const weeklyCalendarGrid = document.getElementById('weeklyCalendar'); const actionModal = document.getElementById('actionModal'); const modalTitle = document.getElementById('modalTitle'); const modalAssignmentIdInput = document.getElementById('modalAssignmentId'); const modalActionButtonsDiv = actionModal.querySelector('.action-buttons'); const modalEditViewDiv = actionModal.querySelector('.edit-view'); const modalEditDateInput = document.getElementById('modalEditDate'); const modalEditNotesInput = document.getElementById('modalEditNotes'); const prevWeekBtn = document.getElementById('prevWeekBtn'); const nextWeekBtn = document.getElementById('nextWeekBtn'); const calendarWeekLabel = document.getElementById('calendarWeekLabel'); const confettiContainer = document.getElementById('confetti-container');
+            const ASSIGNMENTS_STORAGE_KEY = 'jw_assignments_data_black_v3_final'; // Incrementa Versão
+            const UPCOMING_DAYS = 7; const TOP_N_FREQUENT = 5; const CONFETTI_COUNT = 50;
+            const BASE_ASSIGNMENT_OPTIONS = { "Preparação e Organização":["Presidente","Dirigente de Campo","Indicador (Entrada)","Indicador (Auditório)","Limpeza","Áudio","Vídeo"],"Reunião de Congregação":["Condutor","Leitura da Bíblia","Estudo Bíblico da Congregação (Leitor)","Estudo Bíblico da Congregação (Dirigente)","Discurso Público","Discurso (Nossa vida Cristã)","Tesouros (Discurso 10 minutos)","Joias Espirituais","Faça seu melhor no ministério","Estudo de A Sentinela (Leitor)","Estudo de A Sentinela (Dirigente)","Oração Final"],"Eventos Especiais":["Assembleia","Congresso","Visita a Betel"],"Outros":["Personalizado"] };
+            const ASSIGNMENT_EMOJIS = {"Presidente":"🧑‍⚖️","Dirigente de Campo":"🗺️","Indicador (Entrada)":"🚪","Indicador (Auditório)":"🏛️","Limpeza":"🧹","Áudio":"🔊","Vídeo":"📽️","Condutor":"🎤","Leitura da Bíblia":"📖","Estudo Bíblico da Congregação (Leitor)":"🤓","Estudo Bíblico da Congregação (Dirigente)":"🧑‍🏫","Discurso Público":"🗣️","Discurso (Nossa vida Cristã)":"💖","Tesouros (Discurso 10 minutos)":"💎","Joias Espirituais":"✨","Faça seu melhor no ministério":"💪","Estudo de A Sentinela (Leitor)":"👀","Estudo de A Sentinela (Dirigente)":"🧐","Oração Final":"🙏","Assembleia":"🏟️","Congresso":"🧑‍🤝‍🧑","Celebração":"🍷","Visita a Betel":"🏢"};
+            const MEMORIAL_DATES = { 2026:'2026-04-02', 2027:'2027-03-22', 2028:'2028-04-08', 2029:'2029-03-28', 2030:'2030-04-16', 2031:'2031-04-06' };
+            const MEMORIAL_TYPE_NAME = "Celebração";
+            let appData = { assignments: [], frequency: {} }; let calendarWeekOffset = 0;
 
-            // --- Constantes e Estado ---
-             const ASSIGNMENTS_STORAGE_KEY = 'jw_assignments_data_black_v2_final'; // Mantém chave final
-             const UPCOMING_DAYS=7; const TOP_N_FREQUENT=5; const CONFETTI_COUNT=50;
-             const BASE_ASSIGNMENT_OPTIONS={ "Preparação e Organização":["Presidente","Dirigente de Campo","Indicador (Entrada)","Indicador (Auditório)","Limpeza","Áudio","Vídeo"], "Reunião de Congregação":["Condutor","Leitura da Bíblia","Estudo Bíblico da Congregação (Leitor)","Estudo Bíblico da Congregação (Dirigente)","Discurso Público","Discurso (Nossa vida Cristã)","Tesouros (Discurso 10 minutos)","Joias Espirituais","Faça seu melhor no ministério","Estudo de A Sentinela (Leitor)","Estudo de A Sentinela (Dirigente)","Oração Final"], "Eventos Especiais":["Assembleia","Congresso","Visita a Betel"], "Outros":["Personalizado"] };
-             const ASSIGNMENT_EMOJIS={"Presidente":"🧑‍⚖️","Dirigente de Campo":"🗺️","Indicador (Entrada)":"🚪","Indicador (Auditório)":"🏛️","Limpeza":"🧹","Áudio":"🔊","Vídeo":"📽️","Condutor":"🎤","Leitura da Bíblia":"📖","Estudo Bíblico da Congregação (Leitor)":"🤓","Estudo Bíblico da Congregação (Dirigente)":"🧑‍🏫","Discurso Público":"🗣️","Discurso (Nossa vida Cristã)":"💖","Tesouros (Discurso 10 minutos)":"💎","Joias Espirituais":"✨","Faça seu melhor no ministério":"💪","Estudo de A Sentinela (Leitor)":"👀","Estudo de A Sentinela (Dirigente)":"🧐","Oração Final":"🙏","Assembleia":"🏟️","Congresso":"🧑‍🤝‍🧑","Celebração":"🍷","Visita a Betel":"🏢"};
-             const MEMORIAL_DATES={ 2026:'2026-04-02', 2027:'2027-03-22', 2028:'2028-04-08', 2029:'2029-03-28', 2030:'2030-04-16', 2031:'2031-04-06'}; const MEMORIAL_TYPE_NAME="Celebração";
-             let appData = { assignments: [], frequency: {} }; let calendarWeekOffset = 0;
-
-            // --- Armazenamento (Mantido) ---
             function loadAppData(){ const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY); if(s){try{const p=JSON.parse(s); appData.assignments=Array.isArray(p.assignments)?p.assignments:[]; appData.frequency=typeof p.frequency==='object'&&p.frequency!==null?p.frequency:{};} catch(e){appData={assignments:[],frequency:{}};}} else{appData={assignments:[],frequency:{}};}}
             function saveAppData(){ try{localStorage.setItem(ASSIGNMENTS_STORAGE_KEY,JSON.stringify(appData));} catch(e){alert("Falha salvar!");}}
+            function getEmojiForType(type){return ASSIGNMENT_EMOJIS[type]||'';}
+            function formatDate(d,o={day:'2-digit',month:'2-digit',year:'numeric'}){if(!d)return '';try{const dt=new Date(`${d}T00:00:00`);return new Intl.DateTimeFormat('pt-BR',o).format(dt);}catch(e){const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}}
+            function dateToYyyyMmDd(d){const dt=new Date(d);return`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
+            function getTodayDateString(){return dateToYyyyMmDd(new Date());}
+            function formatRelativeDate(ds){try{const t=new Date();t.setHours(0,0,0,0);const tg=new Date(`${ds}T00:00:00`);tg.setHours(0,0,0,0);if(isNaN(tg.getTime()))return ds;const diff=tg-t;const days=Math.ceil(diff/(1e3*60*60*24));const wk=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];const twk=wk[tg.getDay()];if(days<0)return formatDate(ds);if(days===0)return"Hoje";if(days===1)return"Amanhã";if(days===2)return"Dep. Amanhã";if(days<=6)return`Nesta ${twk}`;return formatDate(ds,{day:'2-digit',month:'short'});}catch(e){return formatDate(ds);}}
+            function updateFrequency(t){if(t&&t!=='Personalizado'&&!t.startsWith('Assembleia (Dia')){appData.frequency[t]=(appData.frequency[t]||0)+1;}else if(t==='Assembleia'){appData.frequency['Assembleia']=(appData.frequency['Assembleia']||0)+1;}}
+            function triggerConfetti(){const c=['var(--midnight-accent-primary)','var(--midnight-accent-alt)','var(--success-color)','var(--error-color)','var(--list-color-1)','var(--list-color-3)','var(--list-color-5)'];for(let i=0;i<CONFETTI_COUNT;i++){const p=document.createElement('div');p.classList.add('confetti-piece');p.style.background=c[Math.floor(Math.random()*c.length)];p.style.left=Math.random()*100+'vw';p.style.top=-10-Math.random()*30+'px';p.style.animationDuration=2.5+Math.random()*1.5+'s';p.style.animationDelay=Math.random()*0.5+'s';p.style.transform=`rotate(${Math.random()*360}deg) scale(${0.8+Math.random()*0.4})`;confettiContainer.appendChild(p);setTimeout(()=>{p.remove();},4500);}}
 
-            // --- Funções Helper (Mantidas) ---
-             function getEmojiForType(type){return ASSIGNMENT_EMOJIS[type]||'';}
-             function formatDate(d,o={day:'2-digit',month:'2-digit',year:'numeric'}){if(!d)return '';try{const dt=new Date(`${d}T00:00:00`);return new Intl.DateTimeFormat('pt-BR',o).format(dt);}catch(e){const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}}
-             function dateToYyyyMmDd(d){const dt=new Date(d);return`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
-             function getTodayDateString(){return dateToYyyyMmDd(new Date());}
-             function formatRelativeDate(ds){try{const t=new Date();t.setHours(0,0,0,0);const tg=new Date(`${ds}T00:00:00`);tg.setHours(0,0,0,0);if(isNaN(tg.getTime()))return ds;const diff=tg-t;const days=Math.ceil(diff/(1e3*60*60*24));const wk=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];const twk=wk[tg.getDay()];if(days<0)return formatDate(ds);if(days===0)return"Hoje";if(days===1)return"Amanhã";if(days===2)return"Dep. Amanhã";if(days<=6)return`Nesta ${twk}`;return formatDate(ds,{day:'2-digit',month:'short'});}catch(e){return formatDate(ds);}}
-             function updateFrequency(t){if(t&&t!=='Personalizado'&&!t.startsWith('Assembleia (Dia')){appData.frequency[t]=(appData.frequency[t]||0)+1;}else if(t==='Assembleia'){appData.frequency['Assembleia']=(appData.frequency['Assembleia']||0)+1;}}
-             function triggerConfetti(){const c=['var(--midnight-accent-primary)','var(--midnight-accent-alt)','var(--success-color)','var(--error-color)','var(--list-color-1)','var(--list-color-3)','var(--list-color-5)'];for(let i=0;i<CONFETTI_COUNT;i++){const p=document.createElement('div');p.classList.add('confetti-piece');p.style.background=c[Math.floor(Math.random()*c.length)];p.style.left=Math.random()*100+'vw';p.style.top=-10-Math.random()*30+'px';p.style.animationDuration=2.5+Math.random()*1.5+'s';p.style.animationDelay=Math.random()*0.5+'s';p.style.transform=`rotate(${Math.random()*360}deg) scale(${0.8+Math.random()*0.4})`;confettiContainer.appendChild(p);setTimeout(()=>{p.remove();},4500);}}
+            function ensureAutomaticMemorial() {
+                const todayStr = getTodayDateString(); const currentYear = new Date().getFullYear();
+                let targetYear = currentYear; let memorialDateStr = MEMORIAL_DATES[targetYear]; let changesMade = false;
+                if(memorialDateStr && todayStr > memorialDateStr){ targetYear++; memorialDateStr = MEMORIAL_DATES[targetYear]; }
+                if(!memorialDateStr){ console.warn("Data da Celebração não definida para "+targetYear); return;}
+                const automaticId = `memorial-auto-${targetYear}`;
 
-            // --- Lógica Celebração Automática ---
-             function ensureAutomaticMemorial() {
-                 const todayStr = getTodayDateString(); const currentYear = new Date().getFullYear();
-                 let targetYear = currentYear; let memorialDateStr = MEMORIAL_DATES[targetYear]; let changesMade = false;
-
-                 if (memorialDateStr && todayStr > memorialDateStr) { targetYear++; memorialDateStr = MEMORIAL_DATES[targetYear]; }
-                 if (!memorialDateStr) { return; } // Não há data p/ exibir
-
-                 const automaticId = `memorial-auto-${targetYear}`;
-
-                 // Remover AUTOMATICOS antigos e verificar/atualizar o correto
-                 let currentMemorialFound = false;
-                 appData.assignments = appData.assignments.filter(a => {
+                let currentMemorialInArray = null;
+                let indicesToRemove = [];
+                for(let i = appData.assignments.length - 1; i >= 0; i--) {
+                    const a = appData.assignments[i];
                     if (a.id && a.id.startsWith('memorial-auto-')) {
-                        if (a.id === automaticId && a.date === memorialDateStr && a.isAutomatic) {
-                            currentMemorialFound = true; // Encontrou o correto
-                            return true; // Manter
+                        if (a.id === automaticId) {
+                            currentMemorialInArray = a; // Encontrou o deste ano
                         } else {
-                            changesMade = true; // Será removido, marcar alteração
-                             return false; // Remover memorial antigo/incorreto
+                            indicesToRemove.push(i); // Marcar antigo para remover
+                            changesMade = true;
                         }
-                     }
-                     return true; // Manter não automáticos
-                 });
+                    }
+                }
+                // Remove os antigos de uma vez
+                indicesToRemove.forEach(index => appData.assignments.splice(index, 1));
 
-                 if (!currentMemorialFound) {
-                     const newMemorial = { id: automaticId, type: MEMORIAL_TYPE_NAME, date: memorialDateStr, notes: "Celebração da morte de Cristo.", completed: false, isAutomatic: true };
-                     appData.assignments.push(newMemorial);
-                     changesMade = true;
+                if (!currentMemorialInArray) {
+                    const newMemorial = { id: automaticId, type: MEMORIAL_TYPE_NAME, date: memorialDateStr, notes: "Celebração da morte de Cristo.", completed: false, isAutomatic: true };
+                    appData.assignments.push(newMemorial);
+                    changesMade = true;
+                } else {
+                    // Se existe, garante que os dados estão corretos (segurança extra)
+                     if (currentMemorialInArray.date !== memorialDateStr || !currentMemorialInArray.isAutomatic || currentMemorialInArray.type !== MEMORIAL_TYPE_NAME) {
+                        currentMemorialInArray.date = memorialDateStr;
+                        currentMemorialInArray.isAutomatic = true;
+                        currentMemorialInArray.type = MEMORIAL_TYPE_NAME; // Garante nome correto
+                        changesMade = true;
+                    }
                  }
 
-                 if (changesMade) { saveAppData(); } // Salva só se houve alteração
+                if (changesMade) { saveAppData(); }
              }
 
-             // --- Funções de Renderização (Mantidas) ---
             function updateDropdownOrder(){const select=assignmentTypeInput;const currentSelection=select.value;select.innerHTML='<option value="" disabled selected>Selecione</option>';let allOptions=[];for(const g in BASE_ASSIGNMENT_OPTIONS){BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(o!=='Personalizado'){allOptions.push({value:o,text:o,group:g,freq:appData.frequency[o]||0});}});}allOptions.sort((a,b)=>(b.freq!==a.freq)?b.freq-a.freq:a.text.localeCompare(b.text));const topFreq=allOptions.slice(0,TOP_N_FREQUENT).filter(o=>o.freq>0).map(o=>o.value);const addedFreq=new Set();if(topFreq.length>0){const fg=document.createElement('optgroup');fg.label='Mais Usados';allOptions.forEach(o=>{if(topFreq.includes(o.value)){const op=document.createElement('option');op.value=o.value;op.textContent=`${getEmojiForType(o.value)} ${o.value==='Assembleia'?'Assembleia (3d)':o.text}`;fg.appendChild(op);addedFreq.add(o.value);}});if(fg.childElementCount>0)select.appendChild(fg);}for(const g in BASE_ASSIGNMENT_OPTIONS){const grp=document.createElement('optgroup');grp.label=g;let hasOpt=false;BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(!addedFreq.has(o)&&o!=='Personalizado'){const op=document.createElement('option');op.value=o;op.textContent=`${getEmojiForType(o)} ${o==='Assembleia'?'Assembleia (3d)':o}`;grp.appendChild(op);hasOpt=true;}});if(g==='Outros'){const custOpt=document.createElement('option');custOpt.value='Personalizado';custOpt.textContent='Personalizado';grp.appendChild(custOpt);hasOpt=true;}if(hasOpt){select.appendChild(grp);}}select.value=currentSelection||"";if(!select.value){select.querySelector('option[disabled]').selected=true;}select.dispatchEvent(new Event('change'));}
             function renderWeeklyCalendar(){weeklyCalendarGrid.innerHTML='';const today=new Date();const baseWeek=new Date(today);baseWeek.setDate(today.getDate()+(calendarWeekOffset*7));const dow=(baseWeek.getDay()+6)%7;const start=new Date(baseWeek);start.setDate(baseWeek.getDate()-dow);start.setHours(0,0,0,0);const end=new Date(start);end.setDate(start.getDate()+6);if(calendarWeekOffset===0){calendarWeekLabel.textContent="Esta Semana";}else if(calendarWeekOffset===1){calendarWeekLabel.textContent="Próxima Semana";}else if(calendarWeekOffset===-1){calendarWeekLabel.textContent="Semana Anterior";}else{calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'2-digit'})}-${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'2-digit'})}`;}const hds=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];hds.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});for(let i=0;i<7;i++){const c=new Date(start);c.setDate(start.getDate()+i);const ds=dateToYyyyMmDd(c);const ce=document.createElement('div');ce.className='day-cell';if(calendarWeekOffset===0&&ds===dateToYyyyMmDd(new Date()))ce.classList.add('today');const n=document.createElement('span');n.className='day-number';n.textContent=c.getDate();ce.appendChild(n);const ul=document.createElement('ul');ul.className='day-assignments';ce.appendChild(ul);const ta=appData.assignments.filter(a=>a.date===ds&&!a.completed);ta.forEach(a=>{const li=document.createElement('li');li.className='assignment-marker';li.textContent=getEmojiForType(a.type)+' '+a.type;li.title=li.textContent;ul.appendChild(li);});weeklyCalendarGrid.appendChild(ce);}}
             function renderUpcomingList(){upcomingList.innerHTML='';const today=new Date();today.setHours(0,0,0,0);const cutoff=new Date(today);cutoff.setDate(today.getDate()+UPCOMING_DAYS);const upcoming=appData.assignments.filter(a=>{try{const d=new Date(a.date+'T00:00:00');d.setHours(0,0,0,0);return !isNaN(d)&&d>=today&&d<cutoff&&!a.completed;}catch(e){return false;}}).sort((a,b)=>new Date(a.date+'T00:00:00')-new Date(b.date+'T00:00:00'));if(upcoming.length===0){upcomingList.innerHTML='<li class="no-upcoming">Nada p/ '+UPCOMING_DAYS+' dias</li>';}else{upcoming.forEach(a=>{const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=getEmojiForType(a.type)+' '+a.type;const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li);});}}
-            function renderAssignments() { const c=assignmentsListContainer;c.innerHTML='';if(appData.assignments.length===0){c.innerHTML='<li class="no-assignments">Nada cadastrado</li>';return;}const sorted=[...appData.assignments].sort((a,b)=>{if(a.completed!==b.completed){return a.completed?1:-1;}try{return new Date(a.date+'T00:00:00')-new Date(b.date+'T00:00:00');}catch(e){return 0;}});sorted.forEach(a=>{const li=document.createElement('li');li.className='assignment-item';li.dataset.id=a.id;if(a.completed)li.classList.add('is-completed');const eS=document.createElement('span');eS.className='assignment-emoji';eS.textContent=getEmojiForType(a.type);li.appendChild(eS);const tS=document.createElement('span');tS.className='assignment-type';tS.textContent=a.type;li.appendChild(tS);const dS=document.createElement('span');dS.className='assignment-date';dS.textContent=formatRelativeDate(a.date);li.appendChild(dS);c.appendChild(li);});}
+            function renderAssignments() { const c=assignmentsListContainer; c.innerHTML=''; if(appData.assignments.length===0){c.innerHTML='<li class="no-assignments">Nada cadastrado</li>'; return;} const sorted=[...appData.assignments].sort((a,b)=>{if(a.completed!==b.completed){return a.completed?1:-1;}try{return new Date(a.date+'T00:00:00')-new Date(b.date+'T00:00:00');}catch(e){return 0;}}); sorted.forEach(a=>{const li=document.createElement('li');li.className='assignment-item';li.dataset.id=a.id;if(a.completed)li.classList.add('is-completed'); const eS=document.createElement('span');eS.className='assignment-emoji';eS.textContent=getEmojiForType(a.type);li.appendChild(eS); const tS=document.createElement('span');tS.className='assignment-type';tS.textContent=a.type;li.appendChild(tS); const dS=document.createElement('span');dS.className='assignment-date';dS.textContent=formatRelativeDate(a.date);li.appendChild(dS); c.appendChild(li);});}
 
-
-             // --- Lógica do Formulário Principal (Mantida) ---
-             function addAssignment(event){event.preventDefault();let tS=assignmentTypeInput.value;const bDS=assignmentDateInput.value;const n=assignmentNotesInput.value.trim();let fT=tS;let tFF=tS;const todayS=getTodayDateString();if(bDS&&bDS<todayS){alert('Data passada?');assignmentDateInput.focus();return;}if(tS!=='Personalizado'&&tS!=='Assembleia'){const exists=appData.assignments.some(a=>a.type===tS&&a.date===bDS);if(exists){alert(`"${getEmojiForType(tS)} ${tS}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Personalizado'){fT=customAssignmentTypeInput.value.trim();tFF=fT;if(!fT){alert('Nome?');customAssignmentTypeInput.focus();return;}const cE=appData.assignments.some(a=>a.type===fT&&a.date===bDS);if(cE){alert(`"${fT}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Assembleia'){const a1E=appData.assignments.some(a=>a.type==='Assembleia (Dia 1)'&&a.date===bDS);if(a1E){alert(`Assembleia já cadastrada em ${formatDate(bDS)}.`);return;}}if(tS==='Assembleia'){if(!bDS){alert('Data 1º dia?');assignmentDateInput.focus();return;}const sd=new Date(`${bDS}T00:00:00`);if(isNaN(sd.getTime())){alert('Data inválida.');return;}let added=0;for(let i=0;i<3;i++){const cd=new Date(sd);cd.setDate(sd.getDate()+i);const cds=dateToYyyyMmDd(cd);const ass={id:Date.now()+Math.random()+i,type:`Assembleia (Dia ${i+1})`,date:cds,notes:n,completed:false};appData.assignments.push(ass);added++;}if(added===3){updateFrequency('Assembleia');saveAppData();renderAssignments();renderUpcomingList();renderWeeklyCalendar();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection');}else{alert("Erro dias.");}return;}if(!fT||fT==='Personalizado'||!bDS){alert('Verifique Tipo/Data.');if(!bDS)assignmentDateInput.focus();else if(!fT&&tS!=='Personalizado')assignmentTypeInput.focus();return;}if(!/^\d{4}-\d{2}-\d{2}$/.test(bDS)){alert('Data?');return;}const nA={id:Date.now()+Math.random(),type:fT,date:bDS,notes:n,completed:false};appData.assignments.push(nA);updateFrequency(tFF);saveAppData();renderAssignments();renderUpcomingList();renderWeeklyCalendar();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection');}
-
-
-            // --- Lógica do Modal (Atualizada) ---
-            function showActionModal(id){const a=appData.assignments.find(x=>x.id==id);if(!a)return;modalAssignmentIdInput.value=id;modalTitle.textContent=`Ações: ${getEmojiForType(a.type)} ${a.type}`;modalActionButtonsDiv.style.display='flex';modalEditViewDiv.style.display='none';const completeBtn=document.getElementById('modalBtnComplete');const editBtn=document.getElementById('modalBtnEdit');const deleteBtn=document.getElementById('modalBtnDelete'); if(a.isAutomatic){editBtn.disabled=true;deleteBtn.disabled=true;const todayStr=getTodayDateString();completeBtn.disabled=(a.date>todayStr);}else{editBtn.disabled=false;deleteBtn.disabled=false;completeBtn.disabled=false;}completeBtn.textContent=a.completed?'Desmarcar Conclusão':'Marcar Concluída';actionModal.classList.add('is-visible');}
+            function addAssignment(event){event.preventDefault();let tS=assignmentTypeInput.value;const bDS=assignmentDateInput.value;const n=assignmentNotesInput.value.trim();let fT=tS;let tFF=tS;const todayS=getTodayDateString();if(bDS&&bDS<todayS){alert('Data passada?');assignmentDateInput.focus();return;}if(tS!=='Personalizado'&&tS!=='Assembleia'){const exists=appData.assignments.some(a=>a.type===tS&&a.date===bDS);if(exists){alert(`"${getEmojiForType(tS)} ${tS}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Personalizado'){fT=customAssignmentTypeInput.value.trim();tFF=fT;if(!fT){alert('Nome?');customAssignmentTypeInput.focus();return;}const cE=appData.assignments.some(a=>a.type===fT&&a.date===bDS);if(cE){alert(`"${fT}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Assembleia'){const a1E=appData.assignments.some(a=>a.type==='Assembleia (Dia 1)'&&a.date===bDS);if(a1E){alert(`Assembleia já cadastrada em ${formatDate(bDS)}.`);return;}}if(tS==='Assembleia'){if(!bDS){alert('Data 1º dia?');assignmentDateInput.focus();return;}const sd=new Date(`${bDS}T00:00:00`);if(isNaN(sd.getTime())){alert('Data inválida.');return;}let added=0;for(let i=0;i<3;i++){const cd=new Date(sd);cd.setDate(sd.getDate()+i);const cds=dateToYyyyMmDd(cd);const ass={id:Date.now()+Math.random()+i,type:`Assembleia (Dia ${i+1})`,date:cds,notes:n,completed:false};appData.assignments.push(ass);added++;}if(added===3){updateFrequency('Assembleia');saveAppData();renderAssignments();renderUpcomingList();renderWeeklyCalendar();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection');}else{alert("Erro dias.");}return;}if(!fT||fT==='Personalizado'||!bDS){alert('Verifique Tipo/Data.');if(!bDS)assignmentDateInput.focus();else if(!fT&&tS!=='Personalizado')assignmentTypeInput.focus();return;}if(!/^\d{4}-\d{2}-\d{2}$/.test(bDS)){alert('Data?');return;}const nA={id:Date.now()+Math.random(),type:fT,date:bDS,notes:n,completed:false};appData.assignments.push(nA);updateFrequency(tFF);saveAppData();renderAssignments();renderUpcomingList();renderWeeklyCalendar();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection');}
+            function showActionModal(id){const a=appData.assignments.find(x=>x.id==id);if(!a)return;modalAssignmentIdInput.value=id;modalTitle.textContent=`Ações: ${getEmojiForType(a.type)} ${a.type}`;modalActionButtonsDiv.style.display='flex';modalEditViewDiv.style.display='none';const cb=document.getElementById('modalBtnComplete');const eb=document.getElementById('modalBtnEdit');const db=document.getElementById('modalBtnDelete');if(a.isAutomatic){eb.disabled=true;db.disabled=true;const ts=getTodayDateString();cb.disabled=(a.date>ts);}else{eb.disabled=false;db.disabled=false;cb.disabled=false;}cb.textContent=a.completed?'Desmarcar Conclusão':'Marcar Concluída';actionModal.classList.add('is-visible');}
             function hideActionModal(){actionModal.classList.remove('is-visible');modalAssignmentIdInput.value='';modalEditDateInput.value='';modalEditNotesInput.value='';}
             function handleCompleteToggle(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1)return;const willBeCompleted=!appData.assignments[idx].completed;appData.assignments[idx].completed=willBeCompleted;saveAppData();renderAssignments();renderUpcomingList();renderWeeklyCalendar();if(willBeCompleted){triggerConfetti();}hideActionModal();}
             function handleEditRequest(){const id=modalAssignmentIdInput.value;const a=appData.assignments.find(x=>x.id==id);if(!a||a.isAutomatic)return;modalEditDateInput.value=a.date;modalEditNotesInput.value=a.notes||'';modalActionButtonsDiv.style.display='none';modalEditViewDiv.style.display='flex';}
             function handleSaveEdit(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1)return;const a=appData.assignments[idx];if(a.isAutomatic)return;const nd=modalEditDateInput.value;const nn=modalEditNotesInput.value.trim();const todayS=getTodayDateString();if(!nd||!/^\d{4}-\d{2}-\d{2}$/.test(nd)){alert("Data inválida.");modalEditDateInput.focus();return;}if(nd<todayS){alert("Data passada?");modalEditDateInput.focus();return;}a.date=nd;a.notes=nn;saveAppData();renderAssignments();renderUpcomingList();renderWeeklyCalendar();hideActionModal();}
-            function deleteAssignment(id){ const a=appData.assignments.find(x=>x.id==id); if(!a || a.isAutomatic)return; /* Nao deleta auto */ /* Removido Confirm */ appData.assignments=appData.assignments.filter(x=>x.id!=id); saveAppData(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar();} // Remove confirmação JS
-            function handleDeleteRequest(){const id=modalAssignmentIdInput.value; deleteAssignment(id); hideActionModal();} // Simplesmente chama delete e fecha
+            // MODIFICADO: Remove confirmação JS
+            function deleteAssignment(id){ const a = appData.assignments.find(x=>x.id == id); if (!a || a.isAutomatic) return; appData.assignments=appData.assignments.filter(x=>x.id != id); saveAppData(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar();}
+            function handleDeleteRequest(){ const id = modalAssignmentIdInput.value; deleteAssignment(id); hideActionModal();}
 
-
-            // --- Event Listeners (Mantidos) ---
             assignmentsListContainer.addEventListener('click',(e)=>{const i=e.target.closest('.assignment-item');if(i&&i.dataset.id){showActionModal(i.dataset.id);}});actionModal.addEventListener('click',(e)=>{if(e.target===actionModal){hideActionModal();}});document.getElementById('modalBtnComplete').addEventListener('click',handleCompleteToggle);document.getElementById('modalBtnEdit').addEventListener('click',handleEditRequest);document.getElementById('modalBtnDelete').addEventListener('click',handleDeleteRequest);document.getElementById('modalBtnCancel').addEventListener('click',hideActionModal);document.getElementById('modalBtnSaveEdit').addEventListener('click',handleSaveEdit);document.getElementById('modalBtnCancelEdit').addEventListener('click',hideActionModal);window.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&actionModal.classList.contains('is-visible')){hideActionModal();}});window.toggleSection=(id)=>{const el=document.getElementById(id);if(el)el.classList.toggle('is-open');};assignmentTypeInput.addEventListener('change',()=>{if(assignmentTypeInput.value==='Personalizado'){customTypeGroup.style.display='flex';customAssignmentTypeInput.required=true;setTimeout(()=>customAssignmentTypeInput.focus(),50);}else{customTypeGroup.style.display='none';customAssignmentTypeInput.required=false;customAssignmentTypeInput.value='';}});assignmentForm.addEventListener('submit',addAssignment);prevWeekBtn.addEventListener('click',()=>{calendarWeekOffset--;renderWeeklyCalendar();});nextWeekBtn.addEventListener('click',()=>{calendarWeekOffset++;renderWeeklyCalendar();});
-
-
-            // --- Inicialização ---
-            function initializeApp() {
-                loadAppData();
-                ensureAutomaticMemorial(); // *** Chama a lógica do memorial ***
-                updateDropdownOrder();
-                renderAssignments(); // Renderiza após garantir memorial
-                renderUpcomingList();
-                renderWeeklyCalendar();
-                assignmentTypeInput.dispatchEvent(new Event('change'));
-            }
-            initializeApp(); // Start!
-
+            function initializeApp(){ loadAppData(); ensureAutomaticMemorial(); updateDropdownOrder(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar(); assignmentTypeInput.dispatchEvent(new Event('change')); }
+            initializeApp();
         });
     </script>
 </body>
