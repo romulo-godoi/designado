@@ -36,11 +36,6 @@ A beautiful, single-page web application designed for Jehovah's Witnesses to eas
 *   **CSS3:** Modern styling using Variables, Flexbox, Grid, and Animations.
 *   **Vanilla JavaScript (ES6+):** Handles all logic, interactivity, and data storage. No external frameworks.
 
-##🚀 How to Use
-
-1.  **Download:** Get the `[your-filename].html` file (e.g., `index.html` or `assignments.html`) from this repository.
-2.  **Open:** Double-click the downloaded `.html` file to open it in your preferred web browser (Chrome, Firefox, Edge, Safari, etc.).
-3.  **Use:** Start adding and managing your assignments!
 
 ## ⚠️ Important Note: Data Storage
 
