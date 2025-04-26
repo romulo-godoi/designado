@@ -6,7 +6,8 @@
     <title data-translate="pageTitle">Minhas Designações</title>
 
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#8a9ff9"> <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#8a9ff9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Designações">
     <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
@@ -33,6 +34,7 @@
             --input-focus-shadow: 0 0 0 3px rgba(122,145,232,0.2), inset 0 1px 3px rgba(0,0,0,0.1);
             --date-picker-indicator-filter: invert(0.7);
             --assignment-date-dark-color: #c0c0c0; /* Improved contrast for date on dark theme */
+            --calendar-transition-speed: 0.25s; /* Transition speed for calendar fade */
         }
 
         body.light-theme {
@@ -56,12 +58,12 @@
         * { box-sizing: border-box; margin: 0; padding: 0; } html { scroll-behavior: smooth; height: 100%; }
         body { font-family:var(--font-family); background-color: var(--body-outer-bg); color:var(--text-primary-color); min-height:100vh; -webkit-tap-highlight-color:transparent; position: relative; overflow-x: hidden; transition: background-color var(--transition-speed-med), color var(--transition-speed-med); }
         .mobile-view-container { background-color:var(--bg-color); width: 100%; height: 100vh; display:flex; flex-direction:column; overflow:hidden; z-index: 1; position: relative; transition: background-color var(--transition-speed-med); }
-        header.main-header { background: var(--header-bg-gradient); padding:18px 20px; border-bottom:1px solid var(--border-color); flex-shrink:0; text-align:center; z-index: 10; position: relative; display: flex; justify-content: space-between; /* Changed */ align-items: center; transition: background var(--transition-speed-med), border-color var(--transition-speed-med); }
-        header.main-header h1 { color:var(--accent-primary-color); font-size: 1.4em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: color var(--transition-speed-med); flex-grow: 1; /* Added */ text-align: center; /* Added */ margin: 0 40px; /* Added space for icons */ }
-        #themeToggleBtn, #languageToggleBtn { background:none; border: none; color: var(--text-secondary-color); font-size: 1.3em; cursor: pointer; padding: 5px; line-height: 1; opacity: 0.8; transition: color var(--transition-speed-fast), opacity var(--transition-speed-fast); z-index: 11; position: relative; /* Changed from absolute */ }
+        header.main-header { background: var(--header-bg-gradient); padding:18px 20px; border-bottom:1px solid var(--border-color); flex-shrink:0; text-align:center; z-index: 10; position: relative; display: flex; justify-content: space-between; align-items: center; transition: background var(--transition-speed-med), border-color var(--transition-speed-med); }
+        header.main-header h1 { color:var(--accent-primary-color); font-size: 1.4em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: color var(--transition-speed-med); flex-grow: 1; text-align: center; margin: 0 40px; }
+        #themeToggleBtn, #languageToggleBtn { background:none; border: none; color: var(--text-secondary-color); font-size: 1.3em; cursor: pointer; padding: 5px; line-height: 1; opacity: 0.8; transition: color var(--transition-speed-fast), opacity var(--transition-speed-fast); z-index: 11; position: relative; }
         #themeToggleBtn:hover, #languageToggleBtn:hover { opacity: 1; }
-        .header-controls { display: flex; align-items: center; position: absolute; /* Position controls absolutely */ top: 50%; transform: translateY(-50%); width: calc(100% - 40px); /* Full width minus padding */ justify-content: space-between; /* Space out icons */ left: 20px; /* Align with padding */ pointer-events: none; /* Allow clicks on title */ }
-        .header-controls button { pointer-events: auto; /* Enable clicks on buttons */ }
+        .header-controls { display: flex; align-items: center; position: absolute; top: 50%; transform: translateY(-50%); width: calc(100% - 40px); justify-content: space-between; left: 20px; pointer-events: none; }
+        .header-controls button { pointer-events: auto; }
 
         #languageOptions { position: absolute; top: 100%; left: 15px; background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: var(--border-radius-inner); padding: 5px 0; z-index: 12; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); min-width: 100px; }
         #languageOptions.show { display: block; }
@@ -74,8 +76,15 @@
         .section-header h2, .dashboard-section > h3 { font-size: 0.8em; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary-color); margin: 15px 0 8px 0; padding-bottom: 5px; border-bottom: 1px solid var(--border-color); transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .section-header h2 { color: var(--accent-primary-color); margin: 0; padding: 0; border-bottom: none; flex-grow: 1; font-weight: 600; letter-spacing: 1px; transition: color var(--transition-speed-med); }
         #weeklyCalendarContainer > h3 { text-align: center; color: var(--accent-alt-color); border-bottom: none; margin-bottom: 8px; font-weight: 600; letter-spacing: 1px; transition: color var(--transition-speed-med);}
         .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } .calendar-nav button { background: none; border: 1px solid var(--border-color); color: var(--text-secondary-color); padding: 4px 10px; border-radius: var(--border-radius-inner); font-size: 0.8em; cursor: pointer; transition: all var(--transition-speed-fast); } .calendar-nav button:hover:not(:disabled) { background-color: var(--accent-primary-color); color: #fff; border-color: var(--accent-primary-color); transform: translateY(-1px); } .calendar-nav button:active:not(:disabled) { transform: scale(0.97); } .calendar-nav button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; background-color: transparent !important; border-color: var(--border-color); transform: none !important; color: var(--text-secondary-color) !important;} #calendarWeekLabel { font-size: 1em; font-weight: 600; color: var(--accent-alt-color); flex-grow: 1; text-align: center; transition: color var(--transition-speed-med);}
-        #upcomingListContainer > h3 { color: var(--text-secondary-color); text-align: center; /* Centered */ }
-        #weeklyCalendar { touch-action: pan-y; /* Allow vertical scroll, handle horizontal */ }
+        #upcomingListContainer > h3 { color: var(--text-secondary-color); text-align: center; }
+        #weeklyCalendar {
+             touch-action: pan-y; /* Allow vertical scroll, handle horizontal swipe in JS */
+             transition: opacity var(--calendar-transition-speed) ease-in-out; /* Added transition */
+             position: relative; /* Needed for potential absolute positioning of children if required */
+        }
+        #weeklyCalendar.calendar-loading {
+             opacity: 0; /* Style for fading out */
+        }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; } .day-header{font-size:0.7em;text-align:center;color:var(--text-secondary-color);padding-bottom:5px;font-weight:500;text-transform:uppercase;border-bottom:1px solid var(--border-color);margin-bottom:5px; transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .day-cell{font-size:0.8em;text-align:center;background-color:var(--bg-color);border-radius:var(--border-radius-inner);padding:8px 4px;min-height:65px;display:flex;flex-direction:column;align-items:center;border:1px solid transparent; transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast), border-color var(--transition-speed-fast); position: relative; } .day-cell:hover { background-color: var(--surface-lighter-color); transform: scale(1.03);} .day-cell.today{border-color:var(--accent-alt-color);background-color:var(--surface-lighter-color); box-shadow: 0 0 8px color-mix(in srgb, var(--accent-alt-color) 30%, transparent); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med), box-shadow var(--transition-speed-med); } .day-number{font-weight:600;margin-bottom:4px;color:var(--text-primary-color);transition: color var(--transition-speed-med);} .day-cell.today .day-number{color:var(--accent-alt-color);} .day-assignments{list-style:none;padding:0;width:100%;}
         .assignment-marker{display:block;font-size:0.7em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background-color:var(--accent-secondary-color);color:var(--text-primary-color);padding:3px 5px;margin-top:4px;border-radius:4px;text-align:center; box-shadow: 0 1px 2px rgba(0,0,0,0.15); cursor: pointer; transition: background-color var(--transition-speed-med), color var(--transition-speed-med); font-weight: 500; }
         body.light-theme .assignment-marker { color: var(--bg-color); }
@@ -629,39 +638,52 @@
 
              function renderWeeklyCalendar(){
                  if (!weeklyCalendarGrid || !calendarWeekLabel || !prevWeekBtn || !nextWeekBtn) return;
-                  weeklyCalendarGrid.innerHTML=''; hideCalendarTooltip();
-                  const today=new Date(); today.setUTCHours(0,0,0,0); const baseWeek=new Date(today); baseWeek.setUTCDate(today.getUTCDate()+(calendarWeekOffset*7));
-                  const dow=(baseWeek.getUTCDay() + 6) % 7; const start=new Date(baseWeek); start.setUTCDate(baseWeek.getUTCDate()-dow); start.setUTCHours(0,0,0,0);
-                  const end=new Date(start); end.setUTCDate(start.getUTCDate()+6); const todayStr = getTodayDateString();
 
-                 if(calendarWeekOffset===0) calendarWeekLabel.textContent = _t("calendarThisWeek");
-                 else if(calendarWeekOffset===1) calendarWeekLabel.textContent = _t("calendarNextWeek");
-                 else calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'short'})} - ${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'short'})}`;
+                 // Start fade out
+                 weeklyCalendarGrid.classList.add('calendar-loading');
+                 hideCalendarTooltip(); // Hide any open tooltip during transition
 
-                 prevWeekBtn.disabled = (calendarWeekOffset <= -52); // Limit going back ~1 year
-                 nextWeekBtn.disabled = (calendarWeekOffset >= 52); // Limit going forward ~1 year
+                 // Use setTimeout to allow fade-out animation to start before changing content
+                 setTimeout(() => {
+                     weeklyCalendarGrid.innerHTML=''; // Clear content after fade starts
 
-                  const dayNames = [_t("dayMonShort"), _t("dayTueShort"), _t("dayWedShort"), _t("dayThuShort"), _t("dayFriShort"), _t("daySatShort"), _t("daySunShort")];
-                  dayNames.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
+                     const today=new Date(); today.setUTCHours(0,0,0,0); const baseWeek=new Date(today); baseWeek.setUTCDate(today.getUTCDate()+(calendarWeekOffset*7));
+                     const dow=(baseWeek.getUTCDay() + 6) % 7; const start=new Date(baseWeek); start.setUTCDate(baseWeek.getUTCDate()-dow); start.setUTCHours(0,0,0,0);
+                     const end=new Date(start); end.setUTCDate(start.getUTCDate()+6); const todayStr = getTodayDateString();
 
-                  for(let i=0;i<7;i++){
-                      const currentDate = new Date(start); currentDate.setUTCDate(start.getUTCDate()+i); const dateStr = dateToYyyyMmDd(currentDate); if (!dateStr) continue;
-                      const cellElement = document.createElement('div'); cellElement.className='day-cell'; if(dateStr===todayStr) cellElement.classList.add('today');
-                      const numberSpan=document.createElement('span'); numberSpan.className='day-number'; numberSpan.textContent=currentDate.getUTCDate(); cellElement.appendChild(numberSpan);
-                      const assignmentsUl = document.createElement('ul'); assignmentsUl.className='day-assignments'; cellElement.appendChild(assignmentsUl);
-                      const todaysAssignments = appData.assignments.filter(a => a && a.date === dateStr && !a.completed);
+                     if(calendarWeekOffset===0) calendarWeekLabel.textContent = _t("calendarThisWeek");
+                     else if(calendarWeekOffset===1) calendarWeekLabel.textContent = _t("calendarNextWeek");
+                     else calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'short'})} - ${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'short'})}`;
 
-                      todaysAssignments.forEach(a => {
-                          if (!a.internalType) return;
-                          const li = document.createElement('li'); li.className = 'assignment-marker';
-                          const shortNameKey = SHORT_ASSIGNMENT_NAME_KEYS[a.internalType];
-                          const shortName = shortNameKey ? _t(shortNameKey) : (a.type || _t(a.internalType));
-                          li.textContent = shortName; li.dataset.fullName = a.type || _t(a.internalType);
-                          if (a.notes) { li.dataset.notes = a.notes; } li.dataset.internalType = a.internalType;
-                          assignmentsUl.appendChild(li);
-                      });
-                      weeklyCalendarGrid.appendChild(cellElement);
-                  }
+                     prevWeekBtn.disabled = (calendarWeekOffset <= -52); // Limit going back ~1 year
+                     nextWeekBtn.disabled = (calendarWeekOffset >= 52); // Limit going forward ~1 year
+
+                     const dayNames = [_t("dayMonShort"), _t("dayTueShort"), _t("dayWedShort"), _t("dayThuShort"), _t("dayFriShort"), _t("daySatShort"), _t("daySunShort")];
+                     dayNames.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
+
+                     for(let i=0;i<7;i++){
+                         const currentDate = new Date(start); currentDate.setUTCDate(start.getUTCDate()+i); const dateStr = dateToYyyyMmDd(currentDate); if (!dateStr) continue;
+                         const cellElement = document.createElement('div'); cellElement.className='day-cell'; if(dateStr===todayStr) cellElement.classList.add('today');
+                         const numberSpan=document.createElement('span'); numberSpan.className='day-number'; numberSpan.textContent=currentDate.getUTCDate(); cellElement.appendChild(numberSpan);
+                         const assignmentsUl = document.createElement('ul'); assignmentsUl.className='day-assignments'; cellElement.appendChild(assignmentsUl);
+                         const todaysAssignments = appData.assignments.filter(a => a && a.date === dateStr && !a.completed);
+
+                         todaysAssignments.forEach(a => {
+                             if (!a.internalType) return;
+                             const li = document.createElement('li'); li.className = 'assignment-marker';
+                             const shortNameKey = SHORT_ASSIGNMENT_NAME_KEYS[a.internalType];
+                             const shortName = shortNameKey ? _t(shortNameKey) : (a.type || _t(a.internalType));
+                             li.textContent = shortName; li.dataset.fullName = a.type || _t(a.internalType);
+                             if (a.notes) { li.dataset.notes = a.notes; } li.dataset.internalType = a.internalType;
+                             assignmentsUl.appendChild(li);
+                         });
+                         weeklyCalendarGrid.appendChild(cellElement);
+                     }
+
+                     // Content is ready, remove loading class to fade in
+                     weeklyCalendarGrid.classList.remove('calendar-loading');
+
+                 }, 50); // Small delay (50ms) - adjust if needed
              }
 
              function renderUpcomingList(){
@@ -770,7 +792,7 @@
                      ensureCelebrationExists();
                      renderAssignments();
                      renderUpcomingList();
-                     renderWeeklyCalendar();
+                     renderWeeklyCalendar(); // This now handles its own transition
                      updateDropdownOrder();
                      applyTranslationsHTML(); // Ensure UI text is updated
                  } catch (error) {
@@ -840,9 +862,15 @@
                  // Only trigger horizontal swipe if it's more horizontal than vertical
                  if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > swipeThreshold) {
                      if (deltaX < 0) { // Swiped left (Next Week)
-                         if (!nextWeekBtn.disabled) nextWeekBtn.click();
+                         if (!nextWeekBtn.disabled) {
+                             calendarWeekOffset++;
+                             renderWeeklyCalendar(); // Render triggers fade
+                         }
                      } else { // Swiped right (Prev Week)
-                         if (!prevWeekBtn.disabled) prevWeekBtn.click();
+                         if (!prevWeekBtn.disabled) {
+                             calendarWeekOffset--;
+                             renderWeeklyCalendar(); // Render triggers fade
+                         }
                      }
                  }
                  // Reset coordinates
@@ -888,12 +916,25 @@
                  window.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&actionModal?.classList.contains('is-visible')){hideActionModal();}});
                  if (assignmentTypeInput) assignmentTypeInput.addEventListener('change',()=>{ const isCustom = assignmentTypeInput.value === 'assignTypeCustom'; if (customTypeGroup) customTypeGroup.style.display = isCustom ? 'flex' : 'none'; if(customAssignmentTypeInput){ customAssignmentTypeInput.required = isCustom; if(isCustom){ setTimeout(()=>customAssignmentTypeInput.focus(),50); } else { customAssignmentTypeInput.value=''; }} });
                  if (assignmentForm) assignmentForm.addEventListener('submit',addAssignment);
-                 if (prevWeekBtn) prevWeekBtn.addEventListener('click', () => { if (!prevWeekBtn.disabled) { calendarWeekOffset--; renderWeeklyCalendar(); }});
-                 if (nextWeekBtn) nextWeekBtn.addEventListener('click', () => { if (!nextWeekBtn.disabled) { calendarWeekOffset++; renderWeeklyCalendar(); }});
+
+                 // Modified Button Click Handlers for transition
+                 if (prevWeekBtn) prevWeekBtn.addEventListener('click', () => {
+                     if (!prevWeekBtn.disabled) {
+                         calendarWeekOffset--;
+                         renderWeeklyCalendar(); // Render handles the transition
+                     }
+                 });
+                 if (nextWeekBtn) nextWeekBtn.addEventListener('click', () => {
+                     if (!nextWeekBtn.disabled) {
+                         calendarWeekOffset++;
+                         renderWeeklyCalendar(); // Render handles the transition
+                     }
+                 });
+
                  if (weeklyCalendarGrid) weeklyCalendarGrid.addEventListener('click', handleCalendarMarkerClick);
 
-                 // Swipe listeners for calendar
-                 if (weeklyCalendarContainer) { // Attach to container for better area coverage
+                 // Swipe listeners for calendar (no change needed here, logic moved to handleSwipeGesture)
+                 if (weeklyCalendarContainer) {
                      weeklyCalendarContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
                      weeklyCalendarContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
                  }
