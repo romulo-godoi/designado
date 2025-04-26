@@ -1,0 +1,25 @@
+{
+  "name": "Minhas Designações JW",
+  "short_name": "Designado",
+  "description": "Gerenciador pessoal para designações e datas importantes.",
+  "lang": "pt-BR",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d0d10",
+  "theme_color": "#8a9ff9",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-192x192.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
