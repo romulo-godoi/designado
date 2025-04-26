@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title data-translate="pageTitle">Minhas Designações</title>
+
+    <!-- === PWA Manifest Link & iOS Meta Tags START === -->
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#8a9ff9"> <!-- Cor do tema para barra de endereço, etc. -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Designações">
+    <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
+    <!-- === PWA Manifest Link & iOS Meta Tags END === -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -727,7 +737,6 @@
                 if (weeklyCalendarGrid) weeklyCalendarGrid.addEventListener('click', handleCalendarMarkerClick);
             }
 
-
              async function initializeApp() {
                  console.log("Starting App Initialization...");
                  loadThemePreference();
@@ -737,6 +746,22 @@
                  setupEventListeners();
                  initializeAppLogic();
                  console.log("App Initialized.");
+
+                 // === Service Worker Registration START ===
+                 if ('serviceWorker' in navigator) {
+                     window.addEventListener('load', () => { // Register SW after page load
+                         navigator.serviceWorker.register('./service-worker.js')
+                           .then(registration => {
+                               console.log('ServiceWorker registrado com sucesso no escopo:', registration.scope);
+                           })
+                           .catch(error => {
+                               console.error('Falha ao registrar o ServiceWorker:', error);
+                           });
+                   });
+                 } else {
+                     console.log('Service Worker não é suportado neste navegador.');
+                 }
+                 // === Service Worker Registration END ===
              }
 
             initializeApp();
