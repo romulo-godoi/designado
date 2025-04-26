@@ -2,6 +2,7 @@
   "pt-BR": {
     "pageTitle": "Minhas Designações",
     "themeToggleButton": "Alternar Tema",
+    "languageToggleButton": "Mudar Idioma",
     "prevWeekButton": "< Ant",
     "nextWeekButton": "Próx >",
     "upcomingTitle": "Próximos 7 Dias",
@@ -97,6 +98,7 @@
   "en": {
     "pageTitle": "My Assignments",
     "themeToggleButton": "Toggle Theme",
+    "languageToggleButton": "Change Language",
     "prevWeekButton": "< Prev",
     "nextWeekButton": "Next >",
     "upcomingTitle": "Next 7 Days",
@@ -192,6 +194,7 @@
   "es": {
     "pageTitle": "Mis Asignaciones",
     "themeToggleButton": "Cambiar Tema",
+    "languageToggleButton": "Cambiar Idioma",
     "prevWeekButton": "< Ant",
     "nextWeekButton": "Sig >",
     "upcomingTitle": "Próximos 7 Días",
@@ -287,6 +290,7 @@
   "de": {
     "pageTitle": "Meine Aufgaben",
     "themeToggleButton": "Design wechseln",
+    "languageToggleButton": "Sprache ändern",
     "prevWeekButton": "< Vorh.",
     "nextWeekButton": "Nächst. >",
     "upcomingTitle": "Nächste 7 Tage",
@@ -382,6 +386,7 @@
   "fr": {
     "pageTitle": "Mes attributions",
     "themeToggleButton": "Changer de thème",
+    "languageToggleButton": "Changer de langue",
     "prevWeekButton": "< Préc.",
     "nextWeekButton": "Suiv. >",
     "upcomingTitle": "7 prochains jours",
@@ -477,6 +482,7 @@
   "it": {
     "pageTitle": "I miei incarichi",
     "themeToggleButton": "Cambia tema",
+    "languageToggleButton": "Cambia Lingua",
     "prevWeekButton": "< Prec.",
     "nextWeekButton": "Succ. >",
     "upcomingTitle": "Prossimi 7 giorni",
