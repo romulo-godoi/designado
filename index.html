@@ -43,7 +43,7 @@
         }
         .assignment-item:last-child { border-bottom: none; }
         .assignment-item:not(.assignment-item[data-iscelebration="true"]):hover { transform: translateY(-2px); filter: brightness(1.15); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-        .assignment-item[data-iscelebration="true"] { cursor: default; background-color: #4a2f4a; /* Slightly different color */ }
+        .assignment-item[data-iscelebration="true"] { cursor: default; background-color: #4a2f4a; }
         .assignment-item[data-iscelebration="true"]:hover { background-color: #553655; }
         .assignment-item:nth-child(5n+1):not([data-iscelebration="true"]){background-color:var(--list-color-1);} .assignment-item:nth-child(5n+2):not([data-iscelebration="true"]){background-color:var(--list-color-2);} .assignment-item:nth-child(5n+3):not([data-iscelebration="true"]){background-color:var(--list-color-3);} .assignment-item:nth-child(5n+4):not([data-iscelebration="true"]){background-color:var(--list-color-4);} .assignment-item:nth-child(5n):not([data-iscelebration="true"]){background-color:var(--list-color-5);}
         .assignment-item.is-completed { background-color: var(--completed-item-bg) !important; opacity: 0.55; filter: grayscale(30%); cursor: default; }
@@ -51,9 +51,10 @@
         .assignment-emoji { font-size: 1.9em; margin-bottom: 8px; line-height: 1; display: block; transition: transform var(--transition-speed-fast); }
         .assignment-item:not([data-iscelebration="true"]):hover .assignment-emoji { transform: scale(1.1); }
         .assignment-type { font-size: 1em; font-weight: 600; margin-bottom: 6px; color: var(--midnight-text-primary); line-height: 1.3; display: block; }
-        .assignment-date { font-size: 0.85em; font-weight: 500; color: var(--midnight-text-secondary); display: block; }
+        .assignment-date { font-size: 0.85em; font-weight: 500; color: var(--midnight-text-secondary); display: block; margin-bottom: 4px; /* Added margin */}
         .assignment-item.is-completed .assignment-emoji { filter: grayscale(80%); opacity: 0.7; transform: scale(1);}
         .assignment-item.is-completed .assignment-type { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--midnight-text-secondary); }
+        .assignment-notes { font-size: 0.75em; color: var(--midnight-text-secondary); margin-top: 4px; font-style: italic; } /* New class for notes */
 
         .modal-overlay{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(10,10,15,0.8);backdrop-filter:blur(3px);justify-content:center;align-items:center;opacity:0;transition:opacity var(--transition-speed-med) ease-out;} .modal-overlay.is-visible{display:flex;opacity:1;} .modal-content{background-color:var(--midnight-surface);padding:30px;border-radius:var(--border-radius-inner);box-shadow:0 8px 25px rgba(0,0,0,0.5);width:90%;max-width:400px;position:relative;display:flex;flex-direction:column;gap:18px;border:1px solid var(--midnight-border);transform:scale(0.95);transition:transform var(--transition-speed-med) ease-out 0.1s;} .modal-overlay.is-visible .modal-content{transform:scale(1);} .modal-content h4{color:var(--midnight-accent-primary);margin-bottom:8px;text-align:center;font-size:1.2em;font-weight:600;word-break:break-word;} .modal-content .action-buttons,.modal-content .edit-view{display:flex;flex-direction:column;gap:12px;} .modal-content button{padding:12px 18px;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-weight:600;font-size:0.95em;transition:all var(--transition-speed-fast);width:100%;text-transform:uppercase;letter-spacing:0.5px;box-shadow:0 2px 5px rgba(0,0,0,0.2);} .modal-content button:hover:not(:disabled){opacity:0.9;box-shadow:0 4px 10px rgba(0,0,0,0.3);transform:translateY(-1px);} .modal-content button:active:not(:disabled){transform:scale(0.97);box-shadow:0 1px 2px rgba(0,0,0,0.1);} #modalBtnComplete{background-color:var(--success-color);color:#111;} #modalBtnComplete:disabled { background-color: var(--midnight-text-secondary); color: var(--midnight-surface-lighter); cursor: not-allowed; opacity: 0.7; } #modalBtnEdit{background-color:var(--midnight-accent-alt);color:#111;} #modalBtnDelete{background-color:var(--error-color);color:#fff;} #modalBtnCancel,#modalBtnCancelEdit{background-color:var(--midnight-surface-lighter);color:var(--midnight-text-primary);border:1px solid var(--midnight-border);} .edit-view{display:none;} .edit-view .form-group{width:100%;} .edit-view label{font-size:0.8em;} #modalBtnSaveEdit{background-color:var(--success-color);color:#111;}
         .no-assignments, .no-upcoming{font-size:0.9em;text-align:center;color:var(--midnight-text-secondary);padding:30px 20px;font-style:italic;background:transparent;} .no-assignments{padding:40px 20px;}
@@ -62,7 +63,7 @@
     </style>
 </head>
 <body>
-     <div class="mobile-view-container"><header class="main-header"><h1>Minhas Designações</h1></header><div class="content-scroll"><div class="dashboard-section"><div id="weeklyCalendarContainer"><div class="calendar-nav"><button id="prevWeekBtn">< Ant</button><span id="calendarWeekLabel"></span><button id="nextWeekBtn">Próx ></button></div><div id="weeklyCalendar" class="calendar-grid"></div></div><div id="upcomingListContainer"><h3>Próximos 7 dias</h3><ul id="upcomingList"><li class="no-upcoming">...</li></ul></div></div><div class="collapsible-section" id="formSection"><div class="section-header" onclick="toggleSection('formSection')"><h2>Adicionar Nova</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><form id="assignmentForm"><div class="form-group"><label for="assignmentType">Tipo</label><select id="assignmentType" name="assignmentType" required><option value="" disabled selected>...</option></select></div><div class="form-group" id="customTypeGroup"><label for="customAssignmentType">Nome</label><input type="text" id="customAssignmentType" name="customAssignmentType" placeholder="..."></div><div class="form-group"><label for="assignmentDate">Data (1º dia p/ Assembleia)</label><input type="date" id="assignmentDate" name="assignmentDate" required></div><div class="form-group"><label for="assignmentNotes">Obs</label><input type="text" id="assignmentNotes" name="assignmentNotes" placeholder="..."></div><button type="submit">Adicionar</button></form></div></div><div class="collapsible-section is-open" id="listSection"><div class="section-header" onclick="toggleSection('listSection')"><h2>Todas Designações</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><ul id="assignmentsList" class="assignment-list"><li class="no-assignments">...</li></ul></div></div></div></div>
+     <div class="mobile-view-container"><header class="main-header"><h1>Minhas Designações</h1></header><div class="content-scroll"><div class="dashboard-section"><div id="weeklyCalendarContainer"><div class="calendar-nav"><button id="prevWeekBtn">< Ant</button><span id="calendarWeekLabel"></span><button id="nextWeekBtn">Próx ></button></div><div id="weeklyCalendar" class="calendar-grid"></div></div><div id="upcomingListContainer"><h3>Próximos 7 dias</h3><ul id="upcomingList"><li class="no-upcoming">...</li></ul></div></div><div class="collapsible-section" id="formSection"><div class="section-header" onclick="toggleSection('formSection')"><h2>Adicionar Nova</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><form id="assignmentForm"><div class="form-group"><label for="assignmentType">Tipo</label><select id="assignmentType" name="assignmentType" required><option value="" disabled selected>...</option></select></div><div class="form-group" id="customTypeGroup"><label for="customAssignmentType">Nome</label><input type="text" id="customAssignmentType" name="customAssignmentType" placeholder="..."></div><div class="form-group"><label for="assignmentDate">Data</label><input type="date" id="assignmentDate" name="assignmentDate" required></div><div class="form-group"><label for="assignmentNotes">Obs</label><input type="text" id="assignmentNotes" name="assignmentNotes" placeholder="..."></div><button type="submit">Adicionar</button></form></div></div><div class="collapsible-section is-open" id="listSection"><div class="section-header" onclick="toggleSection('listSection')"><h2>Todas Designações</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><ul id="assignmentsList" class="assignment-list"><li class="no-assignments">...</li></ul></div></div></div></div>
      <div id="actionModal" class="modal-overlay"><div class="modal-content"><h4 id="modalTitle">...</h4><input type="hidden" id="modalAssignmentId"><div class="action-buttons"><button id="modalBtnComplete"></button><button id="modalBtnEdit">Editar</button><button id="modalBtnDelete">Excluir</button><button id="modalBtnCancel">Cancelar</button></div><div class="edit-view"><div class="form-group"><label for="modalEditDate">Data</label><input type="date" id="modalEditDate"></div><div class="form-group"><label for="modalEditNotes">Obs</label><input type="text" id="modalEditNotes" placeholder="..."></div><button id="modalBtnSaveEdit">Salvar</button><button id="modalBtnCancelEdit">Cancelar</button></div></div></div>
      <div id="confetti-container"></div>
 
@@ -89,7 +90,7 @@
             function dateToYyyyMmDd(d){const dt=new Date(d);return`${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,'0')}-${String(dt.getUTCDate()).padStart(2,'0')}`;}
             function getTodayDateString(){const d=new Date(); return dateToYyyyMmDd(d);}
             function formatRelativeDate(ds){try{const t=new Date();t.setUTCHours(0,0,0,0);const tg=new Date(`${ds}T00:00:00Z`);if(isNaN(tg.getTime()))return ds;const diff=tg-t;const days=Math.ceil(diff/(1e3*60*60*24));const wk=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];const twk=wk[tg.getUTCDay()];if(days<0)return formatDate(ds);if(days===0)return"Hoje";if(days===1)return"Amanhã";if(days===2)return"Dep. Amanhã";if(days<=6)return`Próx ${twk}`;return formatDate(ds,{day:'2-digit',month:'short'});}catch(e){return formatDate(ds);}}
-            function updateFrequency(t){if(t&&t!=='Personalizado'&&!t.startsWith('Assembleia (Dia')&&t!==CELEBRATION_TYPE){appData.frequency[t]=(appData.frequency[t]||0)+1;}else if(t==='Assembleia'){appData.frequency['Assembleia']=(appData.frequency['Assembleia']||0)+1;}}
+            function updateFrequency(t){if(t&&t!=='Personalizado'&&!t.startsWith('Congresso (Dia')&&t!==CELEBRATION_TYPE){appData.frequency[t]=(appData.frequency[t]||0)+1;}else if(t==='Congresso'){appData.frequency['Congresso']=(appData.frequency['Congresso']||0)+1;}}
             function triggerConfetti(){const c=['var(--midnight-accent-primary)','var(--midnight-accent-alt)','var(--success-color)','var(--error-color)','var(--list-color-1)','var(--list-color-3)','var(--list-color-5)'];for(let i=0;i<CONFETTI_COUNT;i++){const p=document.createElement('div');p.classList.add('confetti-piece');p.style.background=c[Math.floor(Math.random()*c.length)];p.style.left=Math.random()*100+'vw';p.style.top=-10-Math.random()*30+'px';p.style.animationDuration=2.5+Math.random()*1.5+'s';p.style.animationDelay=Math.random()*0.5+'s';p.style.transform=`rotate(${Math.random()*360}deg) scale(${0.8+Math.random()*0.4})`;confettiContainer.appendChild(p);setTimeout(()=>{p.remove();},4500);}}
 
              function getNextCelebrationDate(todayStr) {
@@ -100,7 +101,6 @@
                          return cel;
                      }
                  }
-                 // If all known dates passed, return the last known one (or indicate none)
                  return CELEBRATION_DATES[CELEBRATION_DATES.length - 1] || null;
             }
 
@@ -110,24 +110,22 @@
                  let existingCelebrationIndex = appData.assignments.findIndex(a => a.isCelebration);
                  let needsSave = false;
 
-                 if (!nextCelebration) { // No future dates known
+                 if (!nextCelebration) {
                     if (existingCelebrationIndex !== -1) {
-                         // Optionally remove old celebration if no future date known
+                         // Optional: remove old celebration if no future date known
                          // appData.assignments.splice(existingCelebrationIndex, 1);
                          // needsSave = true;
                      }
-                     return; // Nothing to add/update
+                     return;
                  }
 
                  const celebrationId = `celebration-${nextCelebration.year}`;
 
                  if (existingCelebrationIndex !== -1) {
                      const current = appData.assignments[existingCelebrationIndex];
-                     // Check if date or ID needs updating
                      if (current.date !== nextCelebration.date || current.id !== celebrationId) {
                          current.date = nextCelebration.date;
                          current.id = celebrationId;
-                         // If the year changed, reset completed status? (Decide based on requirement)
                          if (!current.id.endsWith(String(nextCelebration.year))) {
                             current.completed = false;
                          }
@@ -151,7 +149,7 @@
                  }
              }
 
-             function updateDropdownOrder() { const select=assignmentTypeInput;const currentSelection=select.value;select.innerHTML='<option value="" disabled selected>Selecione</option>';let allOptions=[];for(const g in BASE_ASSIGNMENT_OPTIONS){BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(o!=='Personalizado' && o !== CELEBRATION_TYPE){allOptions.push({value:o,text:o,group:g,freq:appData.frequency[o]||0});}});}allOptions.sort((a,b)=>(b.freq!==a.freq)?b.freq-a.freq:a.text.localeCompare(b.text));const topFreq=allOptions.slice(0,TOP_N_FREQUENT).filter(o=>o.freq>0).map(o=>o.value);const addedFreq=new Set();if(topFreq.length>0){const fg=document.createElement('optgroup');fg.label='Mais Usados';allOptions.forEach(o=>{if(topFreq.includes(o.value)){const op=document.createElement('option');op.value=o.value;op.textContent=`${getEmojiForType(o.value)} ${o.value==='Assembleia'?'Assembleia (3d)':o.text}`;fg.appendChild(op);addedFreq.add(o.value);}});if(fg.childElementCount>0)select.appendChild(fg);}for(const g in BASE_ASSIGNMENT_OPTIONS){const grp=document.createElement('optgroup');grp.label=g;let hasOpt=false;BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(!addedFreq.has(o)&&o!=='Personalizado' && o !== CELEBRATION_TYPE){const op=document.createElement('option');op.value=o;op.textContent=`${getEmojiForType(o)} ${o==='Assembleia'?'Assembleia (3d)':o}`;grp.appendChild(op);hasOpt=true;}});if(g==='Outros'){const custOpt=document.createElement('option');custOpt.value='Personalizado';custOpt.textContent='Personalizado';grp.appendChild(custOpt);hasOpt=true;}if(hasOpt){select.appendChild(grp);}}select.value=currentSelection||"";if(!select.value){select.querySelector('option[disabled]').selected=true;}select.dispatchEvent(new Event('change'));}
+             function updateDropdownOrder() { const select=assignmentTypeInput;const currentSelection=select.value;select.innerHTML='<option value="" disabled selected>Selecione</option>';let allOptions=[];for(const g in BASE_ASSIGNMENT_OPTIONS){BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(o!=='Personalizado' && o !== CELEBRATION_TYPE){allOptions.push({value:o,text:o,group:g,freq:appData.frequency[o]||0});}});}allOptions.sort((a,b)=>(b.freq!==a.freq)?b.freq-a.freq:a.text.localeCompare(b.text));const topFreq=allOptions.slice(0,TOP_N_FREQUENT).filter(o=>o.freq>0).map(o=>o.value);const addedFreq=new Set();if(topFreq.length>0){const fg=document.createElement('optgroup');fg.label='Mais Usados';allOptions.forEach(o=>{if(topFreq.includes(o.value)){const op=document.createElement('option');op.value=o.value;op.textContent=`${getEmojiForType(o.value)} ${o.value==='Congresso'?'Congresso (3d)':o.text}`;fg.appendChild(op);addedFreq.add(o.value);}});if(fg.childElementCount>0)select.appendChild(fg);}for(const g in BASE_ASSIGNMENT_OPTIONS){const grp=document.createElement('optgroup');grp.label=g;let hasOpt=false;BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(!addedFreq.has(o)&&o!=='Personalizado' && o !== CELEBRATION_TYPE){const op=document.createElement('option');op.value=o;op.textContent=`${getEmojiForType(o)} ${o==='Congresso'?'Congresso (3d)':o}`;grp.appendChild(op);hasOpt=true;}});if(g==='Outros'){const custOpt=document.createElement('option');custOpt.value='Personalizado';custOpt.textContent='Personalizado';grp.appendChild(custOpt);hasOpt=true;}if(hasOpt){select.appendChild(grp);}}select.value=currentSelection||"";if(!select.value){select.querySelector('option[disabled]').selected=true;}select.dispatchEvent(new Event('change'));}
             function renderWeeklyCalendar(){weeklyCalendarGrid.innerHTML='';const today=new Date();today.setUTCHours(0,0,0,0);const baseWeek=new Date(today);baseWeek.setUTCDate(today.getUTCDate()+(calendarWeekOffset*7));const dow=(baseWeek.getUTCDay()+6)%7;const start=new Date(baseWeek);start.setUTCDate(baseWeek.getUTCDate()-dow);start.setUTCHours(0,0,0,0);const end=new Date(start);end.setUTCDate(start.getUTCDate()+6);if(calendarWeekOffset===0){calendarWeekLabel.textContent="Esta Semana";}else if(calendarWeekOffset===1){calendarWeekLabel.textContent="Próxima Semana";}else if(calendarWeekOffset===-1){calendarWeekLabel.textContent="Semana Anterior";}else{calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'2-digit'})}-${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'2-digit'})}`;}const hds=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];hds.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});for(let i=0;i<7;i++){const c=new Date(start);c.setUTCDate(start.getUTCDate()+i);const ds=dateToYyyyMmDd(c);const ce=document.createElement('div');ce.className='day-cell';if(calendarWeekOffset===0&&ds===getTodayDateString())ce.classList.add('today');const n=document.createElement('span');n.className='day-number';n.textContent=c.getUTCDate();ce.appendChild(n);const ul=document.createElement('ul');ul.className='day-assignments';ce.appendChild(ul);const ta=appData.assignments.filter(a=>a.date===ds&&!a.completed);ta.forEach(a=>{const li=document.createElement('li');li.className='assignment-marker';li.textContent=getEmojiForType(a.type)+' '+a.type;li.title=`${li.textContent} ${a.notes ? '('+a.notes+')':''}`;ul.appendChild(li);});weeklyCalendarGrid.appendChild(ce);}}
             function renderUpcomingList(){upcomingList.innerHTML='';const today=new Date();today.setUTCHours(0,0,0,0);const cutoff=new Date(today);cutoff.setUTCDate(today.getUTCDate()+UPCOMING_DAYS);const upcoming=appData.assignments.filter(a=>{try{const d=new Date(a.date+'T00:00:00Z');return !isNaN(d)&&d>=today&&d<cutoff&&!a.completed;}catch(e){return false;}}).sort((a,b)=>new Date(a.date+'T00:00:00Z')-new Date(b.date+'T00:00:00Z'));if(upcoming.length===0){upcomingList.innerHTML='<li class="no-upcoming">Nada p/ '+UPCOMING_DAYS+' dias</li>';}else{upcoming.forEach(a=>{const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=getEmojiForType(a.type)+' '+a.type;const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li);});}}
 
@@ -160,8 +158,6 @@
                 if (appData.assignments.length === 0) { container.innerHTML = '<li class="no-assignments">Nada cadastrado</li>'; return; }
                 const sorted = [...appData.assignments].sort((a,b)=>{
                     if (a.completed !== b.completed) return a.completed ? 1 : -1;
-                    // Keep celebration always visible, potentially at the top or sorted by date
-                    // Sorting primarily by date ensures it slots in chronologically
                     try { return new Date(a.date+'T00:00:00Z') - new Date(b.date+'T00:00:00Z'); } catch (e) { return 0; }
                 });
 
@@ -171,7 +167,7 @@
                     if (a.isCelebration) li.dataset.iscelebration = "true";
                     if (a.completed) li.classList.add('is-completed');
 
-                     const emojiSpan = document.createElement('span');
+                    const emojiSpan = document.createElement('span');
                     emojiSpan.className = 'assignment-emoji';
                     emojiSpan.textContent = getEmojiForType(a.type);
                     li.appendChild(emojiSpan);
@@ -181,21 +177,19 @@
                     typeSpan.textContent = a.type;
                     li.appendChild(typeSpan);
 
-                     const dateSpan = document.createElement('span');
-                     dateSpan.className = 'assignment-date';
-                     dateSpan.textContent = formatRelativeDate(a.date);
-                     if (a.notes && !a.isCelebration) { // Show notes only if not celebration
+                    const dateSpan = document.createElement('span'); // Date span always added
+                    dateSpan.className = 'assignment-date';
+                    dateSpan.textContent = formatRelativeDate(a.date);
+                    li.appendChild(dateSpan);
+
+                     if (a.notes && !a.isCelebration) { // Show notes only if NOT celebration AND exists
                           const notesSpan = document.createElement('span');
-                          notesSpan.style.fontSize = '0.75em';
-                          notesSpan.style.color = 'var(--midnight-text-secondary)';
-                          notesSpan.style.marginTop = '4px';
+                          notesSpan.className = 'assignment-notes';
                           notesSpan.textContent = `(${a.notes})`;
                           li.appendChild(notesSpan);
-                     } else if (a.notes && a.isCelebration && a.date){
+                     } else if (a.isCelebration && a.date){ // For celebration, show year
                           const yearSpan = document.createElement('span');
-                          yearSpan.style.fontSize = '0.75em';
-                          yearSpan.style.color = 'var(--midnight-text-secondary)';
-                          yearSpan.style.marginTop = '4px';
+                          yearSpan.className = 'assignment-notes'; // Use same class for simplicity
                           try {
                              yearSpan.textContent = `(${new Date(a.date + 'T00:00:00Z').getUTCFullYear()})`;
                              li.appendChild(yearSpan);
@@ -214,7 +208,7 @@
                 if (container.children.length === 0) { container.innerHTML = '<li class="no-assignments">Nada cadastrado</li>'; }
              }
 
-             function addAssignment(event){event.preventDefault();let tS=assignmentTypeInput.value;const bDS=assignmentDateInput.value;const n=assignmentNotesInput.value.trim();let fT=tS;let tFF=tS;const todayS=getTodayDateString();if(tS===CELEBRATION_TYPE){alert('A Celebração é adicionada automaticamente.');return;}if(bDS&&bDS<todayS){alert('Data no passado não permitida.');assignmentDateInput.focus();return;}if(tS!=='Personalizado'&&tS!=='Assembleia'){const exists=appData.assignments.some(a=>a.type===tS&&a.date===bDS&&!a.isCelebration);if(exists){alert(`"${getEmojiForType(tS)} ${tS}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Personalizado'){fT=customAssignmentTypeInput.value.trim();tFF=fT;if(!fT){alert('Defina um nome para o tipo personalizado.');customAssignmentTypeInput.focus();return;}const cE=appData.assignments.some(a=>a.type===fT&&a.date===bDS&&!a.isCelebration);if(cE){alert(`"${fT}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Assembleia'){const a1E=appData.assignments.some(a=>a.type==='Assembleia (Dia 1)'&&a.date===bDS);if(a1E){alert(`Assembleia já cadastrada começando em ${formatDate(bDS)}.`);return;}}if(tS==='Assembleia'){if(!bDS){alert('Selecione a data do PRIMEIRO dia da Assembleia.');assignmentDateInput.focus();return;}const sd=new Date(`${bDS}T00:00:00Z`);if(isNaN(sd.getTime())){alert('Data inválida.');return;}let added=0;for(let i=0;i<3;i++){const cd=new Date(sd);cd.setUTCDate(sd.getUTCDate()+i);const cds=dateToYyyyMmDd(cd);const ass={id:Date.now()+Math.random()+i,type:`Assembleia (Dia ${i+1})`,date:cds,notes:n,completed:false, isCelebration:false};appData.assignments.push(ass);added++;}if(added===3){updateFrequency('Assembleia');saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false);}else{alert("Erro ao adicionar dias da Assembleia.");}return;}if(!fT||fT==='Personalizado'||!bDS){alert('Verifique se selecionou Tipo e Data válidos.');if(!bDS)assignmentDateInput.focus();else if(!fT&&tS!=='Personalizado')assignmentTypeInput.focus();return;}if(!/^\d{4}-\d{2}-\d{2}$/.test(bDS)){alert('Formato de data inválido.');return;}const nA={id:Date.now()+Math.random(),type:fT,date:bDS,notes:n,completed:false, isCelebration: false};appData.assignments.push(nA);updateFrequency(tFF);saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false);}
+             function addAssignment(event){event.preventDefault();let tS=assignmentTypeInput.value;const bDS=assignmentDateInput.value;const n=assignmentNotesInput.value.trim();let fT=tS;let tFF=tS;const todayS=getTodayDateString();if(tS===CELEBRATION_TYPE){alert('A Celebração é adicionada automaticamente.');return;}if(bDS&&bDS<todayS){alert('Data no passado não permitida.');assignmentDateInput.focus();return;}if(tS!=='Personalizado'&&tS!=='Congresso'){const exists=appData.assignments.some(a=>a.type===tS&&a.date===bDS&&!a.isCelebration);if(exists){alert(`"${getEmojiForType(tS)} ${tS}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Personalizado'){fT=customAssignmentTypeInput.value.trim();tFF=fT;if(!fT){alert('Defina um nome para o tipo personalizado.');customAssignmentTypeInput.focus();return;}const cE=appData.assignments.some(a=>a.type===fT&&a.date===bDS&&!a.isCelebration);if(cE){alert(`"${fT}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Congresso'){const a1E=appData.assignments.some(a=>a.type==='Congresso (Dia 1)'&&a.date===bDS);if(a1E){alert(`Congresso já cadastrado começando em ${formatDate(bDS)}.`);return;}}if(tS==='Congresso'){if(!bDS){alert('Selecione a data do PRIMEIRO dia do Congresso.');assignmentDateInput.focus();return;}const sd=new Date(`${bDS}T00:00:00Z`);if(isNaN(sd.getTime())){alert('Data inválida.');return;}let added=0;for(let i=0;i<3;i++){const cd=new Date(sd);cd.setUTCDate(sd.getUTCDate()+i);const cds=dateToYyyyMmDd(cd);const ass={id:Date.now()+Math.random()+i,type:`Congresso (Dia ${i+1})`,date:cds,notes:n,completed:false, isCelebration:false};appData.assignments.push(ass);added++;}if(added===3){updateFrequency('Congresso');saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false);}else{alert("Erro ao adicionar dias do Congresso.");}return;}if(!fT||fT==='Personalizado'||!bDS){alert('Verifique se selecionou Tipo e Data válidos.');if(!bDS)assignmentDateInput.focus();else if(!fT&&tS!=='Personalizado')assignmentTypeInput.focus();return;}if(!/^\d{4}-\d{2}-\d{2}$/.test(bDS)){alert('Formato de data inválido.');return;}const nA={id:Date.now()+Math.random(),type:fT,date:bDS,notes:n,completed:false, isCelebration: false};appData.assignments.push(nA);updateFrequency(tFF);saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false);}
 
             function showActionModal(id){const a=appData.assignments.find(x=>x.id==id);if(!a)return;modalAssignmentIdInput.value=id;modalTitle.textContent=`${getEmojiForType(a.type)} ${a.type}`;modalActionButtonsDiv.style.display='flex';modalEditViewDiv.style.display='none';modalBtnComplete.textContent=a.completed?'Desmarcar Conclusão':'Marcar Concluída';modalBtnComplete.disabled=false;modalBtnComplete.title='';modalBtnEdit.style.display=a.isCelebration?'none':'block';modalBtnDelete.style.display=a.isCelebration?'none':'block';if(a.isCelebration){const todayStr=getTodayDateString();if(a.date>todayStr){modalBtnComplete.disabled=true;modalBtnComplete.title='Só pode marcar na data ou após.';}}actionModal.classList.add('is-visible');}
             function hideActionModal(){actionModal.classList.remove('is-visible');modalAssignmentIdInput.value='';modalEditDateInput.value='';modalEditNotesInput.value='';}
@@ -225,7 +219,7 @@
             function handleDeleteRequest(){ const id = modalAssignmentIdInput.value; deleteAssignment(id); hideActionModal();}
 
             function renderAll() {
-                 ensureCelebrationExists(); // Always check celebration before rendering
+                 ensureCelebrationExists();
                  renderAssignments();
                  renderUpcomingList();
                  renderWeeklyCalendar();
@@ -240,7 +234,6 @@
                  }
             };
 
-            // assignmentsListContainer has delegated listener added in renderAssignments
             actionModal.addEventListener('click',(e)=>{if(e.target===actionModal){hideActionModal();}});
             modalBtnComplete.addEventListener('click',handleCompleteToggle);
             modalBtnEdit.addEventListener('click',handleEditRequest);
@@ -256,9 +249,9 @@
 
             function initializeApp() {
                  loadAppData();
-                 ensureCelebrationExists(); // Add/Update celebration data on load
+                 ensureCelebrationExists();
                  updateDropdownOrder();
-                 renderAll(); // Initial render of everything
+                 renderAll();
                  assignmentTypeInput.dispatchEvent(new Event('change'));
              }
              initializeApp();
