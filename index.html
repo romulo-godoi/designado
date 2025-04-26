@@ -9,14 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        /* :root holds the DEFAULT theme (dark) */
         :root {
             --bg-color: #0d0d10; --surface-color: #1c1c21; --surface-lighter-color: #25252b;
             --border-color: #333338; --completed-item-bg: #101012; --body-outer-bg: #030304;
             --text-primary-color: #eaeaf0; --text-secondary-color: #90909c;
             --accent-primary-color: #8a9ff9; --accent-secondary-color: #5c6db5; --accent-alt-color: #f2c079;
 
-            /* Common vars */
             --error-color: #e680a7; --success-color: #74c7a3;
             --list-color-1: #2f588f; --list-color-2: #457c7c; --list-color-3: #7d5c9e;
             --list-color-4: #82a05e; --list-color-5: #bc906d;
@@ -60,18 +58,18 @@
         .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } .calendar-nav button { background: none; border: 1px solid var(--border-color); color: var(--text-secondary-color); padding: 4px 10px; border-radius: var(--border-radius-inner); font-size: 0.8em; cursor: pointer; transition: all var(--transition-speed-fast); } .calendar-nav button:hover:not(:disabled) { background-color: var(--accent-primary-color); color: #fff; border-color: var(--accent-primary-color); transform: translateY(-1px); } .calendar-nav button:active:not(:disabled) { transform: scale(0.97); } .calendar-nav button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; background-color: transparent !important; border-color: var(--border-color); transform: none !important; } #calendarWeekLabel { font-size: 1em; font-weight: 600; color: var(--accent-alt-color); flex-grow: 1; text-align: center; transition: color var(--transition-speed-med);}
         #upcomingListContainer > h3 { color: var(--text-secondary-color); }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; } .day-header{font-size:0.7em;text-align:center;color:var(--text-secondary-color);padding-bottom:5px;font-weight:500;text-transform:uppercase;border-bottom:1px solid var(--border-color);margin-bottom:5px; transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .day-cell{font-size:0.8em;text-align:center;background-color:var(--bg-color);border-radius:var(--border-radius-inner);padding:8px 4px;min-height:65px;display:flex;flex-direction:column;align-items:center;border:1px solid transparent; transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast), border-color var(--transition-speed-fast); position: relative; /* Tooltip */ } .day-cell:hover { background-color: var(--surface-lighter-color); transform: scale(1.03);} .day-cell.today{border-color:var(--accent-alt-color);background-color:var(--surface-lighter-color); box-shadow: 0 0 8px color-mix(in srgb, var(--accent-alt-color) 30%, transparent); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med), box-shadow var(--transition-speed-med); } .day-number{font-weight:600;margin-bottom:4px;color:var(--text-primary-color);transition: color var(--transition-speed-med);} .day-cell.today .day-number{color:var(--accent-alt-color);} .day-assignments{list-style:none;padding:0;width:100%;}
-        .assignment-marker{display:block;font-size:0.7em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background-color:var(--accent-secondary-color);color:var(--text-primary-color);padding:3px 5px;margin-top:4px;border-radius:4px;text-align:left; box-shadow: 0 1px 2px rgba(0,0,0,0.15); cursor: pointer; transition: background-color var(--transition-speed-med), color var(--transition-speed-med); }
-        body.light-theme .assignment-marker { color: var(--bg-color); font-weight: 500; } /* Better contrast marker text on light theme */
+        .assignment-marker{display:block;font-size:0.7em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background-color:var(--accent-secondary-color);color:var(--text-primary-color);padding:3px 5px;margin-top:4px;border-radius:4px;text-align:center; /* Center text now */ box-shadow: 0 1px 2px rgba(0,0,0,0.15); cursor: pointer; transition: background-color var(--transition-speed-med), color var(--transition-speed-med); font-weight: 500; /* Make it slightly bolder */ }
+        body.light-theme .assignment-marker { color: var(--bg-color); /* Darker text on marker for light theme */ }
         #upcomingList{list-style:none;padding:0;} .upcoming-item{display:flex;justify-content:space-between;align-items:center;font-size:0.9em;padding:10px 5px;border-bottom:1px dashed var(--border-color); transition: background-color var(--transition-speed-fast), border-color var(--transition-speed-med); } .upcoming-item:last-child{border-bottom:none;} .upcoming-item:hover { background-color: color-mix(in srgb, var(--text-primary-color) 3%, transparent); } .upcoming-item .date{color:var(--text-secondary-color);font-size:0.9em;white-space:nowrap;margin-left:10px; transition: color var(--transition-speed-med);} .upcoming-item .type{font-weight:500; transition: color var(--transition-speed-med);}
         .collapsible-section{background-color:var(--surface-color); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .section-header{padding:18px 20px;cursor:pointer;transition: background-color var(--transition-speed-fast), box-shadow var(--transition-speed-fast);position:relative;z-index:1; display: flex; align-items: center;} .section-header:hover{background-color:var(--surface-lighter-color); box-shadow: inset 0 0 10px rgba(0,0,0,0.1); } .section-header i{font-size:0.9em;transition:transform var(--transition-speed-med) ease-out;color:var(--accent-primary-color);flex-shrink:0; margin-left: 10px;} .collapsible-section.is-open .section-header i{transform:rotate(90deg);} .section-content{max-height:0;overflow:hidden;transition: max-height var(--transition-speed-med) ease-out, padding var(--transition-speed-med) ease-out, border-top var(--transition-speed-med);padding:0 20px;background-color:var(--surface-lighter-color); border-top: 1px solid transparent; transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .collapsible-section.is-open .section-content{max-height:2000px;padding:25px;transition:max-height var(--transition-speed-slow) ease-in-out, padding var(--transition-speed-slow) ease-in-out, border-top var(--transition-speed-slow); border-top: 1px solid var(--border-color); } #listSection.is-open .section-content{background-color:var(--bg-color);padding:0;}
         #assignmentForm{display:flex;flex-direction:column;gap:18px;} .form-group{display:flex;flex-direction:column;} .form-group#customTypeGroup{display:none;margin-top:-5px;padding-left:15px;border-left:3px solid var(--accent-primary-color);padding-top:10px; margin-left: 5px;} .form-group#customTypeGroup label{font-size:0.8em;} label{margin-bottom:6px;font-weight:500;font-size:0.85em;color:var(--text-secondary-color);letter-spacing: 0.5px; transition: color var(--transition-speed-med);} select,input[type="date"],input[type="text"]{padding:14px 16px;background-color:var(--input-bg);border:1px solid var(--border-color);border-radius:var(--border-radius-inner);color:var(--text-primary-color);font-family:inherit;font-size:1rem;width:100%;transition: all var(--transition-speed-fast); box-shadow: var(--input-shadow); } select:hover, input:hover { border-color: var(--text-secondary-color); } select:focus,input:focus{outline:none;border-color:var(--accent-primary-color);background-color: var(--input-focus-bg); box-shadow: var(--input-focus-shadow);} select option,select optgroup{background-color:var(--bg-color);color:var(--text-primary-color);font-weight:normal;} select optgroup{padding:6px 0; font-weight: 600;} select optgroup[label="Mais Usados"]{font-style:normal;font-weight:bold;color:var(--accent-primary-color);} input[type="date"]{color: var(--text-secondary-color); } input[type="date"]:focus, input[type="date"]:valid { color: var(--text-primary-color); } input[type="date"]::-webkit-calendar-picker-indicator{filter:var(--date-picker-indicator-filter);cursor:pointer;opacity:0.7;transition:opacity var(--transition-speed-fast), filter var(--transition-speed-fast);} input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1;} button[type="submit"]{padding:15px 20px;background:linear-gradient(45deg, var(--accent-primary-color), var(--accent-secondary-color));color:#fff;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-size:1.05rem;font-weight:600;text-align:center;width:100%;margin-top:8px;transition: all var(--transition-speed-fast); box-shadow: 0 3px 8px rgba(0,0,0,0.2);} button[type="submit"]:hover{opacity:0.9; box-shadow: 0 5px 12px color-mix(in srgb, var(--accent-primary-color) 30%, transparent); } button[type="submit"]:active{transform:scale(0.97); box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
-        body.light-theme select optgroup[label="Mais Usados"] { color: var(--accent-secondary-color); } /* Different accent for better visibility in light */
+        body.light-theme select optgroup[label="Mais Usados"] { color: var(--accent-secondary-color); }
 
         .assignment-list { list-style: none; padding: 0; }
-        .assignment-item { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 18px 15px; color: var(--text-primary-color); border-bottom: 1px solid var(--border-color); cursor: pointer; transition: all var(--transition-speed-fast); position: relative; background-color: var(--surface-color); } /* Default BG is surface */
+        .assignment-item { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 18px 15px; color: var(--text-primary-color); border-bottom: 1px solid var(--border-color); cursor: pointer; transition: all var(--transition-speed-fast); position: relative; background-color: var(--surface-color); }
         .assignment-item:last-child { border-bottom: none; }
         .assignment-item:not([data-iscelebration="true"]):hover { filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        body.light-theme .assignment-item:not([data-iscelebration="true"]):hover { filter: brightness(0.98); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); } /* Adjust hover for light */
+        body.light-theme .assignment-item:not([data-iscelebration="true"]):hover { filter: brightness(0.98); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .assignment-item[data-iscelebration="true"] { cursor: default; background-color: color-mix(in srgb, var(--accent-primary-color) 20%, var(--bg-color)); }
         body.light-theme .assignment-item[data-iscelebration="true"] { background-color: color-mix(in srgb, var(--list-color-3) 70%, var(--bg-color)); }
         .assignment-item:nth-child(5n+1):not([data-iscelebration="true"]){background-color:var(--list-color-1);} .assignment-item:nth-child(5n+2):not([data-iscelebration="true"]){background-color:var(--list-color-2);} .assignment-item:nth-child(5n+3):not([data-iscelebration="true"]){background-color:var(--list-color-3);} .assignment-item:nth-child(5n+4):not([data-iscelebration="true"]){background-color:var(--list-color-4);} .assignment-item:nth-child(5n):not([data-iscelebration="true"]){background-color:var(--list-color-5);}
@@ -86,9 +84,15 @@
         .assignment-item.is-completed .assignment-emoji { filter: grayscale(80%); opacity: 0.7; transform: scale(1);}
         .assignment-item.is-completed .assignment-type { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--text-secondary-color); }
         .assignment-notes { font-size: 0.75em; color: var(--text-secondary-color); margin-top: 4px; font-style: italic; }
-        body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-type { color: var(--bg-color); /* Darker text on colored background */ }
+        /* *** IMPROVED LIGHT THEME READABILITY ON COLORED ITEMS *** */
+        body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-type {
+            color: #1a1a1e; /* Force darker text on colored backgrounds */
+            font-weight: 600;
+        }
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-date,
-        body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-notes { color: color-mix(in srgb, var(--bg-color) 65%, transparent); /* Slightly less dark */ }
+        body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-notes {
+            color: #3d3d41; /* Force darker secondary text too */
+        }
 
         .modal-overlay{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color: var(--modal-overlay-bg); backdrop-filter:blur(3px);justify-content:center;align-items:center;opacity:0;transition:opacity var(--transition-speed-med) ease-out;} .modal-overlay.is-visible{display:flex;opacity:1;} .modal-content{background-color:var(--surface-color);padding:30px;border-radius:var(--border-radius-inner);box-shadow:0 8px 25px rgba(0,0,0,0.3);width:90%;max-width:400px;position:relative;display:flex;flex-direction:column;gap:18px;border:1px solid var(--border-color);transform:scale(0.95);transition: transform var(--transition-speed-med) ease-out 0.1s, background-color var(--transition-speed-med), border-color var(--transition-speed-med);} .modal-overlay.is-visible .modal-content{transform:scale(1);} .modal-content h4{color:var(--accent-primary-color);margin-bottom:8px;text-align:center;font-size:1.2em;font-weight:600;word-break:break-word; transition: color var(--transition-speed-med);} .modal-content .action-buttons,.modal-content .edit-view{display:flex;flex-direction:column;gap:12px;} .modal-content button{padding:12px 18px;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-weight:600;font-size:0.95em;transition:all var(--transition-speed-fast);width:100%;text-transform:uppercase;letter-spacing:0.5px;box-shadow:0 2px 5px rgba(0,0,0,0.15);} .modal-content button:hover:not(:disabled){opacity:0.9;box-shadow:0 4px 10px rgba(0,0,0,0.2);transform:translateY(-1px);} .modal-content button:active:not(:disabled){transform:scale(0.97);box-shadow:0 1px 2px rgba(0,0,0,0.1);} .modal-content button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; transform: none !important; filter: grayscale(30%); }
         #modalBtnComplete{background-color:var(--success-color);color:#fff;} #modalBtnComplete:disabled { background-color: var(--text-secondary-color); color: var(--surface-lighter-color); cursor: not-allowed; } #modalBtnEdit{background-color:var(--accent-alt-color);color:#fff;} #modalBtnDelete{background-color:var(--error-color);color:#fff;} #modalBtnCancel,#modalBtnCancelEdit{background-color:var(--surface-lighter-color);color:var(--text-primary-color);border:1px solid var(--border-color);}
@@ -115,7 +119,7 @@
              <div class="dashboard-section">
                  <div id="weeklyCalendarContainer">
                      <div class="calendar-nav">
-                         <button id="prevWeekBtn" disabled>< Ant</button> <!-- Start disabled -->
+                         <button id="prevWeekBtn" disabled>< Ant</button>
                          <span id="calendarWeekLabel"></span>
                          <button id="nextWeekBtn">Próx ></button>
                      </div>
@@ -236,10 +240,8 @@
 
                  if(calendarWeekOffset===0){calendarWeekLabel.textContent="Esta Semana";}
                  else if(calendarWeekOffset===1){calendarWeekLabel.textContent="Próxima Semana";}
-                 // Note: Removed "Semana Anterior" label as offset will not be negative
                  else {calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'2-digit'})}-${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'2-digit'})}`;}
 
-                 // *** UPDATED: Disable prevWeekBtn if showing current week or past (offset <= 0) ***
                  prevWeekBtn.disabled = (calendarWeekOffset <= 0);
 
                  const hds=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom']; hds.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
@@ -251,10 +253,13 @@
                     const assignmentsUl = document.createElement('ul'); assignmentsUl.className='day-assignments'; cellElement.appendChild(assignmentsUl);
                     const todaysAssignments = appData.assignments.filter(a => a.date === dateStr && !a.completed);
                     todaysAssignments.forEach(a => {
-                        const li = document.createElement('li'); li.className = 'assignment-marker';
-                        const fullType = a.type; const shortType = SHORT_ASSIGNMENT_NAMES[fullType] || fullType;
-                        const emoji = getEmojiForType(fullType);
-                        li.textContent = `${emoji} ${shortType}`;
+                        const li = document.createElement('li');
+                        li.className = 'assignment-marker';
+                        const fullType = a.type;
+                        const shortType = SHORT_ASSIGNMENT_NAMES[fullType] || fullType;
+                        // *** UPDATED: Only show short name in calendar marker, no emoji ***
+                        li.textContent = shortType;
+                        // Store full details for the tooltip
                         li.dataset.fullName = fullType;
                         if (a.notes) { li.dataset.notes = a.notes; }
                         assignmentsUl.appendChild(li);
@@ -275,13 +280,25 @@
             function renderAll() { ensureCelebrationExists(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar(); }
             window.toggleSection = (id, forceState = null) => { const el = document.getElementById(id); if(el) { if (forceState === true) el.classList.add('is-open'); else if (forceState === false) el.classList.remove('is-open'); else el.classList.toggle('is-open'); } };
 
-            // --- Tooltip Functions ---
-            function showCalendarTooltip(markerElement) { const fullName = markerElement.dataset.fullName; const notes = markerElement.dataset.notes; if (!fullName) return; let content = getEmojiForType(fullName) + ' ' + fullName; if (notes) { content += ` (${notes})`; } calendarTooltip.textContent = content; const markerRect = markerElement.getBoundingClientRect(); const gridRect = weeklyCalendarGrid.getBoundingClientRect(); let top = markerRect.bottom - gridRect.top + 5 + weeklyCalendarGrid.scrollTop; let left = markerRect.left - gridRect.left + (markerRect.width / 2); calendarTooltip.style.top = `${top}px`; calendarTooltip.style.left = `${left}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; calendarTooltip.classList.add('is-visible'); activeTooltipMarker = markerElement; const tooltipRect = calendarTooltip.getBoundingClientRect(); if (tooltipRect.left < gridRect.left) { calendarTooltip.style.left = `${left + (gridRect.left - tooltipRect.left) + 5}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; } else if (tooltipRect.right > gridRect.right) { calendarTooltip.style.left = `${left - (tooltipRect.right - gridRect.right) - 5}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; } setTimeout(hideCalendarTooltip, 2500); }
+            function showCalendarTooltip(markerElement) {
+                const fullName = markerElement.dataset.fullName; const notes = markerElement.dataset.notes;
+                if (!fullName) return;
+                // *** TOOLTIP STILL USES EMOJI ***
+                let content = getEmojiForType(fullName) + ' ' + fullName;
+                if (notes) { content += ` (${notes})`; }
+                calendarTooltip.textContent = content;
+                const markerRect = markerElement.getBoundingClientRect(); const gridRect = weeklyCalendarGrid.getBoundingClientRect();
+                let top = markerRect.bottom - gridRect.top + 5 + weeklyCalendarGrid.scrollTop; let left = markerRect.left - gridRect.left + (markerRect.width / 2);
+                calendarTooltip.style.top = `${top}px`; calendarTooltip.style.left = `${left}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; calendarTooltip.classList.add('is-visible'); activeTooltipMarker = markerElement;
+                const tooltipRect = calendarTooltip.getBoundingClientRect();
+                if (tooltipRect.left < gridRect.left) { calendarTooltip.style.left = `${left + (gridRect.left - tooltipRect.left) + 5}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; }
+                else if (tooltipRect.right > gridRect.right) { calendarTooltip.style.left = `${left - (tooltipRect.right - gridRect.right) - 5}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; }
+                setTimeout(hideCalendarTooltip, 2500);
+             }
             function hideCalendarTooltip() { calendarTooltip.classList.remove('is-visible'); activeTooltipMarker = null; }
             function handleCalendarMarkerClick(event) { const marker = event.target.closest('.assignment-marker'); if (marker) { if(marker === activeTooltipMarker) { hideCalendarTooltip(); } else { hideCalendarTooltip(); showCalendarTooltip(marker); } } else if (!event.target.closest('.calendar-tooltip')) { hideCalendarTooltip(); } }
 
-            // Event Listeners Setup
-            themeToggleBtn.addEventListener('click', toggleTheme); // Listener for theme toggle
+            themeToggleBtn.addEventListener('click', toggleTheme);
             actionModal.addEventListener('click',(e)=>{if(e.target===actionModal){hideActionModal();}});
             modalBtnComplete.addEventListener('click',handleCompleteToggle);
             modalBtnEdit.addEventListener('click',handleEditRequest);
@@ -292,31 +309,11 @@
             window.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&actionModal.classList.contains('is-visible')){hideActionModal();}});
             assignmentTypeInput.addEventListener('change',()=>{if(assignmentTypeInput.value==='Personalizado'){customTypeGroup.style.display='flex';customAssignmentTypeInput.required=true;setTimeout(()=>customAssignmentTypeInput.focus(),50);}else{customTypeGroup.style.display='none';customAssignmentTypeInput.required=false;customAssignmentTypeInput.value='';}});
             assignmentForm.addEventListener('submit',addAssignment);
-
-            // *** UPDATED: Event listeners for calendar navigation ***
-            prevWeekBtn.addEventListener('click', () => {
-                // Only decrement if not already at the current week
-                if (calendarWeekOffset > 0) {
-                    calendarWeekOffset--;
-                    renderWeeklyCalendar(); // Re-render calendar includes disabling the button if needed
-                }
-            });
-            nextWeekBtn.addEventListener('click', () => {
-                calendarWeekOffset++;
-                renderWeeklyCalendar(); // Re-render calendar includes enabling the button if needed
-            });
-
+            prevWeekBtn.addEventListener('click', () => { if (calendarWeekOffset > 0) { calendarWeekOffset--; renderWeeklyCalendar(); } });
+            nextWeekBtn.addEventListener('click', () => { calendarWeekOffset++; renderWeeklyCalendar(); });
             weeklyCalendarGrid.addEventListener('click', handleCalendarMarkerClick);
 
-
-            function initializeApp() {
-                loadThemePreference(); // Load theme first
-                loadAppData();
-                ensureCelebrationExists();
-                updateDropdownOrder();
-                renderAll(); // Includes initial renderWeeklyCalendar call which sets button state
-                assignmentTypeInput.dispatchEvent(new Event('change'));
-             }
+            function initializeApp() { loadThemePreference(); loadAppData(); ensureCelebrationExists(); updateDropdownOrder(); renderAll(); assignmentTypeInput.dispatchEvent(new Event('change')); }
             initializeApp();
         });
     </script>
