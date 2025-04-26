@@ -5,15 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title data-translate="pageTitle">Minhas Designações</title>
 
-    <!-- === PWA Manifest Link & iOS Meta Tags START === -->
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#8a9ff9"> <!-- Cor do tema para barra de endereço, etc. -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#8a9ff9"> <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Designações">
     <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
-    <!-- === PWA Manifest Link & iOS Meta Tags END === -->
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -36,6 +32,7 @@
             --input-bg: var(--bg-color); --input-focus-bg: var(--surface-color); --input-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
             --input-focus-shadow: 0 0 0 3px rgba(122,145,232,0.2), inset 0 1px 3px rgba(0,0,0,0.1);
             --date-picker-indicator-filter: invert(0.7);
+            --assignment-date-dark-color: #c0c0c0; /* Improved contrast for date on dark theme */
         }
 
         body.light-theme {
@@ -53,21 +50,32 @@
             --input-bg: #efeff2; --input-focus-bg: #ffffff; --input-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
             --input-focus-shadow: 0 0 0 3px rgba(0, 110, 230, 0.2), inset 0 1px 2px rgba(0,0,0,0.05);
             --date-picker-indicator-filter: invert(0.1);
+            --assignment-date-dark-color: var(--text-secondary-color); /* Reset for light theme */
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; } html { scroll-behavior: smooth; height: 100%; }
         body { font-family:var(--font-family); background-color: var(--body-outer-bg); color:var(--text-primary-color); min-height:100vh; -webkit-tap-highlight-color:transparent; position: relative; overflow-x: hidden; transition: background-color var(--transition-speed-med), color var(--transition-speed-med); }
         .mobile-view-container { background-color:var(--bg-color); width: 100%; height: 100vh; display:flex; flex-direction:column; overflow:hidden; z-index: 1; position: relative; transition: background-color var(--transition-speed-med); }
-        header.main-header { background: var(--header-bg-gradient); padding:18px 20px; border-bottom:1px solid var(--border-color); flex-shrink:0; text-align:center; z-index: 10; position: relative; display: flex; justify-content: center; align-items: center; transition: background var(--transition-speed-med), border-color var(--transition-speed-med); }
-        header.main-header h1 { color:var(--accent-primary-color); font-size: 1.4em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: color var(--transition-speed-med); }
-        #themeToggleBtn { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); background:none; border: none; color: var(--text-secondary-color); font-size: 1.3em; cursor: pointer; padding: 5px; line-height: 1; opacity: 0.8; transition: color var(--transition-speed-fast), opacity var(--transition-speed-fast); z-index: 11;} #themeToggleBtn:hover { opacity: 1; }
+        header.main-header { background: var(--header-bg-gradient); padding:18px 20px; border-bottom:1px solid var(--border-color); flex-shrink:0; text-align:center; z-index: 10; position: relative; display: flex; justify-content: space-between; /* Changed */ align-items: center; transition: background var(--transition-speed-med), border-color var(--transition-speed-med); }
+        header.main-header h1 { color:var(--accent-primary-color); font-size: 1.4em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: color var(--transition-speed-med); flex-grow: 1; /* Added */ text-align: center; /* Added */ margin: 0 40px; /* Added space for icons */ }
+        #themeToggleBtn, #languageToggleBtn { background:none; border: none; color: var(--text-secondary-color); font-size: 1.3em; cursor: pointer; padding: 5px; line-height: 1; opacity: 0.8; transition: color var(--transition-speed-fast), opacity var(--transition-speed-fast); z-index: 11; position: relative; /* Changed from absolute */ }
+        #themeToggleBtn:hover, #languageToggleBtn:hover { opacity: 1; }
+        .header-controls { display: flex; align-items: center; position: absolute; /* Position controls absolutely */ top: 50%; transform: translateY(-50%); width: calc(100% - 40px); /* Full width minus padding */ justify-content: space-between; /* Space out icons */ left: 20px; /* Align with padding */ pointer-events: none; /* Allow clicks on title */ }
+        .header-controls button { pointer-events: auto; /* Enable clicks on buttons */ }
+
+        #languageOptions { position: absolute; top: 100%; left: 15px; background-color: var(--surface-color); border: 1px solid var(--border-color); border-radius: var(--border-radius-inner); padding: 5px 0; z-index: 12; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); min-width: 100px; }
+        #languageOptions.show { display: block; }
+        #languageOptions button { display: block; width: 100%; background: none; border: none; color: var(--text-primary-color); padding: 8px 15px; text-align: left; font-size: 0.9em; cursor: pointer; }
+        #languageOptions button:hover { background-color: var(--surface-lighter-color); }
+        #languageOptions button.active { font-weight: bold; color: var(--accent-primary-color); }
 
         .content-scroll { flex-grow:1; overflow-y:auto; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); } .content-scroll::-webkit-scrollbar { width: 8px; } .content-scroll::-webkit-scrollbar-track { background: var(--scrollbar-track); } .content-scroll::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 4px; border: 2px solid var(--bg-color); }
         .dashboard-section, .collapsible-section { border-bottom: 1px solid var(--border-color); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .dashboard-section { padding: 20px; background-color: var(--surface-color); position: relative; }
         .section-header h2, .dashboard-section > h3 { font-size: 0.8em; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary-color); margin: 15px 0 8px 0; padding-bottom: 5px; border-bottom: 1px solid var(--border-color); transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .section-header h2 { color: var(--accent-primary-color); margin: 0; padding: 0; border-bottom: none; flex-grow: 1; font-weight: 600; letter-spacing: 1px; transition: color var(--transition-speed-med); }
         #weeklyCalendarContainer > h3 { text-align: center; color: var(--accent-alt-color); border-bottom: none; margin-bottom: 8px; font-weight: 600; letter-spacing: 1px; transition: color var(--transition-speed-med);}
         .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } .calendar-nav button { background: none; border: 1px solid var(--border-color); color: var(--text-secondary-color); padding: 4px 10px; border-radius: var(--border-radius-inner); font-size: 0.8em; cursor: pointer; transition: all var(--transition-speed-fast); } .calendar-nav button:hover:not(:disabled) { background-color: var(--accent-primary-color); color: #fff; border-color: var(--accent-primary-color); transform: translateY(-1px); } .calendar-nav button:active:not(:disabled) { transform: scale(0.97); } .calendar-nav button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; background-color: transparent !important; border-color: var(--border-color); transform: none !important; color: var(--text-secondary-color) !important;} #calendarWeekLabel { font-size: 1em; font-weight: 600; color: var(--accent-alt-color); flex-grow: 1; text-align: center; transition: color var(--transition-speed-med);}
-        #upcomingListContainer > h3 { color: var(--text-secondary-color); }
+        #upcomingListContainer > h3 { color: var(--text-secondary-color); text-align: center; /* Centered */ }
+        #weeklyCalendar { touch-action: pan-y; /* Allow vertical scroll, handle horizontal */ }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; } .day-header{font-size:0.7em;text-align:center;color:var(--text-secondary-color);padding-bottom:5px;font-weight:500;text-transform:uppercase;border-bottom:1px solid var(--border-color);margin-bottom:5px; transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .day-cell{font-size:0.8em;text-align:center;background-color:var(--bg-color);border-radius:var(--border-radius-inner);padding:8px 4px;min-height:65px;display:flex;flex-direction:column;align-items:center;border:1px solid transparent; transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast), border-color var(--transition-speed-fast); position: relative; } .day-cell:hover { background-color: var(--surface-lighter-color); transform: scale(1.03);} .day-cell.today{border-color:var(--accent-alt-color);background-color:var(--surface-lighter-color); box-shadow: 0 0 8px color-mix(in srgb, var(--accent-alt-color) 30%, transparent); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med), box-shadow var(--transition-speed-med); } .day-number{font-weight:600;margin-bottom:4px;color:var(--text-primary-color);transition: color var(--transition-speed-med);} .day-cell.today .day-number{color:var(--accent-alt-color);} .day-assignments{list-style:none;padding:0;width:100%;}
         .assignment-marker{display:block;font-size:0.7em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background-color:var(--accent-secondary-color);color:var(--text-primary-color);padding:3px 5px;margin-top:4px;border-radius:4px;text-align:center; box-shadow: 0 1px 2px rgba(0,0,0,0.15); cursor: pointer; transition: background-color var(--transition-speed-med), color var(--transition-speed-med); font-weight: 500; }
         body.light-theme .assignment-marker { color: var(--bg-color); }
@@ -91,13 +99,15 @@
         .assignment-emoji { font-size: 1.9em; margin-bottom: 8px; line-height: 1; display: block; transition: transform var(--transition-speed-fast); }
         .assignment-item:not([data-iscelebration="true"]):hover .assignment-emoji { transform: scale(1.1); }
         .assignment-type { font-size: 1em; font-weight: 600; margin-bottom: 6px; color: var(--text-primary-color); line-height: 1.3; display: block; transition: color var(--transition-speed-med); }
-        .assignment-date { font-size: 0.85em; font-weight: 500; color: var(--text-secondary-color); display: block; margin-bottom: 4px; transition: color var(--transition-speed-med);}
+        .assignment-date { font-size: 0.85em; font-weight: 500; color: var(--assignment-date-dark-color); /* Changed for dark theme */ display: block; margin-bottom: 4px; transition: color var(--transition-speed-med);}
         .assignment-item.is-completed .assignment-emoji { filter: grayscale(80%); opacity: 0.7; transform: scale(1);}
         .assignment-item.is-completed .assignment-type { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--text-secondary-color); }
         .assignment-notes { font-size: 0.75em; color: var(--text-secondary-color); margin-top: 4px; font-style: italic; word-break: break-word; max-width: 90%; }
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-type { color: #1a1a1e; font-weight: 600; }
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-date,
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-notes { color: #3d3d41; }
+        /* Ensure date color reverts correctly on light theme */
+        body.light-theme .assignment-item .assignment-date { color: var(--text-secondary-color); }
 
         .modal-overlay{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color: var(--modal-overlay-bg); backdrop-filter:blur(3px);justify-content:center;align-items:center;opacity:0;transition:opacity var(--transition-speed-med) ease-out;} .modal-overlay.is-visible{display:flex;opacity:1;} .modal-content{background-color:var(--surface-color);padding:30px;border-radius:var(--border-radius-inner);box-shadow:0 8px 25px rgba(0,0,0,0.3);width:90%;max-width:400px;position:relative;display:flex;flex-direction:column;gap:18px;border:1px solid var(--border-color);transform:scale(0.95);transition: transform var(--transition-speed-med) ease-out 0.1s, background-color var(--transition-speed-med), border-color var(--transition-speed-med);} .modal-overlay.is-visible .modal-content{transform:scale(1);} .modal-content h4{color:var(--accent-primary-color);margin-bottom:8px;text-align:center;font-size:1.2em;font-weight:600;word-break:break-word; transition: color var(--transition-speed-med);} .modal-content .action-buttons,.modal-content .edit-view{display:flex;flex-direction:column;gap:12px;} .modal-content button{padding:12px 18px;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-weight:600;font-size:0.95em;transition:all var(--transition-speed-fast);width:100%;text-transform:uppercase;letter-spacing:0.5px;box-shadow:0 2px 5px rgba(0,0,0,0.15);} .modal-content button:hover:not(:disabled){opacity:0.9;box-shadow:0 4px 10px rgba(0,0,0,0.2);transform:translateY(-1px);} .modal-content button:active:not(:disabled){transform:scale(0.97);box-shadow:0 1px 2px rgba(0,0,0,0.1);} .modal-content button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; transform: none !important; filter: grayscale(30%); }
         #modalBtnComplete{background-color:var(--success-color);color:#fff;} #modalBtnComplete:disabled { background-color: var(--text-secondary-color); color: var(--surface-lighter-color); cursor: not-allowed; } #modalBtnEdit{background-color:var(--accent-alt-color);color:#fff;} #modalBtnDelete{background-color:var(--error-color);color:#fff;} #modalBtnCancel,#modalBtnCancelEdit{background-color:var(--surface-lighter-color);color:var(--text-primary-color);border:1px solid var(--border-color);}
@@ -116,16 +126,21 @@
 <body>
      <div class="mobile-view-container">
          <header class="main-header">
+             <div class="header-controls">
+                 <button id="languageToggleBtn" data-translate-title="languageToggleButton"><i class="fas fa-globe"></i></button>
+                 <button id="themeToggleBtn" data-translate-title="themeToggleButton"><i class="fas fa-sun"></i></button>
+             </div>
              <h1 data-translate="pageTitle">Minhas Designações</h1>
-             <button id="themeToggleBtn" data-translate-title="themeToggleButton"><i class="fas fa-sun"></i></button>
+             <div id="languageOptions">
+                 </div>
          </header>
          <div class="content-scroll">
              <div class="dashboard-section">
                  <div id="weeklyCalendarContainer">
                      <div class="calendar-nav">
-                         <button id="prevWeekBtn" data-translate="prevWeekButton">< Ant</button>
+                         <button id="prevWeekBtn" data-translate="prevWeekButton">&lt; Ant</button>
                          <span id="calendarWeekLabel"></span>
-                         <button id="nextWeekBtn" data-translate="nextWeekButton">Próx ></button>
+                         <button id="nextWeekBtn" data-translate="nextWeekButton">Próx &gt;</button>
                      </div>
                      <div id="weeklyCalendar" class="calendar-grid"></div>
                  </div>
@@ -178,178 +193,243 @@
      </div>
      <div id="actionModal" class="modal-overlay">
          <div class="modal-content">
-            <h4 id="modalTitle" data-translate="loading">...</h4>
-            <input type="hidden" id="modalAssignmentId">
-            <div class="action-buttons">
-                <button id="modalBtnComplete"></button>
-                <button id="modalBtnEdit" data-translate="modalEditButton">Editar</button>
-                <button id="modalBtnDelete" data-translate="modalDeleteButton">Excluir</button>
-                <button id="modalBtnCancel" data-translate="modalCancelButton">Cancelar</button>
-            </div>
-            <div class="edit-view">
-                <div class="form-group">
-                    <label for="modalEditDate" data-translate="formDateLabel">Data</label>
-                    <input type="date" id="modalEditDate">
-                </div>
-                <div class="form-group">
-                    <label for="modalEditNotes" data-translate="formNotesLabel">Obs</label>
-                    <input type="text" id="modalEditNotes" data-translate-placeholder="formNotesPlaceholder" placeholder="...">
-                </div>
-                <button id="modalBtnSaveEdit" data-translate="modalSaveButton">Salvar</button>
-                <button id="modalBtnCancelEdit" data-translate="modalCancelButton">Cancelar</button>
-            </div>
+             <h4 id="modalTitle" data-translate="loading">...</h4>
+             <input type="hidden" id="modalAssignmentId">
+             <div class="action-buttons">
+                 <button id="modalBtnComplete"></button>
+                 <button id="modalBtnEdit" data-translate="modalEditButton">Editar</button>
+                 <button id="modalBtnDelete" data-translate="modalDeleteButton">Excluir</button>
+                 <button id="modalBtnCancel" data-translate="modalCancelButton">Cancelar</button>
+             </div>
+             <div class="edit-view">
+                 <div class="form-group">
+                     <label for="modalEditDate" data-translate="formDateLabel">Data</label>
+                     <input type="date" id="modalEditDate">
+                 </div>
+                 <div class="form-group">
+                     <label for="modalEditNotes" data-translate="formNotesLabel">Obs</label>
+                     <input type="text" id="modalEditNotes" data-translate-placeholder="formNotesPlaceholder" placeholder="...">
+                 </div>
+                 <button id="modalBtnSaveEdit" data-translate="modalSaveButton">Salvar</button>
+                 <button id="modalBtnCancelEdit" data-translate="modalCancelButton">Cancelar</button>
+             </div>
          </div>
      </div>
      <div id="confetti-container"></div>
      <div id="calendar-tooltip" class="calendar-tooltip"></div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const SUPPORTED_LANGUAGES = ['pt-BR', 'en', 'es', 'de', 'fr', 'it'];
-            const DEFAULT_LANGUAGE = 'en';
-            const LANG_STORAGE_KEY = 'jw_assignments_language_preference';
-            let translations = {};
-            let currentLanguage = DEFAULT_LANGUAGE;
+     <script>
+         document.addEventListener('DOMContentLoaded', async () => {
+             const SUPPORTED_LANGUAGES = ['pt-BR', 'en', 'es', 'de', 'fr', 'it']; // Add more as needed
+             const LANGUAGE_NAMES = { // Optional: Names for the dropdown
+                 'pt-BR': 'Português (BR)',
+                 'en': 'English',
+                 'es': 'Español',
+                 'de': 'Deutsch',
+                 'fr': 'Français',
+                 'it': 'Italiano'
+             };
+             const DEFAULT_LANGUAGE = 'en';
+             const LANG_STORAGE_KEY = 'jw_assignments_language_preference';
+             let translations = {};
+             let currentLanguage = DEFAULT_LANGUAGE;
 
-            async function loadTranslations() {
-                try {
-                    const response = await fetch('translations.json?v=' + Date.now());
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    translations = await response.json();
-                } catch (error) {
-                    console.error("Could not load translations file (translations.json):", error);
+             async function loadTranslations() {
+                 try {
+                     const response = await fetch('translations.json?v=' + Date.now());
+                     if (!response.ok) {
+                         throw new Error(`HTTP error! status: ${response.status}`);
+                     }
+                     translations = await response.json();
+                     // Ensure all supported languages have at least an empty object
+                     SUPPORTED_LANGUAGES.forEach(lang => {
+                         if (!translations[lang]) {
+                             console.warn(`Translations for ${lang} not found in file, creating empty object.`);
+                             translations[lang] = {};
+                         }
+                     });
+                 } catch (error) {
+                     console.error("Could not load translations file (translations.json):", error);
+                     // Load minimal English fallback if fetch fails
                      translations['en'] = {
-                        pageTitle: "My Assignments", loading: "Loading...", noAssignmentsAdded: "No assignments added yet.",
-                        formTypeSelectOption: "Select Type", assignTypeCustom: "Custom", assignCatOther: "Other/Custom",
-                        frequentAssignmentsGroup:"Most Used", upcomingTitle:"Next 7 Days", addAssignmentHeader:"Add New",
-                        allAssignmentsHeader: "All Assignments", formTypeLabel:"Type", formCustomTypeLabel: "Name",
-                        formDateLabel: "Date", formNotesLabel: "Notes", formAddButton: "Add", prevWeekButton: "< Prev",
-                        nextWeekButton: "Next >", modalEditButton: "Edit", modalDeleteButton: "Delete", modalCancelButton: "Cancel",
-                        modalSaveButton:"Save", modalMarkCompleteButton:"Mark Complete", modalUnmarkCompleteButton:"Unmark Complete",
-                        relativeDateToday: "Today", relativeDateTomorrow: "Tomorrow", dayMonShort: "Mon", dayTueShort:"Tue",
-                        dayWedShort: "Wed", dayThuShort: "Thu", dayFriShort: "Fri", daySatShort: "Sat", daySunShort: "Sun",
-                        calendarThisWeek: "This Week", calendarNextWeek: "Next Week", noUpcomingAssignments:"No items for {0} days.",
-                        celebrationTypeName: "Memorial", celebrationNotes:"Annual", assignTypeConvention: "Convention", congressDuration: "3 days",
-                        congressDayPrefix: "Conv. (Day {0})", assignCatPreparation:"Preparation", assignCatMeeting:"Meeting",
-                        assignCatEvents:"Events", assignTypePresident:"Chairman", alertDateRequired: "Date is required.",
-                        alertInvalidDateFormat: "Invalid date format.", alertDateInPast: "Cannot select a past date.",
-                        alertAddCelebrationManual: "Memorial is added automatically.", alertInvalidTypeDate:"Please select a valid type and date.",
-                        alertAlreadyExists:"'{0}' already exists for {1}.", alertCustomTypeRequired:"Please enter a name for the custom type.",
-                        alertCongressExists: "Convention already scheduled starting {0}.", alertCongressDateRequired:"Select FIRST day of convention.",
-                        alertErrorAddingCongress:"Error adding convention days.", alertInvalidDate:"Invalid date.",
-                        alertDateInPastEdit:"Cannot set past date for incomplete item.", modalCompleteCelebrationFuture:"Cannot complete future Memorial.",
-                        assignTypeFieldLeader: "Group Overseer", assignTypeAttendantEntry: "Entry Attendant", assignTypeAttendantAud: "Aud. Attendant", assignTypeCleaning: "Cleaning", assignTypeAudio: "Sound", assignTypeVideo: "Video",
-                        assignTypeConductor: "WT Conductor", assignTypeBibleReading: "Bible Reading", assignTypeCongStudyReader: "CBS Reader", assignTypeCongStudyConductor: "CBS Conductor", assignTypePublicTalk: "Public Talk", assignTypeChristianLifeTalk: "Living Talk", assignTypeTreasuresTalk: "Treasures Talk", assignTypeSpiritualGems: "Digging Gems", assignTypeMinistrySchool: "Apply Ministry", assignTypeWatchtowerReader: "WT Reader", assignTypeWatchtowerConductor: "WT Conductor", assignTypeFinalPrayer: "Final Prayer",
-                        assignTypeAssembly: "Assembly", assignTypeBethelVisit: "Bethel Visit", shortNameCongStudyReader:"CBS Read.", shortNameCongStudyConductor:"CBS Cond.", shortNameMinistrySchool:"Ministry", shortNameAttendantEntry:"Attend. Entry", shortNameAttendantAud:"Attend. Aud.", shortNameTreasuresTalk:"Treasures", shortNameChristianLifeTalk:"Living", shortNameWatchtowerReader:"WT Read.", shortNameWatchtowerConductor:"WT Cond.", shortNameConventionD1:"Conv. D1", shortNameConventionD2:"Conv. D2", shortNameConventionD3:"Conv. D3", shortNameFieldLeader:"Gr. Over.", themeToggleButton: "Toggle Theme"
-                    };
-                    currentLanguage = DEFAULT_LANGUAGE;
-                    console.warn("Using internal English fallbacks for translations.");
-                }
-            }
+                         pageTitle: "My Assignments", loading: "Loading...", noAssignmentsAdded: "No assignments added yet.",
+                         formTypeSelectOption: "Select Type", assignTypeCustom: "Custom", assignCatOther: "Other/Custom",
+                         frequentAssignmentsGroup:"Most Used", upcomingTitle:"Next 7 Days", addAssignmentHeader:"Add New",
+                         allAssignmentsHeader: "All Assignments", formTypeLabel:"Type", formCustomTypeLabel: "Name",
+                         formDateLabel: "Date", formNotesLabel: "Notes", formAddButton: "Add", prevWeekButton: "< Prev",
+                         nextWeekButton: "Next >", modalEditButton: "Edit", modalDeleteButton: "Delete", modalCancelButton: "Cancel",
+                         modalSaveButton:"Save", modalMarkCompleteButton:"Mark Complete", modalUnmarkCompleteButton:"Unmark Complete",
+                         relativeDateToday: "Today", relativeDateTomorrow: "Tomorrow", dayMonShort: "Mon", dayTueShort:"Tue",
+                         dayWedShort: "Wed", dayThuShort: "Thu", dayFriShort: "Fri", daySatShort: "Sat", daySunShort: "Sun",
+                         calendarThisWeek: "This Week", calendarNextWeek: "Next Week", noUpcomingAssignments:"No items for {0} days.",
+                         celebrationTypeName: "Memorial", celebrationNotes:"Annual", assignTypeConvention: "Convention", congressDuration: "3 days",
+                         congressDayPrefix: "Conv. (Day {0})", assignCatPreparation:"Preparation", assignCatMeeting:"Meeting",
+                         assignCatEvents:"Events", assignTypePresident:"Chairman", alertDateRequired: "Date is required.",
+                         alertInvalidDateFormat: "Invalid date format.", alertDateInPast: "Cannot select a past date.",
+                         alertAddCelebrationManual: "Memorial is added automatically.", alertInvalidTypeDate:"Please select a valid type and date.",
+                         alertAlreadyExists:"'{0}' already exists for {1}.", alertCustomTypeRequired:"Please enter a name for the custom type.",
+                         alertCongressExists: "Convention already scheduled starting {0}.", alertCongressDateRequired:"Select FIRST day of convention.",
+                         alertErrorAddingCongress:"Error adding convention days.", alertInvalidDate:"Invalid date.",
+                         alertDateInPastEdit:"Cannot set past date for incomplete item.", modalCompleteCelebrationFuture:"Cannot complete future Memorial.",
+                         assignTypeFieldLeader: "Group Overseer", assignTypeAttendantEntry: "Entry Attendant", assignTypeAttendantAud: "Aud. Attendant", assignTypeCleaning: "Cleaning", assignTypeAudio: "Sound", assignTypeVideo: "Video",
+                         assignTypeConductor: "WT Conductor", assignTypeBibleReading: "Bible Reading", assignTypeCongStudyReader: "CBS Reader", assignTypeCongStudyConductor: "CBS Conductor", assignTypePublicTalk: "Public Talk", assignTypeChristianLifeTalk: "Living Talk", assignTypeTreasuresTalk: "Treasures Talk", assignTypeSpiritualGems: "Digging Gems", assignTypeMinistrySchool: "Apply Ministry", assignTypeWatchtowerReader: "WT Reader", assignTypeWatchtowerConductor: "WT Conductor", assignTypeFinalPrayer: "Final Prayer",
+                         assignTypeAssembly: "Assembly", assignTypeBethelVisit: "Bethel Visit", shortNameCongStudyReader:"CBS Read.", shortNameCongStudyConductor:"CBS Cond.", shortNameMinistrySchool:"Ministry", shortNameAttendantEntry:"Attend. Entry", shortNameAttendantAud:"Attend. Aud.", shortNameTreasuresTalk:"Treasures", shortNameChristianLifeTalk:"Living", shortNameWatchtowerReader:"WT Read.", shortNameWatchtowerConductor:"WT Cond.", shortNameConventionD1:"Conv. D1", shortNameConventionD2:"Conv. D2", shortNameConventionD3:"Conv. D3", shortNameFieldLeader:"Gr. Over.", themeToggleButton: "Toggle Theme", languageToggleButton: "Change Language"
+                     };
+                     currentLanguage = DEFAULT_LANGUAGE; // Fallback to English
+                     console.warn("Using internal English fallbacks for translations.");
+                 }
+             }
 
-            function getBestInitialLanguage() {
-                const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
-                if (savedLang && SUPPORTED_LANGUAGES.includes(savedLang)) return savedLang;
-                const browserLang = navigator.language || navigator.userLanguage;
-                if (browserLang) {
-                   if (SUPPORTED_LANGUAGES.includes(browserLang)) return browserLang;
-                   const baseLang = browserLang.split('-')[0];
-                   const matchedLang = SUPPORTED_LANGUAGES.find(l => l.startsWith(baseLang));
-                   if (matchedLang) return matchedLang;
-                }
-                return DEFAULT_LANGUAGE;
-            }
+             function getBestInitialLanguage() {
+                 const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
+                 if (savedLang && SUPPORTED_LANGUAGES.includes(savedLang)) {
+                     console.log("Using saved language:", savedLang);
+                     return savedLang;
+                 }
 
-            function _t(key, ...args) {
-                const langSet = (translations && translations[currentLanguage]) || (translations && translations[DEFAULT_LANGUAGE]) || {};
-                let translated = langSet[key] !== undefined ? langSet[key] : key;
-                if (args.length > 0 && typeof translated === 'string') {
-                    args.forEach((arg, index) => {
-                        const placeholder = new RegExp(`\\{${index}\\}`, 'g');
-                        translated = translated.replace(placeholder, arg ?? '');
-                    });
-                }
-                return translated;
-            }
+                 const browserLang = navigator.language || navigator.userLanguage;
+                 if (browserLang) {
+                     console.log("Browser language detected:", browserLang);
+                     if (SUPPORTED_LANGUAGES.includes(browserLang)) return browserLang;
+                     const baseLang = browserLang.split('-')[0];
+                     const matchedLang = SUPPORTED_LANGUAGES.find(l => l.startsWith(baseLang));
+                     if (matchedLang) {
+                         console.log("Matched base language:", matchedLang);
+                         return matchedLang;
+                     }
+                 }
+                 console.log("Falling back to default language:", DEFAULT_LANGUAGE);
+                 return DEFAULT_LANGUAGE;
+             }
 
-            function applyTranslationsHTML() {
-                document.querySelectorAll('[data-translate]').forEach(el => { el.textContent = _t(el.getAttribute('data-translate')); });
-                document.querySelectorAll('[data-translate-placeholder]').forEach(el => { el.placeholder = _t(el.getAttribute('data-translate-placeholder')); });
-                document.querySelectorAll('[data-translate-title]').forEach(el => { el.title = _t(el.getAttribute('data-translate-title')); });
-                if (document.titleElement) { document.title = _t(document.titleElement.getAttribute('data-translate') || 'pageTitle'); }
-                document.documentElement.lang = currentLanguage.split('-')[0];
-            }
+             function _t(key, ...args) {
+                 const langSet = (translations && translations[currentLanguage]) || (translations && translations[DEFAULT_LANGUAGE]) || {};
+                 let translated = langSet[key] !== undefined ? langSet[key] : (translations[DEFAULT_LANGUAGE]?.[key] ?? key); // Fallback chain: current -> default -> key
+                 if (args.length > 0 && typeof translated === 'string') {
+                     args.forEach((arg, index) => {
+                         const placeholder = new RegExp(`\\{${index}\\}`, 'g');
+                         translated = translated.replace(placeholder, arg ?? '');
+                     });
+                 }
+                 return translated;
+             }
+
+             function applyTranslationsHTML() {
+                 document.querySelectorAll('[data-translate]').forEach(el => { el.textContent = _t(el.getAttribute('data-translate')); });
+                 document.querySelectorAll('[data-translate-placeholder]').forEach(el => { el.placeholder = _t(el.getAttribute('data-translate-placeholder')); });
+                 document.querySelectorAll('[data-translate-title]').forEach(el => { el.title = _t(el.getAttribute('data-translate-title')); });
+                 if (document.titleElement) { document.title = _t(document.titleElement.getAttribute('data-translate') || 'pageTitle'); }
+                 document.documentElement.lang = currentLanguage.split('-')[0];
+                 populateLanguageOptions(); // Update active state in dropdown
+             }
 
              function setLanguage(lang) {
                  if (!translations || Object.keys(translations).length === 0) { console.warn("Translations not loaded, cannot change language yet."); return; }
-                if (SUPPORTED_LANGUAGES.includes(lang) && lang !== currentLanguage) {
-                    currentLanguage = lang;
-                    localStorage.setItem(LANG_STORAGE_KEY, lang);
-                    initializeAppLogic();
-                } else if (!SUPPORTED_LANGUAGES.includes(lang)) {
-                    console.warn(`Unsupported language: ${lang}. Sticking with ${currentLanguage}`);
-                }
-            }
+                 if (SUPPORTED_LANGUAGES.includes(lang) && lang !== currentLanguage) {
+                     console.log(`Setting language to: ${lang}`);
+                     currentLanguage = lang;
+                     localStorage.setItem(LANG_STORAGE_KEY, lang); // Save user preference
+                     initializeAppLogic(); // Re-initialize/re-render everything
+                     hideLanguageOptions();
+                 } else if (!SUPPORTED_LANGUAGES.includes(lang)) {
+                     console.warn(`Unsupported language: ${lang}. Sticking with ${currentLanguage}`);
+                 }
+             }
 
-            const assignmentForm = document.getElementById('assignmentForm');
-            const assignmentTypeInput = document.getElementById('assignmentType');
-            const assignmentDateInput = document.getElementById('assignmentDate');
-            const assignmentNotesInput = document.getElementById('assignmentNotes');
-            const assignmentsListContainer = document.querySelector('#listSection .section-content ul');
-            const upcomingList = document.getElementById('upcomingList');
-            const customTypeGroup = document.getElementById('customTypeGroup');
-            const customAssignmentTypeInput = document.getElementById('customAssignmentType');
-            const weeklyCalendarGrid = document.getElementById('weeklyCalendar');
-            const actionModal = document.getElementById('actionModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalAssignmentIdInput = document.getElementById('modalAssignmentId');
-            const modalActionButtonsDiv = actionModal.querySelector('.action-buttons');
-            const modalEditViewDiv = actionModal.querySelector('.edit-view');
-            const modalEditDateInput = document.getElementById('modalEditDate');
-            const modalEditNotesInput = document.getElementById('modalEditNotes');
-            const modalBtnComplete = document.getElementById('modalBtnComplete');
-            const modalBtnEdit = document.getElementById('modalBtnEdit');
-            const modalBtnDelete = document.getElementById('modalBtnDelete');
-            const prevWeekBtn = document.getElementById('prevWeekBtn');
-            const nextWeekBtn = document.getElementById('nextWeekBtn');
-            const calendarWeekLabel = document.getElementById('calendarWeekLabel');
-            const confettiContainer = document.getElementById('confetti-container');
-            const calendarTooltip = document.getElementById('calendar-tooltip');
-            const themeToggleBtn = document.getElementById('themeToggleBtn');
-            const themeToggleIcon = themeToggleBtn?.querySelector('i');
-            document.titleElement = document.querySelector('title');
+             function populateLanguageOptions() {
+                 if (!languageOptionsContainer) return;
+                 languageOptionsContainer.innerHTML = '';
+                 SUPPORTED_LANGUAGES.forEach(lang => {
+                     const button = document.createElement('button');
+                     button.textContent = LANGUAGE_NAMES[lang] || lang;
+                     button.dataset.lang = lang;
+                     if (lang === currentLanguage) {
+                         button.classList.add('active');
+                     }
+                     button.addEventListener('click', () => setLanguage(lang));
+                     languageOptionsContainer.appendChild(button);
+                 });
+             }
 
-            const ASSIGNMENTS_STORAGE_KEY = 'jw_assignments_data_v2_multi';
-            const THEME_STORAGE_KEY = 'jw_assignments_theme_preference';
-            const UPCOMING_DAYS = 7;
-            const TOP_N_FREQUENT = 5;
-            const CONFETTI_COUNT = 50;
-            const CELEBRATION_DATES = [ { date: '2026-04-02', year: 2026 }, { date: '2027-03-22', year: 2027 }, ];
-            const INTERNAL_CELEBRATION_TYPE = "celebration";
-            const INTERNAL_CONGRESS_TYPE = "convention";
-            const BASE_ASSIGNMENT_KEYS = {
+             function toggleLanguageOptions() {
+                 if (languageOptionsContainer) {
+                     languageOptionsContainer.classList.toggle('show');
+                 }
+             }
+             function hideLanguageOptions() {
+                 if (languageOptionsContainer) {
+                     languageOptionsContainer.classList.remove('show');
+                 }
+             }
+
+             // --- DOM Element References ---
+             const assignmentForm = document.getElementById('assignmentForm');
+             const assignmentTypeInput = document.getElementById('assignmentType');
+             const assignmentDateInput = document.getElementById('assignmentDate');
+             const assignmentNotesInput = document.getElementById('assignmentNotes');
+             const assignmentsListContainer = document.querySelector('#listSection .section-content ul');
+             const upcomingList = document.getElementById('upcomingList');
+             const customTypeGroup = document.getElementById('customTypeGroup');
+             const customAssignmentTypeInput = document.getElementById('customAssignmentType');
+             const weeklyCalendarGrid = document.getElementById('weeklyCalendar');
+             const weeklyCalendarContainer = document.getElementById('weeklyCalendarContainer'); // For swipe
+             const actionModal = document.getElementById('actionModal');
+             const modalTitle = document.getElementById('modalTitle');
+             const modalAssignmentIdInput = document.getElementById('modalAssignmentId');
+             const modalActionButtonsDiv = actionModal?.querySelector('.action-buttons');
+             const modalEditViewDiv = actionModal?.querySelector('.edit-view');
+             const modalEditDateInput = document.getElementById('modalEditDate');
+             const modalEditNotesInput = document.getElementById('modalEditNotes');
+             const modalBtnComplete = document.getElementById('modalBtnComplete');
+             const modalBtnEdit = document.getElementById('modalBtnEdit');
+             const modalBtnDelete = document.getElementById('modalBtnDelete');
+             const prevWeekBtn = document.getElementById('prevWeekBtn');
+             const nextWeekBtn = document.getElementById('nextWeekBtn');
+             const calendarWeekLabel = document.getElementById('calendarWeekLabel');
+             const confettiContainer = document.getElementById('confetti-container');
+             const calendarTooltip = document.getElementById('calendar-tooltip');
+             const themeToggleBtn = document.getElementById('themeToggleBtn');
+             const themeToggleIcon = themeToggleBtn?.querySelector('i');
+             const languageToggleBtn = document.getElementById('languageToggleBtn');
+             const languageOptionsContainer = document.getElementById('languageOptions');
+             document.titleElement = document.querySelector('title');
+
+             // --- Constants and State ---
+             const ASSIGNMENTS_STORAGE_KEY = 'jw_assignments_data_v2_multi';
+             const THEME_STORAGE_KEY = 'jw_assignments_theme_preference';
+             const UPCOMING_DAYS = 7;
+             const TOP_N_FREQUENT = 5;
+             const CONFETTI_COUNT = 50;
+             const CELEBRATION_DATES = [ { date: '2026-04-02', year: 2026 }, { date: '2027-03-22', year: 2027 }, ]; // Add more future dates as needed
+             const INTERNAL_CELEBRATION_TYPE = "celebration";
+             const INTERNAL_CONGRESS_TYPE = "convention";
+             const BASE_ASSIGNMENT_KEYS = {
                  assignCatPreparation: ["assignTypePresident", "assignTypeFieldLeader", "assignTypeAttendantEntry", "assignTypeAttendantAud", "assignTypeCleaning", "assignTypeAudio", "assignTypeVideo"],
                  assignCatMeeting: ["assignTypeConductor", "assignTypeBibleReading", "assignTypeCongStudyReader", "assignTypeCongStudyConductor", "assignTypePublicTalk", "assignTypeChristianLifeTalk", "assignTypeTreasuresTalk", "assignTypeSpiritualGems", "assignTypeMinistrySchool", "assignTypeWatchtowerReader", "assignTypeWatchtowerConductor", "assignTypeFinalPrayer"],
                  assignCatEvents: ["assignTypeAssembly", INTERNAL_CONGRESS_TYPE, "assignTypeBethelVisit"],
                  assignCatOther: ["assignTypeCustom"]
-            };
-            const ASSIGNMENT_EMOJIS = { "assignTypePresident": "🧑‍⚖️", "assignTypeFieldLeader": "🗺️", "assignTypeAttendantEntry": "🚪", "assignTypeAttendantAud": "🏛️", "assignTypeCleaning": "🧹", "assignTypeAudio": "🔊", "assignTypeVideo": "📽️", "assignTypeConductor": "🎤", "assignTypeBibleReading": "📖", "assignTypeCongStudyReader": "🤓", "assignTypeCongStudyConductor": "🧑‍🏫", "assignTypePublicTalk": "🗣️", "assignTypeChristianLifeTalk": "💖", "assignTypeTreasuresTalk": "💎", "assignTypeSpiritualGems": "✨", "assignTypeMinistrySchool": "💪", "assignTypeWatchtowerReader": "👀", "assignTypeWatchtowerConductor": "🧐", "assignTypeFinalPrayer": "🙏", "assignTypeAssembly": "🏟️", [INTERNAL_CONGRESS_TYPE]: "🧑‍🤝‍🧑", "convention_day_1": "🧑‍🤝‍🧑", "convention_day_2": "🧑‍🤝‍🧑", "convention_day_3": "🧑‍🤝‍🧑", "assignTypeBethelVisit": "🏢", "assignTypeCustom": "❓", [INTERNAL_CELEBRATION_TYPE]: "🍷", "custom": "✨" };
-            const SHORT_ASSIGNMENT_NAME_KEYS = { "assignTypeCongStudyReader": "shortNameCongStudyReader", "assignTypeCongStudyConductor": "shortNameCongStudyConductor", "assignTypeMinistrySchool": "shortNameMinistrySchool", "assignTypeAttendantEntry": "shortNameAttendantEntry", "assignTypeAttendantAud": "shortNameAttendantAud", "assignTypeTreasuresTalk": "shortNameTreasuresTalk", "assignTypeChristianLifeTalk": "shortNameChristianLifeTalk", "assignTypeWatchtowerReader": "shortNameWatchtowerReader", "assignTypeWatchtowerConductor": "shortNameWatchtowerConductor", "convention_day_1": "shortNameConventionD1", "convention_day_2": "shortNameConventionD2", "convention_day_3": "shortNameConventionD3", "assignTypeFieldLeader": "shortNameFieldLeader" };
+             };
+             const ASSIGNMENT_EMOJIS = { "assignTypePresident": "🧑‍⚖️", "assignTypeFieldLeader": "🗺️", "assignTypeAttendantEntry": "🚪", "assignTypeAttendantAud": "🏛️", "assignTypeCleaning": "🧹", "assignTypeAudio": "🔊", "assignTypeVideo": "📽️", "assignTypeConductor": "🎤", "assignTypeBibleReading": "📖", "assignTypeCongStudyReader": "🤓", "assignTypeCongStudyConductor": "🧑‍🏫", "assignTypePublicTalk": "🗣️", "assignTypeChristianLifeTalk": "💖", "assignTypeTreasuresTalk": "💎", "assignTypeSpiritualGems": "✨", "assignTypeMinistrySchool": "💪", "assignTypeWatchtowerReader": "👀", "assignTypeWatchtowerConductor": "🧐", "assignTypeFinalPrayer": "🙏", "assignTypeAssembly": "🏟️", [INTERNAL_CONGRESS_TYPE]: "🧑‍🤝‍🧑", "convention_day_1": "🧑‍🤝‍🧑", "convention_day_2": "🧑‍🤝‍🧑", "convention_day_3": "🧑‍🤝‍🧑", "assignTypeBethelVisit": "🏢", "assignTypeCustom": "❓", [INTERNAL_CELEBRATION_TYPE]: "🍷", "custom": "✨" };
+             const SHORT_ASSIGNMENT_NAME_KEYS = { "assignTypeCongStudyReader": "shortNameCongStudyReader", "assignTypeCongStudyConductor": "shortNameCongStudyConductor", "assignTypeMinistrySchool": "shortNameMinistrySchool", "assignTypeAttendantEntry": "shortNameAttendantEntry", "assignTypeAttendantAud": "shortNameAttendantAud", "assignTypeTreasuresTalk": "shortNameTreasuresTalk", "assignTypeChristianLifeTalk": "shortNameChristianLifeTalk", "assignTypeWatchtowerReader": "shortNameWatchtowerReader", "assignTypeWatchtowerConductor": "shortNameWatchtowerConductor", "convention_day_1": "shortNameConventionD1", "convention_day_2": "shortNameConventionD2", "convention_day_3": "shortNameConventionD3", "assignTypeFieldLeader": "shortNameFieldLeader" };
 
-            let appData = { assignments: [], frequency: {} };
-            let calendarWeekOffset = 0;
-            let activeTooltipMarker = null;
+             let appData = { assignments: [], frequency: {} };
+             let calendarWeekOffset = 0;
+             let activeTooltipMarker = null;
+             let touchstartX = 0;
+             let touchstartY = 0; // To detect vertical scroll intent
+             let touchendX = 0;
+             let touchendY = 0; // To detect vertical scroll intent
+             const swipeThreshold = 50; // Minimum pixels for a swipe
 
-            function loadAppData(){
+             // --- Core Functions (No internal comments as requested) ---
+             function loadAppData(){
                  const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY);
                  appData = { assignments: [], frequency: {} };
                  if(s){
                      try{
-                        const p=JSON.parse(s);
-                        if(p && Array.isArray(p.assignments)) appData.assignments = p.assignments;
-                        if(p && typeof p.frequency === 'object' && p.frequency !== null) appData.frequency = p.frequency;
+                         const p=JSON.parse(s);
+                         if(p && Array.isArray(p.assignments)) appData.assignments = p.assignments;
+                         if(p && typeof p.frequency === 'object' && p.frequency !== null) appData.frequency = p.frequency;
 
                          appData.assignments = appData.assignments.map(a => {
                              if (!a) return null;
@@ -361,135 +441,162 @@
                                      if (a.type.includes('1')) a.internalType = "convention_day_1";
                                      else if (a.type.includes('2')) a.internalType = "convention_day_2";
                                      else if (a.type.includes('3')) a.internalType = "convention_day_3";
-                                      else a.internalType = INTERNAL_CONGRESS_TYPE;
+                                      else a.internalType = INTERNAL_CONGRESS_TYPE; // Fallback if day number isn't clear
                                  } else {
-                                      let possibleKey = null;
-                                      const typeMap = {};
-                                      for (const catKey in BASE_ASSIGNMENT_KEYS) {
-                                          if (Array.isArray(BASE_ASSIGNMENT_KEYS[catKey])) {
-                                               BASE_ASSIGNMENT_KEYS[catKey].forEach(typeK => {
-                                                  if(typeK !== INTERNAL_CONGRESS_TYPE && typeK !== 'assignTypeCustom') {
-                                                       typeMap[_t(typeK)] = typeK;
-                                                  }
-                                               });
-                                          }
-                                      }
-                                      possibleKey = typeMap[a.type];
-                                      a.internalType = possibleKey || `custom:${a.type || `unknown_${a.id}`}`;
-                                       if (!possibleKey) console.log(` > Migrated '${a.type}' to custom type.`);
+                                     let possibleKey = null;
+                                     const typeMap = {};
+                                     for (const catKey in BASE_ASSIGNMENT_KEYS) {
+                                         if (Array.isArray(BASE_ASSIGNMENT_KEYS[catKey])) {
+                                             BASE_ASSIGNMENT_KEYS[catKey].forEach(typeK => {
+                                                 if(typeK !== INTERNAL_CONGRESS_TYPE && typeK !== 'assignTypeCustom') {
+                                                      // Use English as the base for mapping during migration if needed
+                                                     const baseLang = translations['en'] || {};
+                                                     typeMap[baseLang[typeK] || typeK] = typeK;
+                                                 }
+                                             });
+                                         }
+                                     }
+                                     possibleKey = typeMap[a.type] || Object.keys(typeMap).find(key => typeMap[key] === a.type); // Try matching display name back to key
+                                     a.internalType = possibleKey || `custom:${a.type || `unknown_${a.id}`}`;
+                                      if (!possibleKey) console.log(` > Migrated '${a.type}' to custom type.`);
                                  }
                              }
+                             // Ensure display 'type' matches current language based on internalType
                              if (a.internalType && a.internalType !== 'unknown' && !a.internalType.startsWith('custom:')) {
-                                if (a.internalType === INTERNAL_CELEBRATION_TYPE) a.type = _t("celebrationTypeName");
-                                else if (a.internalType === 'convention_day_1') a.type = _t("congressDayPrefix", 1);
-                                else if (a.internalType === 'convention_day_2') a.type = _t("congressDayPrefix", 2);
-                                else if (a.internalType === 'convention_day_3') a.type = _t("congressDayPrefix", 3);
-                                else if (Object.values(BASE_ASSIGNMENT_KEYS).flat().includes(a.internalType)) {
+                                 if (a.internalType === INTERNAL_CELEBRATION_TYPE) a.type = _t("celebrationTypeName");
+                                 else if (a.internalType === 'convention_day_1') a.type = _t("congressDayPrefix", 1);
+                                 else if (a.internalType === 'convention_day_2') a.type = _t("congressDayPrefix", 2);
+                                 else if (a.internalType === 'convention_day_3') a.type = _t("congressDayPrefix", 3);
+                                 else if (Object.values(BASE_ASSIGNMENT_KEYS).flat().includes(a.internalType)) {
                                      a.type = _t(a.internalType);
                                  }
-                              } else if (a.internalType && a.internalType.startsWith('custom:')) {
-                                  if (!a.type) a.type = a.internalType.substring(7).replace(/_/g, ' ');
-                              }
+                             } else if (a.internalType && a.internalType.startsWith('custom:')) {
+                                  if (!a.type) a.type = a.internalType.substring(7).replace(/_/g, ' '); // Restore type from custom internal type if missing
+                             }
                              return a;
                          }).filter(a => a && a.internalType !== 'unknown');
                           appData.assignments.forEach(a => { if (a.internalType === INTERNAL_CELEBRATION_TYPE) a.isCelebration = true; });
-                    } catch(e){ console.error("Error parsing loaded data:", e); appData = { assignments: [], frequency: {} }; }
+                     } catch(e){ console.error("Error parsing loaded data:", e); appData = { assignments: [], frequency: {} }; }
                  }
-            }
+             }
 
-            function saveAppData(){ try{localStorage.setItem(ASSIGNMENTS_STORAGE_KEY,JSON.stringify(appData));} catch(e){console.error("Failed to save data:", e);}}
-            function loadThemePreference() { const savedTheme = localStorage.getItem(THEME_STORAGE_KEY); if (savedTheme === 'light') { document.body.classList.add('light-theme'); if (themeToggleIcon) { themeToggleIcon.classList.remove('fa-sun'); themeToggleIcon.classList.add('fa-moon'); } } else { document.body.classList.remove('light-theme'); if (themeToggleIcon) { themeToggleIcon.classList.remove('fa-moon'); themeToggleIcon.classList.add('fa-sun'); } } }
-            function saveThemePreference(theme) { localStorage.setItem(THEME_STORAGE_KEY, theme); }
-            function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); saveThemePreference(isLight ? 'light' : 'dark'); if (themeToggleIcon) { themeToggleIcon.classList.toggle('fa-sun', !isLight); themeToggleIcon.classList.toggle('fa-moon', isLight); }}
+             function saveAppData(){ try{localStorage.setItem(ASSIGNMENTS_STORAGE_KEY,JSON.stringify(appData));} catch(e){console.error("Failed to save data:", e);}}
+             function loadThemePreference() { const savedTheme = localStorage.getItem(THEME_STORAGE_KEY); if (savedTheme === 'light') { document.body.classList.add('light-theme'); if (themeToggleIcon) { themeToggleIcon.classList.remove('fa-sun'); themeToggleIcon.classList.add('fa-moon'); } } else { document.body.classList.remove('light-theme'); if (themeToggleIcon) { themeToggleIcon.classList.remove('fa-moon'); themeToggleIcon.classList.add('fa-sun'); } } }
+             function saveThemePreference(theme) { localStorage.setItem(THEME_STORAGE_KEY, theme); }
+             function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); saveThemePreference(isLight ? 'light' : 'dark'); if (themeToggleIcon) { themeToggleIcon.classList.toggle('fa-sun', !isLight); themeToggleIcon.classList.toggle('fa-moon', isLight); }}
 
-            function getEmojiForInternalType(internalType){ if (internalType?.startsWith('custom:')) return ASSIGNMENT_EMOJIS['custom'] || '✨'; return ASSIGNMENT_EMOJIS[internalType] || ASSIGNMENT_EMOJIS['assignTypeCustom'] ||'❓';}
-            function formatDate(d,o={day:'2-digit',month:'2-digit',year:'numeric'}){if(!d)return '';try{const dt=new Date(`${d}T00:00:00Z`); if(isNaN(dt)) throw new Error("Invalid date input for Date obj"); return new Intl.DateTimeFormat(currentLanguage,{...o,timeZone:'UTC'}).format(dt);}catch(e){console.error("Date format error:",e, "Input:", d); const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}}
-            function dateToYyyyMmDd(d){ try{ if (!(d instanceof Date)) d = new Date(d); if(isNaN(d)) throw new Error("Invalid Date obj"); const year = d.getUTCFullYear(); const month = String(d.getUTCMonth()+1).padStart(2,'0'); const day = String(d.getUTCDate()).padStart(2,'0'); return`${year}-${month}-${day}`; } catch(e) { console.error("dateToYyyyMmDd error:", e, "Input:", d); return null;} }
-            function getTodayDateString(){const d=new Date(); return dateToYyyyMmDd(d);}
+             function getEmojiForInternalType(internalType){ if (internalType?.startsWith('custom:')) return ASSIGNMENT_EMOJIS['custom'] || '✨'; return ASSIGNMENT_EMOJIS[internalType] || ASSIGNMENT_EMOJIS['assignTypeCustom'] ||'❓';}
+             function formatDate(d,o={day:'2-digit',month:'2-digit',year:'numeric'}){if(!d)return '';try{const dt=new Date(`${d}T00:00:00Z`); if(isNaN(dt)) throw new Error("Invalid date input for Date obj"); return new Intl.DateTimeFormat(currentLanguage,{...o,timeZone:'UTC'}).format(dt);}catch(e){console.error("Date format error:",e, "Input:", d); const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}}
+             function dateToYyyyMmDd(d){ try{ if (!(d instanceof Date)) d = new Date(d); if(isNaN(d)) throw new Error("Invalid Date obj"); const year = d.getUTCFullYear(); const month = String(d.getUTCMonth()+1).padStart(2,'0'); const day = String(d.getUTCDate()).padStart(2,'0'); return`${year}-${month}-${day}`; } catch(e) { console.error("dateToYyyyMmDd error:", e, "Input:", d); return null;} }
+             function getTodayDateString(){const d=new Date(); return dateToYyyyMmDd(d);}
 
              function formatRelativeDate(ds) {
-                if (!ds || !/^\d{4}-\d{2}-\d{2}$/.test(ds)) { return ds || ''; }
-                try {
-                    const today = new Date();
-                    today.setUTCHours(0, 0, 0, 0);
-                    const targetDate = new Date(`${ds}T00:00:00Z`);
-                    if (isNaN(targetDate.getTime())) {
-                        console.warn("formatRelativeDate: Invalid targetDate from input", ds);
-                        return ds;
-                    }
+                 if (!ds || !/^\d{4}-\d{2}-\d{2}$/.test(ds)) { return ds || ''; }
+                 try {
+                     const today = new Date();
+                     today.setUTCHours(0, 0, 0, 0);
+                     const targetDate = new Date(`${ds}T00:00:00Z`);
+                     if (isNaN(targetDate.getTime())) {
+                         console.warn("formatRelativeDate: Invalid targetDate from input", ds);
+                         return ds;
+                     }
 
-                    if (typeof Intl !== 'undefined' && typeof Intl.RelativeTimeFormat !== 'undefined') {
-                        const rtf = new Intl.RelativeTimeFormat(currentLanguage, { numeric: 'auto', style: 'short' });
-                        const diffDays = Math.ceil((targetDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+                     if (typeof Intl !== 'undefined' && typeof Intl.RelativeTimeFormat !== 'undefined') {
+                         const rtf = new Intl.RelativeTimeFormat(currentLanguage, { numeric: 'auto', style: 'short' });
+                         const diffDays = Math.ceil((targetDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
-                        if (diffDays < -30) return formatDate(ds);
-                        if (diffDays < 0) return rtf.format(diffDays, 'day');
-                        if (diffDays === 0) return _t("relativeDateToday");
-                        if (diffDays === 1) return _t("relativeDateTomorrow");
+                         if (diffDays < -30) return formatDate(ds);
+                         if (diffDays < 0) return rtf.format(diffDays, 'day');
+                         if (diffDays === 0) return _t("relativeDateToday");
+                         if (diffDays === 1) return _t("relativeDateTomorrow");
 
-                        if (diffDays > 1 && diffDays <= 6) {
-                            try {
-                                const weekdayFormat = new Intl.DateTimeFormat(currentLanguage, { weekday: 'short', timeZone: 'UTC' });
-                                const weekday = weekdayFormat.format(targetDate);
-                                return `${rtf.format(diffDays, 'day')} (${weekday})`;
-                            } catch (eInner) {
-                                console.warn("formatRelativeDate: Could not format weekday, falling back.", eInner);
-                                return rtf.format(diffDays, 'day');
-                            }
-                        }
-                        return formatDate(ds, { day: '2-digit', month: 'short' });
-                    } else {
-                         return formatDate(ds);
-                    }
-                } catch (e) {
-                    console.error("Error in formatRelativeDate:", e, "Input:", ds);
-                    return formatDate(ds);
-                }
+                         if (diffDays > 1 && diffDays <= 6) {
+                             try {
+                                 const weekdayFormat = new Intl.DateTimeFormat(currentLanguage, { weekday: 'short', timeZone: 'UTC' });
+                                 const weekday = weekdayFormat.format(targetDate);
+                                 return `${rtf.format(diffDays, 'day')} (${weekday})`;
+                             } catch (eInner) {
+                                 console.warn("formatRelativeDate: Could not format weekday, falling back.", eInner);
+                                 return rtf.format(diffDays, 'day');
+                             }
+                         }
+                         return formatDate(ds, { day: '2-digit', month: 'short' });
+                     } else {
+                          return formatDate(ds);
+                     }
+                 } catch (e) {
+                     console.error("Error in formatRelativeDate:", e, "Input:", ds);
+                     return formatDate(ds);
+                 }
              }
 
              function updateFrequency(internalType) { if (!internalType) return; if (internalType !== 'assignTypeCustom' && !internalType.startsWith('custom:') && !internalType.startsWith('convention_day_') && internalType !== INTERNAL_CELEBRATION_TYPE) { appData.frequency[internalType] = (appData.frequency[internalType] || 0) + 1; } else if (internalType === INTERNAL_CONGRESS_TYPE) { appData.frequency[INTERNAL_CONGRESS_TYPE] = (appData.frequency[INTERNAL_CONGRESS_TYPE] || 0) + 1; }}
              function triggerConfetti(){const c=['var(--accent-primary-color)','var(--accent-alt-color)','var(--success-color)','var(--error-color)','var(--list-color-1)','var(--list-color-3)','var(--list-color-5)'];if(!confettiContainer) return; for(let i=0;i<CONFETTI_COUNT;i++){const p=document.createElement('div');p.classList.add('confetti-piece');p.style.background=c[Math.floor(Math.random()*c.length)];p.style.left=Math.random()*100+'vw';p.style.top=-10-Math.random()*30+'px';p.style.animationDuration=2.5+Math.random()*1.5+'s';p.style.animationDelay=Math.random()*0.5+'s';p.style.transform=`rotate(${Math.random()*360}deg) scale(${0.8+Math.random()*0.4})`;confettiContainer.appendChild(p);setTimeout(()=>{p.remove();},4500);}}
-             function getNextCelebrationDate(todayStr) { if(!todayStr) return null; const today = new Date(todayStr + 'T00:00:00Z'); for (const cel of CELEBRATION_DATES) { if (cel && cel.date) { const celDate = new Date(cel.date + 'T00:00:00Z'); if (!isNaN(celDate) && celDate >= today) { return cel; } } } return CELEBRATION_DATES.length > 0 ? CELEBRATION_DATES[CELEBRATION_DATES.length - 1] : null; }
+             function getNextCelebrationDate(todayStr) { if(!todayStr) return null; const today = new Date(todayStr + 'T00:00:00Z'); let futureCelebrations = []; for (const cel of CELEBRATION_DATES) { if (cel && cel.date) { const celDate = new Date(cel.date + 'T00:00:00Z'); if (!isNaN(celDate) && celDate >= today) { futureCelebrations.push(cel); } } } if (futureCelebrations.length > 0) { futureCelebrations.sort((a, b) => new Date(a.date + 'T00:00:00Z') - new Date(b.date + 'T00:00:00Z')); return futureCelebrations[0]; } return null; } // Return closest future date or null
 
-            function ensureCelebrationExists() {
-                const todayStr = getTodayDateString(); if (!todayStr) return;
-                const nextCelebration = getNextCelebrationDate(todayStr);
-                let existingCelebration = appData.assignments.find(a => a && a.internalType === INTERNAL_CELEBRATION_TYPE);
-                let needsSave = false;
-                 if (!nextCelebration) return;
+             function ensureCelebrationExists() {
+                 const todayStr = getTodayDateString(); if (!todayStr) return;
+                 const nextCelebration = getNextCelebrationDate(todayStr);
+                 let needsSave = false;
+
+                 if (!nextCelebration) { // No future celebrations defined, remove any existing one
+                     const existingIndex = appData.assignments.findIndex(a => a && a.internalType === INTERNAL_CELEBRATION_TYPE);
+                     if (existingIndex > -1) {
+                         console.log("No future celebration found, removing existing one.");
+                         appData.assignments.splice(existingIndex, 1);
+                         needsSave = true;
+                     }
+                     if (needsSave) saveAppData();
+                     return;
+                 }
+
                  const celebrationId = `celebration-${nextCelebration.year}`;
+                 let existingCelebration = appData.assignments.find(a => a && a.internalType === INTERNAL_CELEBRATION_TYPE);
 
                  if (existingCelebration) {
-                    if (existingCelebration.date !== nextCelebration.date || existingCelebration.id !== celebrationId || existingCelebration.type !== _t("celebrationTypeName")) {
-                        existingCelebration.date = nextCelebration.date; existingCelebration.id = celebrationId; existingCelebration.type = _t("celebrationTypeName");
-                         if (!existingCelebration.id.endsWith(String(nextCelebration.year))) { existingCelebration.completed = false; }
-                        needsSave = true;
-                    }
+                     // Check if the existing one matches the *next* upcoming one
+                     if (existingCelebration.date !== nextCelebration.date || existingCelebration.id !== celebrationId) {
+                         console.log(`Updating existing celebration from ${existingCelebration.date} to ${nextCelebration.date}`);
+                         existingCelebration.date = nextCelebration.date;
+                         existingCelebration.id = celebrationId;
+                         existingCelebration.type = _t("celebrationTypeName");
+                         existingCelebration.notes = _t("celebrationNotes");
+                         existingCelebration.completed = false; // Reset completion status if date changes
+                         existingCelebration.isCelebration = true;
+                         needsSave = true;
+                     } else if (existingCelebration.type !== _t("celebrationTypeName") || existingCelebration.notes !== _t("celebrationNotes")) {
+                         // Update text fields if language changed
+                         existingCelebration.type = _t("celebrationTypeName");
+                         existingCelebration.notes = _t("celebrationNotes");
+                         needsSave = true;
+                     }
                  } else {
+                     console.log(`Adding new celebration for ${nextCelebration.date}`);
                      appData.assignments.push({ id: celebrationId, type: _t("celebrationTypeName"), internalType: INTERNAL_CELEBRATION_TYPE, date: nextCelebration.date, notes: _t("celebrationNotes"), completed: false, isCelebration: true });
-                    needsSave = true;
+                     needsSave = true;
                  }
+
                  if (needsSave) saveAppData();
-            }
+             }
 
              function updateDropdownOrder() {
                  const select = assignmentTypeInput; if (!select) return;
                  const currentSelection = select.value;
-                 select.innerHTML = `<option value="" disabled selected>${_t("formTypeSelectOption")}</option>`;
+                 select.innerHTML = `<option value="" disabled>${_t("formTypeSelectOption")}</option>`; // Keep placeholder selected initially
                  let allOptions = [];
                   if (!BASE_ASSIGNMENT_KEYS || typeof BASE_ASSIGNMENT_KEYS !== 'object') { console.error("BASE_ASSIGNMENT_KEYS missing or invalid"); return; }
 
                   Object.keys(BASE_ASSIGNMENT_KEYS).forEach(categoryKey => {
-                    if (Array.isArray(BASE_ASSIGNMENT_KEYS[categoryKey])) {
-                         BASE_ASSIGNMENT_KEYS[categoryKey].forEach(typeKey => {
-                            if (typeKey !== 'assignTypeCustom') {
-                                let displayText = typeKey === INTERNAL_CONGRESS_TYPE
-                                    ? `${getEmojiForInternalType(typeKey)} ${_t('assignTypeConvention')} (${_t('congressDuration')})`
-                                    : `${getEmojiForInternalType(typeKey)} ${_t(typeKey)}`;
-                                allOptions.push({ internalValue: typeKey, displayText: displayText, categoryKey: categoryKey, freq: appData.frequency[typeKey] || 0 });
-                            }
-                         });
-                    }
+                      if (Array.isArray(BASE_ASSIGNMENT_KEYS[categoryKey])) {
+                          BASE_ASSIGNMENT_KEYS[categoryKey].forEach(typeKey => {
+                              if (typeKey !== 'assignTypeCustom') {
+                                  let displayText = typeKey === INTERNAL_CONGRESS_TYPE
+                                      ? `${getEmojiForInternalType(typeKey)} ${_t('assignTypeConvention')} (${_t('congressDuration')})`
+                                      : `${getEmojiForInternalType(typeKey)} ${_t(typeKey)}`;
+                                  allOptions.push({ internalValue: typeKey, displayText: displayText, categoryKey: categoryKey, freq: appData.frequency[typeKey] || 0 });
+                              }
+                          });
+                      }
                   });
 
                  allOptions.sort((a, b) => (b.freq !== a.freq) ? b.freq - a.freq : (a.displayText || "").localeCompare(b.displayText || "", currentLanguage));
@@ -511,130 +618,135 @@
                       if (hasOpt) select.appendChild(grp);
                   });
 
-                  if (Array.from(select.options).some(opt => opt.value === currentSelection)) { select.value = currentSelection; } else if (select.options.length > 0) { select.options[0].selected = true; }
-                 select.dispatchEvent(new Event('change'));
+                  // Restore selection or select placeholder
+                  if (currentSelection && Array.from(select.options).some(opt => opt.value === currentSelection)) {
+                     select.value = currentSelection;
+                  } else {
+                      select.selectedIndex = 0; // Select the placeholder
+                  }
+                 select.dispatchEvent(new Event('change')); // Trigger change event for custom field logic
              }
 
-            function renderWeeklyCalendar(){
-                if (!weeklyCalendarGrid || !calendarWeekLabel || !prevWeekBtn || !nextWeekBtn) return;
-                 weeklyCalendarGrid.innerHTML=''; hideCalendarTooltip();
-                 const today=new Date(); today.setUTCHours(0,0,0,0); const baseWeek=new Date(today); baseWeek.setUTCDate(today.getUTCDate()+(calendarWeekOffset*7));
-                 const dow=(baseWeek.getUTCDay() + 6) % 7; const start=new Date(baseWeek); start.setUTCDate(baseWeek.getUTCDate()-dow); start.setUTCHours(0,0,0,0);
-                 const end=new Date(start); end.setUTCDate(start.getUTCDate()+6); const todayStr = getTodayDateString();
+             function renderWeeklyCalendar(){
+                 if (!weeklyCalendarGrid || !calendarWeekLabel || !prevWeekBtn || !nextWeekBtn) return;
+                  weeklyCalendarGrid.innerHTML=''; hideCalendarTooltip();
+                  const today=new Date(); today.setUTCHours(0,0,0,0); const baseWeek=new Date(today); baseWeek.setUTCDate(today.getUTCDate()+(calendarWeekOffset*7));
+                  const dow=(baseWeek.getUTCDay() + 6) % 7; const start=new Date(baseWeek); start.setUTCDate(baseWeek.getUTCDate()-dow); start.setUTCHours(0,0,0,0);
+                  const end=new Date(start); end.setUTCDate(start.getUTCDate()+6); const todayStr = getTodayDateString();
 
-                if(calendarWeekOffset===0) calendarWeekLabel.textContent = _t("calendarThisWeek");
-                else if(calendarWeekOffset===1) calendarWeekLabel.textContent = _t("calendarNextWeek");
-                else calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'short'})} - ${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'short'})}`;
+                 if(calendarWeekOffset===0) calendarWeekLabel.textContent = _t("calendarThisWeek");
+                 else if(calendarWeekOffset===1) calendarWeekLabel.textContent = _t("calendarNextWeek");
+                 else calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'short'})} - ${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'short'})}`;
 
-                prevWeekBtn.disabled = (calendarWeekOffset <= 0);
-                nextWeekBtn.disabled = false;
+                 prevWeekBtn.disabled = (calendarWeekOffset <= -52); // Limit going back ~1 year
+                 nextWeekBtn.disabled = (calendarWeekOffset >= 52); // Limit going forward ~1 year
 
-                 const dayNames = [_t("dayMonShort"), _t("dayTueShort"), _t("dayWedShort"), _t("dayThuShort"), _t("dayFriShort"), _t("daySatShort"), _t("daySunShort")];
-                 dayNames.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
+                  const dayNames = [_t("dayMonShort"), _t("dayTueShort"), _t("dayWedShort"), _t("dayThuShort"), _t("dayFriShort"), _t("daySatShort"), _t("daySunShort")];
+                  dayNames.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
 
-                 for(let i=0;i<7;i++){
-                    const currentDate = new Date(start); currentDate.setUTCDate(start.getUTCDate()+i); const dateStr = dateToYyyyMmDd(currentDate); if (!dateStr) continue;
-                    const cellElement = document.createElement('div'); cellElement.className='day-cell'; if(dateStr===todayStr) cellElement.classList.add('today');
-                    const numberSpan=document.createElement('span'); numberSpan.className='day-number'; numberSpan.textContent=currentDate.getUTCDate(); cellElement.appendChild(numberSpan);
-                    const assignmentsUl = document.createElement('ul'); assignmentsUl.className='day-assignments'; cellElement.appendChild(assignmentsUl);
-                    const todaysAssignments = appData.assignments.filter(a => a && a.date === dateStr && !a.completed);
+                  for(let i=0;i<7;i++){
+                      const currentDate = new Date(start); currentDate.setUTCDate(start.getUTCDate()+i); const dateStr = dateToYyyyMmDd(currentDate); if (!dateStr) continue;
+                      const cellElement = document.createElement('div'); cellElement.className='day-cell'; if(dateStr===todayStr) cellElement.classList.add('today');
+                      const numberSpan=document.createElement('span'); numberSpan.className='day-number'; numberSpan.textContent=currentDate.getUTCDate(); cellElement.appendChild(numberSpan);
+                      const assignmentsUl = document.createElement('ul'); assignmentsUl.className='day-assignments'; cellElement.appendChild(assignmentsUl);
+                      const todaysAssignments = appData.assignments.filter(a => a && a.date === dateStr && !a.completed);
 
-                    todaysAssignments.forEach(a => {
-                        if (!a.internalType) return;
-                        const li = document.createElement('li'); li.className = 'assignment-marker';
-                        const shortNameKey = SHORT_ASSIGNMENT_NAME_KEYS[a.internalType];
-                        const shortName = shortNameKey ? _t(shortNameKey) : (a.type || _t(a.internalType));
-                        li.textContent = shortName; li.dataset.fullName = a.type || _t(a.internalType);
-                        if (a.notes) { li.dataset.notes = a.notes; } li.dataset.internalType = a.internalType;
-                        assignmentsUl.appendChild(li);
-                    });
-                    weeklyCalendarGrid.appendChild(cellElement);
-                 }
-            }
+                      todaysAssignments.forEach(a => {
+                          if (!a.internalType) return;
+                          const li = document.createElement('li'); li.className = 'assignment-marker';
+                          const shortNameKey = SHORT_ASSIGNMENT_NAME_KEYS[a.internalType];
+                          const shortName = shortNameKey ? _t(shortNameKey) : (a.type || _t(a.internalType));
+                          li.textContent = shortName; li.dataset.fullName = a.type || _t(a.internalType);
+                          if (a.notes) { li.dataset.notes = a.notes; } li.dataset.internalType = a.internalType;
+                          assignmentsUl.appendChild(li);
+                      });
+                      weeklyCalendarGrid.appendChild(cellElement);
+                  }
+             }
 
              function renderUpcomingList(){
-                if (!upcomingList) return;
-                 upcomingList.innerHTML=''; const today=new Date();today.setUTCHours(0,0,0,0); const cutoff=new Date(today); cutoff.setUTCDate(today.getUTCDate()+UPCOMING_DAYS); const todayStr = getTodayDateString();
-                 const upcoming=appData.assignments.filter(a=>{ try { const d = new Date(a.date+'T00:00:00Z'); return a && a.date && !isNaN(d) && d >= today && d < cutoff && !a.completed && a.date >= todayStr && a.internalType; } catch(e){ return false; } }).sort((a,b) => { try{ return new Date(a.date+'T00:00:00Z') - new Date(b.date+'T00:00:00Z');} catch(e) {return 0;} });
-                 if(upcoming.length===0){upcomingList.innerHTML=`<li class="no-upcoming">${_t("noUpcomingAssignments", UPCOMING_DAYS)}</li>`;}
-                 else { upcoming.forEach(a=>{ const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=`${getEmojiForInternalType(a.internalType)} ${a.type || _t(a.internalType)}`;const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li); });}
+                 if (!upcomingList) return;
+                  upcomingList.innerHTML=''; const today=new Date();today.setUTCHours(0,0,0,0); const cutoff=new Date(today); cutoff.setUTCDate(today.getUTCDate()+UPCOMING_DAYS); const todayStr = getTodayDateString();
+                  const upcoming=appData.assignments.filter(a=>{ try { const d = new Date(a.date+'T00:00:00Z'); return a && a.date && !isNaN(d) && d >= today && d < cutoff && !a.completed && a.date >= todayStr && a.internalType; } catch(e){ return false; } }).sort((a,b) => { try{ return new Date(a.date+'T00:00:00Z') - new Date(b.date+'T00:00:00Z');} catch(e) {return 0;} });
+                  if(upcoming.length===0){upcomingList.innerHTML=`<li class="no-upcoming">${_t("noUpcomingAssignments", UPCOMING_DAYS)}</li>`;}
+                  else { upcoming.forEach(a=>{ const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=`${getEmojiForInternalType(a.internalType)} ${a.type || _t(a.internalType)}`;const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li); });}
              }
 
-            function renderAssignments() {
-                const container = assignmentsListContainer; if (!container) return;
-                 container.innerHTML = '';
-                 if (!appData?.assignments || appData.assignments.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; return; }
+             function renderAssignments() {
+                 const container = assignmentsListContainer; if (!container) return;
+                  container.innerHTML = '';
+                  if (!appData?.assignments || appData.assignments.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; return; }
 
-                const sorted = [...appData.assignments].filter(a => a && a.internalType)
-                    .sort((a,b)=>{
-                    const timeA = a.date ? new Date(a.date+'T00:00:00Z').getTime() : (a.completed ? Infinity : -Infinity);
-                    const timeB = b.date ? new Date(b.date+'T00:00:00Z').getTime() : (b.completed ? Infinity : -Infinity);
-                    if (a.completed !== b.completed) return a.completed ? 1 : -1;
-                    if (isNaN(timeA) && isNaN(timeB)) return 0;
-                    if (isNaN(timeA)) return a.completed ? 1 : -1;
-                    if (isNaN(timeB)) return b.completed ? -1 : 1;
-                    if (timeA !== timeB) return timeA - timeB;
-                    return (a.type || "").localeCompare(b.type || "", currentLanguage);
-                });
+                 const sorted = [...appData.assignments].filter(a => a && a.internalType)
+                      .sort((a,b)=>{
+                         const timeA = a.date ? new Date(a.date+'T00:00:00Z').getTime() : (a.completed ? Infinity : -Infinity);
+                         const timeB = b.date ? new Date(b.date+'T00:00:00Z').getTime() : (b.completed ? Infinity : -Infinity);
+                         if (a.completed !== b.completed) return a.completed ? 1 : -1;
+                         if (isNaN(timeA) && isNaN(timeB)) return 0;
+                         if (isNaN(timeA)) return a.completed ? 1 : -1;
+                         if (isNaN(timeB)) return b.completed ? -1 : 1;
+                         if (timeA !== timeB) return timeA - timeB;
+                         return (a.type || "").localeCompare(b.type || "", currentLanguage);
+                     });
 
-                if (sorted.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; return; }
+                 if (sorted.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; return; }
 
-                sorted.forEach(a => {
-                    const li = document.createElement('li'); li.className = 'assignment-item'; li.dataset.id = a.id;
-                    if (a.isCelebration) li.dataset.iscelebration = "true"; if (a.completed) li.classList.add('is-completed');
-                    const emojiSpan = document.createElement('span'); emojiSpan.className = 'assignment-emoji'; emojiSpan.textContent = getEmojiForInternalType(a.internalType); li.appendChild(emojiSpan);
-                    const typeSpan = document.createElement('span'); typeSpan.className = 'assignment-type'; typeSpan.textContent = a.type || _t(a.internalType); li.appendChild(typeSpan);
-                    const dateSpan = document.createElement('span'); dateSpan.className = 'assignment-date'; dateSpan.textContent = formatRelativeDate(a.date); li.appendChild(dateSpan);
-                    if (a.notes && !a.isCelebration) { const notesSpan = document.createElement('span'); notesSpan.className = 'assignment-notes'; notesSpan.textContent = `(${a.notes})`; li.appendChild(notesSpan); }
-                    else if (a.isCelebration && a.date){ try { const year = new Date(a.date + 'T00:00:00Z').getUTCFullYear(); if (!isNaN(year)) { const yearSpan = document.createElement('span'); yearSpan.className = 'assignment-notes'; yearSpan.textContent = `(${year})`; li.appendChild(yearSpan); }} catch (e) {} }
-                    li.addEventListener('click', (e) => { const item = e.currentTarget; if (item?.dataset?.id) showActionModal(item.dataset.id); });
-                    container.appendChild(li);
-                });
-            }
+                 sorted.forEach(a => {
+                     const li = document.createElement('li'); li.className = 'assignment-item'; li.dataset.id = a.id;
+                     if (a.isCelebration) li.dataset.iscelebration = "true"; if (a.completed) li.classList.add('is-completed');
+                     const emojiSpan = document.createElement('span'); emojiSpan.className = 'assignment-emoji'; emojiSpan.textContent = getEmojiForInternalType(a.internalType); li.appendChild(emojiSpan);
+                     const typeSpan = document.createElement('span'); typeSpan.className = 'assignment-type'; typeSpan.textContent = a.type || _t(a.internalType); li.appendChild(typeSpan);
+                     const dateSpan = document.createElement('span'); dateSpan.className = 'assignment-date'; dateSpan.textContent = formatRelativeDate(a.date); li.appendChild(dateSpan);
+                     if (a.notes && !a.isCelebration) { const notesSpan = document.createElement('span'); notesSpan.className = 'assignment-notes'; notesSpan.textContent = `(${a.notes})`; li.appendChild(notesSpan); }
+                     else if (a.isCelebration && a.date){ try { const year = new Date(a.date + 'T00:00:00Z').getUTCFullYear(); if (!isNaN(year)) { const yearSpan = document.createElement('span'); yearSpan.className = 'assignment-notes'; yearSpan.textContent = `(${year})`; li.appendChild(yearSpan); }} catch (e) {} }
+                     li.addEventListener('click', (e) => { const item = e.currentTarget; if (item?.dataset?.id) showActionModal(item.dataset.id); });
+                     container.appendChild(li);
+                 });
+             }
 
              function addAssignment(event){
-                event.preventDefault();
-                if (!assignmentTypeInput || !assignmentDateInput || !customAssignmentTypeInput) return;
+                 event.preventDefault();
+                 if (!assignmentTypeInput || !assignmentDateInput || !customAssignmentTypeInput) return;
 
-                const internalTypeSelected = assignmentTypeInput.value; const selectedOptionElement = assignmentTypeInput.options[assignmentTypeInput.selectedIndex];
-                const displayTypeSelected = selectedOptionElement ? selectedOptionElement.textContent : internalTypeSelected;
-                const baseDateString = assignmentDateInput.value; const notes = assignmentNotesInput?.value.trim() || '';
-                let finalInternalType = internalTypeSelected; let finalDisplayType = displayTypeSelected; let frequencyTrackingType = internalTypeSelected;
-                const todayS = getTodayDateString();
-                const emojiMatch = displayTypeSelected.match(/^(\p{Emoji}\uFE0F?)\s+/u); let cleanDisplayTypeForAlert = emojiMatch ? displayTypeSelected.substring(emojiMatch[0].length) : displayTypeSelected;
-                cleanDisplayTypeForAlert = cleanDisplayTypeForAlert.replace(` (${_t('congressDuration')})`, '').trim();
+                 const internalTypeSelected = assignmentTypeInput.value; const selectedOptionElement = assignmentTypeInput.options[assignmentTypeInput.selectedIndex];
+                 const displayTypeSelected = selectedOptionElement ? selectedOptionElement.textContent : internalTypeSelected;
+                 const baseDateString = assignmentDateInput.value; const notes = assignmentNotesInput?.value.trim() || '';
+                 let finalInternalType = internalTypeSelected; let finalDisplayType = displayTypeSelected; let frequencyTrackingType = internalTypeSelected;
+                 const todayS = getTodayDateString();
+                 const emojiMatch = displayTypeSelected.match(/^(\p{Emoji}\uFE0F?)\s+/u); let cleanDisplayTypeForAlert = emojiMatch ? displayTypeSelected.substring(emojiMatch[0].length) : displayTypeSelected;
+                 cleanDisplayTypeForAlert = cleanDisplayTypeForAlert.replace(` (${_t('congressDuration')})`, '').trim();
 
-                if (internalTypeSelected === INTERNAL_CELEBRATION_TYPE) { alert(_t("alertAddCelebrationManual")); return; }
-                if (!baseDateString) { alert(_t("alertDateRequired")); assignmentDateInput.focus(); return; }
-                if (!/^\d{4}-\d{2}-\d{2}$/.test(baseDateString)) { alert(_t('alertInvalidDateFormat')); assignmentDateInput.focus(); return; }
-                if (baseDateString < todayS) { alert(_t("alertDateInPast")); assignmentDateInput.focus(); return; }
+                 if (internalTypeSelected === INTERNAL_CELEBRATION_TYPE) { alert(_t("alertAddCelebrationManual")); return; }
+                 if (!internalTypeSelected) { alert(_t('alertInvalidTypeDate')); assignmentTypeInput.focus(); return; } // Check type selected before date
+                 if (!baseDateString) { alert(_t("alertDateRequired")); assignmentDateInput.focus(); return; }
+                 if (!/^\d{4}-\d{2}-\d{2}$/.test(baseDateString)) { alert(_t('alertInvalidDateFormat')); assignmentDateInput.focus(); return; }
+                 if (baseDateString < todayS) { alert(_t("alertDateInPast")); assignmentDateInput.focus(); return; }
 
-                 if (internalTypeSelected === 'assignTypeCustom') {
-                    const customName = customAssignmentTypeInput.value.trim(); if (!customName) { alert(_t("alertCustomTypeRequired")); customAssignmentTypeInput.focus(); return; }
-                    finalInternalType = 'custom:' + customName.toLowerCase().replace(/[^\p{L}\p{N}_-]+/gu, '_').substring(0, 30);
-                    finalDisplayType = customName; frequencyTrackingType = null;
-                    const customExists = appData.assignments.some(a => a && a.type === finalDisplayType && a.date === baseDateString && !a.completed);
-                    if (customExists) { alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString))); return; }
-                 } else if (internalTypeSelected === INTERNAL_CONGRESS_TYPE) {
-                     const day1InternalType = `convention_day_1`; const day1Exists = appData.assignments.some(a => a && a.internalType === day1InternalType && a.date === baseDateString);
-                     if (day1Exists) { alert(_t("alertCongressExists", formatDate(baseDateString))); return; }
-                     const startDate = new Date(`${baseDateString}T00:00:00Z`); if (isNaN(startDate)) { alert(_t('alertInvalidDate')); return; }
-                     let addedAssignments = [];
-                     for (let i = 0; i < 3; i++) { const currentDayDate = new Date(startDate); currentDayDate.setUTCDate(startDate.getUTCDate() + i); const currentDayDateString = dateToYyyyMmDd(currentDayDate); if (!currentDayDateString) { alert(_t("alertErrorAddingCongress")); return; } const dayTypeDisplay = _t('congressDayPrefix', i + 1); const dayTypeInternal = `convention_day_${i + 1}`; addedAssignments.push({ id: Date.now() + Math.random() + i, type: dayTypeDisplay, internalType: dayTypeInternal, date: currentDayDateString, notes: notes, completed: false, isCelebration: false }); }
-                     appData.assignments.push(...addedAssignments); updateFrequency(INTERNAL_CONGRESS_TYPE); saveAppData(); renderAll(); resetAndCloseForm(); return;
-                 } else {
-                     if (!internalTypeSelected) { alert(_t('alertInvalidTypeDate')); assignmentTypeInput.focus(); return; }
-                     finalDisplayType = _t(internalTypeSelected); const exists = appData.assignments.some(a => a && a.internalType === internalTypeSelected && a.date === baseDateString && !a.completed);
-                     if (exists) { alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString))); return; }
-                 }
-                 const newAssignment = { id: Date.now() + Math.random(), type: finalDisplayType, internalType: finalInternalType, date: baseDateString, notes: notes, completed: false, isCelebration: false };
-                 appData.assignments.push(newAssignment); if (frequencyTrackingType) { updateFrequency(frequencyTrackingType); }
-                 saveAppData(); renderAll(); resetAndCloseForm();
+                  if (internalTypeSelected === 'assignTypeCustom') {
+                      const customName = customAssignmentTypeInput.value.trim(); if (!customName) { alert(_t("alertCustomTypeRequired")); customAssignmentTypeInput.focus(); return; }
+                      finalInternalType = 'custom:' + customName.toLowerCase().replace(/[^\p{L}\p{N}_-]+/gu, '_').substring(0, 30);
+                      finalDisplayType = customName; frequencyTrackingType = null;
+                      const customExists = appData.assignments.some(a => a && a.type === finalDisplayType && a.date === baseDateString && !a.completed);
+                      if (customExists) { alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString))); return; }
+                  } else if (internalTypeSelected === INTERNAL_CONGRESS_TYPE) {
+                       const day1InternalType = `convention_day_1`; const day1Exists = appData.assignments.some(a => a && a.internalType === day1InternalType && a.date === baseDateString);
+                       if (day1Exists) { alert(_t("alertCongressExists", formatDate(baseDateString))); return; }
+                       const startDate = new Date(`${baseDateString}T00:00:00Z`); if (isNaN(startDate)) { alert(_t('alertInvalidDate')); return; }
+                       let addedAssignments = [];
+                       for (let i = 0; i < 3; i++) { const currentDayDate = new Date(startDate); currentDayDate.setUTCDate(startDate.getUTCDate() + i); const currentDayDateString = dateToYyyyMmDd(currentDayDate); if (!currentDayDateString) { alert(_t("alertErrorAddingCongress")); return; } const dayTypeDisplay = _t('congressDayPrefix', i + 1); const dayTypeInternal = `convention_day_${i + 1}`; addedAssignments.push({ id: Date.now() + Math.random() + i, type: dayTypeDisplay, internalType: dayTypeInternal, date: currentDayDateString, notes: notes, completed: false, isCelebration: false }); }
+                       appData.assignments.push(...addedAssignments); updateFrequency(INTERNAL_CONGRESS_TYPE); saveAppData(); renderAll(); resetAndCloseForm(); return;
+                  } else {
+                       finalDisplayType = _t(internalTypeSelected); const exists = appData.assignments.some(a => a && a.internalType === internalTypeSelected && a.date === baseDateString && !a.completed);
+                       if (exists) { alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString))); return; }
+                  }
+                  const newAssignment = { id: Date.now() + Math.random(), type: finalDisplayType, internalType: finalInternalType, date: baseDateString, notes: notes, completed: false, isCelebration: false };
+                  appData.assignments.push(newAssignment); if (frequencyTrackingType) { updateFrequency(frequencyTrackingType); }
+                  saveAppData(); renderAll(); resetAndCloseForm();
              }
 
              function resetAndCloseForm() { if (assignmentForm) assignmentForm.reset(); if (customTypeGroup) customTypeGroup.style.display = 'none'; if (customAssignmentTypeInput) { customAssignmentTypeInput.value = ''; customAssignmentTypeInput.required = false; } if (assignmentTypeInput) assignmentTypeInput.value = ""; toggleSection('formSection', false); }
 
-            function showActionModal(id){
+             function showActionModal(id){
                  const a=appData.assignments.find(x=>x && x.id == id);
                  if(!a || !actionModal || !modalTitle || !modalBtnComplete || !modalBtnEdit || !modalBtnDelete || !modalAssignmentIdInput ) return;
                  modalAssignmentIdInput.value=id; modalTitle.textContent=`${getEmojiForInternalType(a.internalType)} ${a.type || _t(a.internalType)}`;
@@ -645,25 +757,25 @@
                  modalBtnEdit.disabled = !canEditDelete; modalBtnDelete.disabled = !canEditDelete;
                  if (a.isCelebration){ const todayStr=getTodayDateString(); if(a.date > todayStr){ modalBtnComplete.disabled=true; modalBtnComplete.title = _t("modalCompleteCelebrationFuture"); }}
                  actionModal.classList.add('is-visible');
-            }
-            function hideActionModal(){ if(actionModal) actionModal.classList.remove('is-visible'); }
-            function handleCompleteToggle(){ const id=modalAssignmentIdInput.value; const idx=appData.assignments.findIndex(a=>a && a.id==id); if(idx===-1) return; const a=appData.assignments[idx]; if(a.isCelebration){ const todayStr=getTodayDateString(); if(a.date>todayStr){return;}} const willBeCompleted=!a.completed; appData.assignments[idx].completed=willBeCompleted; saveAppData(); renderAll(); if(willBeCompleted){triggerConfetti();} hideActionModal(); }
-            function handleEditRequest(){ const id=modalAssignmentIdInput.value; const a=appData.assignments.find(x=>x && x.id==id); if(!a || a.isCelebration || a.internalType?.startsWith('convention_day_') || !modalEditDateInput || !modalEditNotesInput || !modalActionButtonsDiv || !modalEditViewDiv ) return; modalEditDateInput.value=a.date; modalEditNotesInput.value=a.notes||''; modalActionButtonsDiv.style.display='none'; modalEditViewDiv.style.display='flex'; }
-            function handleSaveEdit(){ const id=modalAssignmentIdInput.value; const idx=appData.assignments.findIndex(a=>a && a.id==id); if(idx===-1 || appData.assignments[idx].isCelebration || appData.assignments[idx].internalType?.startsWith('convention_day_') || !modalEditDateInput || !modalEditNotesInput) return; const newDate=modalEditDateInput.value; const newNotes=modalEditNotesInput.value.trim(); const todayS=getTodayDateString(); if(!newDate||!/^\d{4}-\d{2}-\d{2}$/.test(newDate)){alert(_t("alertInvalidDate")); modalEditDateInput.focus(); return;} if(newDate < todayS && !appData.assignments[idx].completed){alert(_t("alertDateInPastEdit")); modalEditDateInput.focus(); return;} appData.assignments[idx].date=newDate; appData.assignments[idx].notes=newNotes; saveAppData(); renderAll(); hideActionModal(); }
-            function deleteAssignment(id){ const aIndex = appData.assignments.findIndex(x => x && x.id == id); if (aIndex === -1) return; const a = appData.assignments[aIndex]; if (!a || a.isCelebration || a.internalType?.startsWith('convention_day_')) { return; } appData.assignments.splice(aIndex, 1); saveAppData(); renderAll(); }
-            function handleDeleteRequest(){ const id = modalAssignmentIdInput.value; if (id) { deleteAssignment(id); hideActionModal(); } }
+             }
+             function hideActionModal(){ if(actionModal) actionModal.classList.remove('is-visible'); }
+             function handleCompleteToggle(){ const id=modalAssignmentIdInput.value; const idx=appData.assignments.findIndex(a=>a && a.id==id); if(idx===-1) return; const a=appData.assignments[idx]; if(a.isCelebration){ const todayStr=getTodayDateString(); if(a.date>todayStr){return;}} const willBeCompleted=!a.completed; appData.assignments[idx].completed=willBeCompleted; saveAppData(); renderAll(); if(willBeCompleted){triggerConfetti();} hideActionModal(); }
+             function handleEditRequest(){ const id=modalAssignmentIdInput.value; const a=appData.assignments.find(x=>x && x.id==id); if(!a || a.isCelebration || a.internalType?.startsWith('convention_day_') || !modalEditDateInput || !modalEditNotesInput || !modalActionButtonsDiv || !modalEditViewDiv ) return; modalEditDateInput.value=a.date; modalEditNotesInput.value=a.notes||''; modalActionButtonsDiv.style.display='none'; modalEditViewDiv.style.display='flex'; }
+             function handleSaveEdit(){ const id=modalAssignmentIdInput.value; const idx=appData.assignments.findIndex(a=>a && a.id==id); if(idx===-1 || appData.assignments[idx].isCelebration || appData.assignments[idx].internalType?.startsWith('convention_day_') || !modalEditDateInput || !modalEditNotesInput) return; const newDate=modalEditDateInput.value; const newNotes=modalEditNotesInput.value.trim(); const todayS=getTodayDateString(); if(!newDate||!/^\d{4}-\d{2}-\d{2}$/.test(newDate)){alert(_t("alertInvalidDate")); modalEditDateInput.focus(); return;} if(newDate < todayS && !appData.assignments[idx].completed){alert(_t("alertDateInPastEdit")); modalEditDateInput.focus(); return;} appData.assignments[idx].date=newDate; appData.assignments[idx].notes=newNotes; saveAppData(); renderAll(); hideActionModal(); }
+             function deleteAssignment(id){ const aIndex = appData.assignments.findIndex(x => x && x.id == id); if (aIndex === -1) return; const a = appData.assignments[aIndex]; if (!a || a.isCelebration || a.internalType?.startsWith('convention_day_')) { return; } appData.assignments.splice(aIndex, 1); saveAppData(); renderAll(); }
+             function handleDeleteRequest(){ const id = modalAssignmentIdInput.value; if (id) { deleteAssignment(id); hideActionModal(); } }
 
-            function renderAll() {
+             function renderAll() {
                  try {
                      ensureCelebrationExists();
                      renderAssignments();
                      renderUpcomingList();
                      renderWeeklyCalendar();
                      updateDropdownOrder();
-                     applyTranslationsHTML();
+                     applyTranslationsHTML(); // Ensure UI text is updated
                  } catch (error) {
                      console.error("Critical error during renderAll:", error);
-                     document.body.innerHTML = `<div style="padding: 20px; text-align: center; color: var(--error-color);">Application error. Please reload. (${error.message})</div>`;
+                      document.body.innerHTML = `<div style="padding: 20px; text-align: center; color: var(--error-color);">Application error. Please reload. (${error.message})</div>`;
                  }
              }
 
@@ -677,65 +789,115 @@
                  const markerRect = markerElement.getBoundingClientRect(); const gridRect = weeklyCalendarGrid.getBoundingClientRect();
                  const dashboardSection = weeklyCalendarGrid.closest('.dashboard-section');
                  const dashRect = dashboardSection?.getBoundingClientRect() || { top: 0, left: 0, right: window.innerWidth };
+                 const scrollContainer = document.querySelector('.content-scroll'); // Get the scrollable container
+                 const scrollOffset = scrollContainer?.scrollTop || 0; // Get its scroll position
 
-                 let top = (markerRect.bottom - gridRect.top) + 5 + (dashboardSection?.scrollTop || 0); let left = (markerRect.left - gridRect.top) + (markerRect.width / 2);
+                 // Adjust top position relative to the dashboard section, considering scroll
+                 let top = (markerRect.top - dashRect.top) + markerRect.height + 5 + scrollOffset;
+                 // Adjust left position relative to the dashboard section
+                 let left = (markerRect.left - dashRect.left) + (markerRect.width / 2);
 
                  calendarTooltip.style.position = 'absolute';
                  calendarTooltip.style.top = `${top}px`; calendarTooltip.style.left = `${left}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)';
                  calendarTooltip.classList.add('is-visible'); activeTooltipMarker = markerElement;
 
                  requestAnimationFrame(() => {
-                       if (!calendarTooltip.classList.contains('is-visible')) return;
-                        const tooltipRect = calendarTooltip.getBoundingClientRect();
-                         const rightEdge = dashRect.right - 10; const leftEdge = dashRect.left + 10;
-                        let newLeft = left; let newTransform = 'translateX(-50%) translateY(0)';
+                      if (!calendarTooltip.classList.contains('is-visible')) return;
+                      const tooltipRect = calendarTooltip.getBoundingClientRect();
+                       const rightEdge = dashRect.right - 10; const leftEdge = dashRect.left + 10;
+                      let newLeft = left; let newTransform = 'translateX(-50%) translateY(0)';
 
-                        if (tooltipRect.right > rightEdge) { newLeft = (rightEdge - dashRect.left) - (tooltipRect.width / 2); }
-                        else if (tooltipRect.left < leftEdge) { newLeft = (leftEdge - dashRect.left) + (tooltipRect.width / 2); }
+                      // Check if tooltip goes off the right edge of the dashboard
+                      if ((left - (tooltipRect.width / 2) + tooltipRect.width) > (dashRect.right - dashRect.left - 10)) {
+                          newLeft = (dashRect.right - dashRect.left) - (tooltipRect.width / 2) - 10; // Align right edge
+                      }
+                      // Check if tooltip goes off the left edge of the dashboard
+                      else if ((left - (tooltipRect.width / 2)) < 10) {
+                          newLeft = (tooltipRect.width / 2) + 10; // Align left edge
+                      }
 
-                         const maxLeft = (dashRect.right - dashRect.left) - tooltipRect.width - 10;
-                         const minLeft = 10;
-                         if(newLeft + (tooltipRect.width * (newTransform.includes('-50%') ? 0.5 : 0)) > maxLeft + 10) newLeft = maxLeft;
-                         if(newLeft - (tooltipRect.width * (newTransform.includes('-50%') ? 0.5 : 0)) < minLeft - 10) newLeft = minLeft;
-
-                         calendarTooltip.style.left = `${newLeft}px`;
-                         calendarTooltip.style.transform = newTransform;
-                   });
+                      calendarTooltip.style.left = `${newLeft}px`;
+                      calendarTooltip.style.transform = newTransform; // Keep centered horizontally
+                  });
                  setTimeout(() => hideCalendarTooltip(markerElement), 3500);
              }
-            function hideCalendarTooltip(marker = null) { if (activeTooltipMarker && (marker === null || marker === activeTooltipMarker) && calendarTooltip) { calendarTooltip.classList.remove('is-visible'); activeTooltipMarker = null; }}
-            function handleCalendarMarkerClick(event) { const marker = event.target.closest('.assignment-marker'); if (marker) { if(marker === activeTooltipMarker) { hideCalendarTooltip(marker); } else { hideCalendarTooltip(); showCalendarTooltip(marker); } } else if (!event.target.closest('.calendar-tooltip')) { hideCalendarTooltip(); }}
+             function hideCalendarTooltip(marker = null) { if (activeTooltipMarker && (marker === null || marker === activeTooltipMarker) && calendarTooltip) { calendarTooltip.classList.remove('is-visible'); activeTooltipMarker = null; }}
+             function handleCalendarMarkerClick(event) { const marker = event.target.closest('.assignment-marker'); if (marker) { if(marker === activeTooltipMarker) { hideCalendarTooltip(marker); } else { hideCalendarTooltip(); showCalendarTooltip(marker); } } else if (!event.target.closest('.calendar-tooltip')) { hideCalendarTooltip(); }}
+
+             // --- Swipe Logic ---
+             function handleTouchStart(event) {
+                 touchstartX = event.changedTouches[0].screenX;
+                 touchstartY = event.changedTouches[0].screenY;
+             }
+             function handleTouchEnd(event) {
+                 touchendX = event.changedTouches[0].screenX;
+                 touchendY = event.changedTouches[0].screenY;
+                 handleSwipeGesture();
+             }
+             function handleSwipeGesture() {
+                 const deltaX = touchendX - touchstartX;
+                 const deltaY = touchendY - touchstartY;
+                 // Only trigger horizontal swipe if it's more horizontal than vertical
+                 if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > swipeThreshold) {
+                     if (deltaX < 0) { // Swiped left (Next Week)
+                         if (!nextWeekBtn.disabled) nextWeekBtn.click();
+                     } else { // Swiped right (Prev Week)
+                         if (!prevWeekBtn.disabled) prevWeekBtn.click();
+                     }
+                 }
+                 // Reset coordinates
+                 touchstartX = 0;
+                 touchstartY = 0;
+                 touchendX = 0;
+                 touchendY = 0;
+             }
 
              function initializeAppLogic() {
-                if (!translations || Object.keys(translations).length === 0) { console.error("Cannot initialize: Translations not loaded."); document.body.innerHTML = `<p style='padding:20px; color:red;'>Error loading translations. Please ensure 'translations.json' exists and is valid.</p>`; return; }
-                console.log("Initializing App Logic with language:", currentLanguage);
-                try {
-                    loadAppData();
-                    renderAll();
-                    if (assignmentTypeInput) assignmentTypeInput.dispatchEvent(new Event('change'));
-                    toggleSection('formSection', false); toggleSection('listSection', true);
-                } catch(error) {
+                 if (!translations || Object.keys(translations).length === 0) { console.error("Cannot initialize: Translations not loaded."); document.body.innerHTML = `<p style='padding:20px; color:red;'>Error loading translations. Please ensure 'translations.json' exists and is valid.</p>`; return; }
+                 console.log("Initializing App Logic with language:", currentLanguage);
+                 try {
+                     loadAppData(); // Load data first
+                     renderAll(); // Then render everything using the loaded data and current language
+                     if (assignmentTypeInput) assignmentTypeInput.dispatchEvent(new Event('change'));
+                     toggleSection('formSection', false); toggleSection('listSection', true);
+                 } catch(error) {
                      console.error("Error during initial render:", error);
                       document.body.innerHTML = `<p style='padding:20px; color:red;'>Error initializing application interface.</p>`;
-                }
-            }
+                 }
+             }
 
              function setupEventListeners() {
-                if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
-                if (actionModal) actionModal.addEventListener('click',(e)=>{if(e.target===actionModal){hideActionModal();}});
-                if (modalBtnComplete) modalBtnComplete.addEventListener('click',handleCompleteToggle);
-                if (modalBtnEdit) modalBtnEdit.addEventListener('click',handleEditRequest);
-                if (modalBtnDelete) modalBtnDelete.addEventListener('click',handleDeleteRequest);
-                if (document.getElementById('modalBtnCancel')) document.getElementById('modalBtnCancel').addEventListener('click',hideActionModal);
-                if (document.getElementById('modalBtnSaveEdit')) document.getElementById('modalBtnSaveEdit').addEventListener('click',handleSaveEdit);
-                if (document.getElementById('modalBtnCancelEdit')) document.getElementById('modalBtnCancelEdit').addEventListener('click',hideActionModal);
-                window.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&actionModal?.classList.contains('is-visible')){hideActionModal();}});
-                if (assignmentTypeInput) assignmentTypeInput.addEventListener('change',()=>{ const isCustom = assignmentTypeInput.value === 'assignTypeCustom'; if (customTypeGroup) customTypeGroup.style.display = isCustom ? 'flex' : 'none'; if(customAssignmentTypeInput){ customAssignmentTypeInput.required = isCustom; if(isCustom){ setTimeout(()=>customAssignmentTypeInput.focus(),50); } else { customAssignmentTypeInput.value=''; }} });
-                if (assignmentForm) assignmentForm.addEventListener('submit',addAssignment);
-                if (prevWeekBtn) prevWeekBtn.addEventListener('click', () => { if (calendarWeekOffset > 0) { calendarWeekOffset--; renderWeeklyCalendar(); }});
-                if (nextWeekBtn) nextWeekBtn.addEventListener('click', () => { calendarWeekOffset++; renderWeeklyCalendar(); });
-                if (weeklyCalendarGrid) weeklyCalendarGrid.addEventListener('click', handleCalendarMarkerClick);
-            }
+                 if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+                 if (languageToggleBtn) languageToggleBtn.addEventListener('click', toggleLanguageOptions);
+                 // Close language options if clicking outside
+                 document.addEventListener('click', (event) => {
+                     if (languageOptionsContainer && languageToggleBtn &&
+                         !languageOptionsContainer.contains(event.target) &&
+                         !languageToggleBtn.contains(event.target)) {
+                         hideLanguageOptions();
+                     }
+                 });
+
+                 if (actionModal) actionModal.addEventListener('click',(e)=>{if(e.target===actionModal){hideActionModal();}});
+                 if (modalBtnComplete) modalBtnComplete.addEventListener('click',handleCompleteToggle);
+                 if (modalBtnEdit) modalBtnEdit.addEventListener('click',handleEditRequest);
+                 if (modalBtnDelete) modalBtnDelete.addEventListener('click',handleDeleteRequest);
+                 if (document.getElementById('modalBtnCancel')) document.getElementById('modalBtnCancel').addEventListener('click',hideActionModal);
+                 if (document.getElementById('modalBtnSaveEdit')) document.getElementById('modalBtnSaveEdit').addEventListener('click',handleSaveEdit);
+                 if (document.getElementById('modalBtnCancelEdit')) document.getElementById('modalBtnCancelEdit').addEventListener('click',hideActionModal);
+                 window.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&actionModal?.classList.contains('is-visible')){hideActionModal();}});
+                 if (assignmentTypeInput) assignmentTypeInput.addEventListener('change',()=>{ const isCustom = assignmentTypeInput.value === 'assignTypeCustom'; if (customTypeGroup) customTypeGroup.style.display = isCustom ? 'flex' : 'none'; if(customAssignmentTypeInput){ customAssignmentTypeInput.required = isCustom; if(isCustom){ setTimeout(()=>customAssignmentTypeInput.focus(),50); } else { customAssignmentTypeInput.value=''; }} });
+                 if (assignmentForm) assignmentForm.addEventListener('submit',addAssignment);
+                 if (prevWeekBtn) prevWeekBtn.addEventListener('click', () => { if (!prevWeekBtn.disabled) { calendarWeekOffset--; renderWeeklyCalendar(); }});
+                 if (nextWeekBtn) nextWeekBtn.addEventListener('click', () => { if (!nextWeekBtn.disabled) { calendarWeekOffset++; renderWeeklyCalendar(); }});
+                 if (weeklyCalendarGrid) weeklyCalendarGrid.addEventListener('click', handleCalendarMarkerClick);
+
+                 // Swipe listeners for calendar
+                 if (weeklyCalendarContainer) { // Attach to container for better area coverage
+                     weeklyCalendarContainer.addEventListener('touchstart', handleTouchStart, { passive: true });
+                     weeklyCalendarContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
+                 }
+             }
 
              async function initializeApp() {
                  console.log("Starting App Initialization...");
@@ -743,30 +905,30 @@
                  currentLanguage = getBestInitialLanguage();
                  console.log("Initial language determined:", currentLanguage);
                  await loadTranslations();
-                 setupEventListeners();
-                 initializeAppLogic();
+                 setupEventListeners(); // Setup listeners before the first logic run
+                 initializeAppLogic(); // Initial load and render
                  console.log("App Initialized.");
 
                  // === Service Worker Registration START ===
                  if ('serviceWorker' in navigator) {
-                     window.addEventListener('load', () => { // Register SW after page load
-                         navigator.serviceWorker.register('./service-worker.js')
-                           .then(registration => {
-                               console.log('ServiceWorker registrado com sucesso no escopo:', registration.scope);
-                           })
-                           .catch(error => {
-                               console.error('Falha ao registrar o ServiceWorker:', error);
-                           });
-                   });
+                      window.addEventListener('load', () => { // Register SW after page load
+                          navigator.serviceWorker.register('./service-worker.js')
+                             .then(registration => {
+                                 console.log('ServiceWorker registrado com sucesso no escopo:', registration.scope);
+                             })
+                             .catch(error => {
+                                 console.error('Falha ao registrar o ServiceWorker:', error);
+                             });
+                     });
                  } else {
-                     console.log('Service Worker não é suportado neste navegador.');
+                      console.log('Service Worker não é suportado neste navegador.');
                  }
                  // === Service Worker Registration END ===
              }
 
-            initializeApp();
+             initializeApp();
 
-        });
-    </script>
+         });
+     </script>
 </body>
 </html>
