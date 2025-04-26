@@ -38,12 +38,13 @@
         .modal-overlay{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color:rgba(10,10,15,0.8);backdrop-filter:blur(3px);justify-content:center;align-items:center;opacity:0;transition:opacity var(--transition-speed-med) ease-out;} .modal-overlay.is-visible{display:flex;opacity:1;} .modal-content{background-color:var(--midnight-surface);padding:30px;border-radius:var(--border-radius-inner);box-shadow:0 8px 25px rgba(0,0,0,0.5);width:90%;max-width:400px;position:relative;display:flex;flex-direction:column;gap:18px;border:1px solid var(--midnight-border);transform:scale(0.95);transition:transform var(--transition-speed-med) ease-out 0.1s;} .modal-overlay.is-visible .modal-content{transform:scale(1);} .modal-content h4{color:var(--midnight-accent-primary);margin-bottom:8px;text-align:center;font-size:1.2em;font-weight:600;word-break:break-word;} .modal-content .action-buttons,.modal-content .edit-view{display:flex;flex-direction:column;gap:12px;} .modal-content button{padding:12px 18px;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-weight:600;font-size:0.95em;transition:all var(--transition-speed-fast);width:100%;text-transform:uppercase;letter-spacing:0.5px;box-shadow:0 2px 5px rgba(0,0,0,0.2);} .modal-content button:hover{opacity:0.9;box-shadow:0 4px 10px rgba(0,0,0,0.3);transform:translateY(-1px);} .modal-content button:active{transform:scale(0.97);box-shadow:0 1px 2px rgba(0,0,0,0.1);} #modalBtnComplete{background-color:var(--success-color);color:#111;} #modalBtnEdit{background-color:var(--midnight-accent-alt);color:#111;} #modalBtnDelete{background-color:var(--error-color);color:#fff;} #modalBtnCancel,#modalBtnCancelEdit{background-color:var(--midnight-surface-lighter);color:var(--midnight-text-primary);border:1px solid var(--midnight-border);} .modal-content button:disabled{background-color:var(--midnight-border) !important;color:var(--midnight-text-secondary) !important;opacity:0.5 !important;cursor:not-allowed !important;transform:none !important;box-shadow:none !important;} .edit-view{display:none;} .edit-view .form-group{width:100%;} .edit-view label{font-size:0.8em;} #modalBtnSaveEdit{background-color:var(--success-color);color:#111;}
         .no-assignments, .no-upcoming{font-size:0.9em;text-align:center;color:var(--midnight-text-secondary);padding:30px 20px;font-style:italic;background:transparent;} .no-assignments{padding:40px 20px;}
         #confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2000;} .confetti-piece{position:absolute;width:10px;height:15px;opacity:0.9;animation:fallFadeOut 3.5s ease-in forwards;border-radius:3px;background-image:linear-gradient(45deg,var(--midnight-accent-primary),var(--success-color),var(--midnight-accent-alt));} @keyframes fallFadeOut{0%{transform:translateY(-30px) rotate(0deg) scale(1);opacity:1;}100%{transform:translateY(110vh) rotate(1080deg) scale(0.5);opacity:0;}}
+
     </style>
 </head>
 <body>
-    <div class="mobile-view-container"><header class="main-header"><h1>Minhas Designações</h1></header><div class="content-scroll"><div class="dashboard-section"><div id="weeklyCalendarContainer"><div class="calendar-nav"><button id="prevWeekBtn">< Ant</button><span id="calendarWeekLabel"></span><button id="nextWeekBtn">Próx ></button></div><div id="weeklyCalendar" class="calendar-grid"></div></div><div id="upcomingListContainer"><h3>Próximos 7 dias</h3><ul id="upcomingList"><li class="no-upcoming">...</li></ul></div></div><div class="collapsible-section" id="formSection"><div class="section-header" onclick="toggleSection('formSection')"><h2>Adicionar Nova</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><form id="assignmentForm"><div class="form-group"><label for="assignmentType">Tipo</label><select id="assignmentType" name="assignmentType" required><option value="" disabled selected>...</option></select></div><div class="form-group" id="customTypeGroup"><label for="customAssignmentType">Nome</label><input type="text" id="customAssignmentType" name="customAssignmentType" placeholder="..."></div>
+    <div class="mobile-view-container"><header class="main-header"><h1>Minhas Designações</h1></header><div class="content-scroll"><div class="dashboard-section"><div id="weeklyCalendarContainer"><div class="calendar-nav"><button id="prevWeekBtn" title="Semana Anterior">< Ant</button><span id="calendarWeekLabel">Esta Semana</span><button id="nextWeekBtn" title="Próxima Semana">Próx ></button></div><div id="weeklyCalendar" class="calendar-grid"></div></div><div id="upcomingListContainer"><h3>Próximos 7 dias</h3><ul id="upcomingList"><li class="no-upcoming">...</li></ul></div></div><div class="collapsible-section" id="formSection"><div class="section-header" onclick="toggleSection('formSection')"><h2>Adicionar Nova</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><form id="assignmentForm"><div class="form-group"><label for="assignmentType">Tipo</label><select id="assignmentType" name="assignmentType" required><option value="" disabled selected>...</option></select></div><div class="form-group" id="customTypeGroup"><label for="customAssignmentType">Nome</label><input type="text" id="customAssignmentType" name="customAssignmentType" placeholder="..."></div>
      <!-- Label Simples -->
-     <div class="form-group"><label for="assignmentDate">Data</label><input type="date" id="assignmentDate" name="assignmentDate" required></div>
+    <div class="form-group"><label for="assignmentDate">Data</label><input type="date" id="assignmentDate" name="assignmentDate" required></div>
      <div class="form-group"><label for="assignmentNotes">Obs</label><input type="text" id="assignmentNotes" name="assignmentNotes" placeholder="..."></div><button type="submit">Adicionar</button></form></div></div><div class="collapsible-section is-open" id="listSection"><div class="section-header" onclick="toggleSection('listSection')"><h2>Todas Designações</h2><i class="fas fa-chevron-right"></i></div><div class="section-content"><ul id="assignmentsList" class="assignment-list"></ul></div></div></div></div>
      <div id="actionModal" class="modal-overlay"><div class="modal-content"><h4 id="modalTitle">...</h4><input type="hidden" id="modalAssignmentId"><div class="action-buttons"><button id="modalBtnComplete"></button><button id="modalBtnEdit">Editar</button><button id="modalBtnDelete">Excluir</button><button id="modalBtnCancel">Cancelar</button></div><div class="edit-view"><div class="form-group"><label for="modalEditDate">Data</label><input type="date" id="modalEditDate"></div><div class="form-group"><label for="modalEditNotes">Obs</label><input type="text" id="modalEditNotes" placeholder="..."></div><button id="modalBtnSaveEdit">Salvar</button><button id="modalBtnCancelEdit">Cancelar</button></div></div></div>
      <div id="confetti-container"></div>
@@ -52,15 +53,15 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const assignmentForm=document.getElementById('assignmentForm');const assignmentTypeInput=document.getElementById('assignmentType');const assignmentDateInput=document.getElementById('assignmentDate');const assignmentNotesInput=document.getElementById('assignmentNotes');const assignmentsListContainer=document.querySelector('#listSection .section-content ul');const upcomingList=document.getElementById('upcomingList');const customTypeGroup=document.getElementById('customTypeGroup');const customAssignmentTypeInput=document.getElementById('customAssignmentType');const weeklyCalendarGrid=document.getElementById('weeklyCalendar');const actionModal=document.getElementById('actionModal');const modalTitle=document.getElementById('modalTitle');const modalAssignmentIdInput=document.getElementById('modalAssignmentId');const modalActionButtonsDiv=actionModal.querySelector('.action-buttons');const modalEditViewDiv=actionModal.querySelector('.edit-view');const modalEditDateInput=document.getElementById('modalEditDate');const modalEditNotesInput=document.getElementById('modalEditNotes');const prevWeekBtn=document.getElementById('prevWeekBtn');const nextWeekBtn=document.getElementById('nextWeekBtn');const calendarWeekLabel=document.getElementById('calendarWeekLabel');const confettiContainer=document.getElementById('confetti-container');
-            const ASSIGNMENTS_STORAGE_KEY = 'jw_assignments_data_black_v3_final'; // Mantem
+            const ASSIGNMENTS_STORAGE_KEY = 'jw_assignments_data_black_v3_final';
             const UPCOMING_DAYS=7; const TOP_N_FREQUENT=5; const CONFETTI_COUNT=50;
             const BASE_ASSIGNMENT_OPTIONS={ "Preparação e Organização":["Presidente","Dirigente de Campo","Indicador (Entrada)","Indicador (Auditório)","Limpeza","Áudio","Vídeo"],"Reunião de Congregação":["Condutor","Leitura da Bíblia","Estudo Bíblico da Congregação (Leitor)","Estudo Bíblico da Congregação (Dirigente)","Discurso Público","Discurso (Nossa vida Cristã)","Tesouros (Discurso 10 minutos)","Joias Espirituais","Faça seu melhor no ministério","Estudo de A Sentinela (Leitor)","Estudo de A Sentinela (Dirigente)","Oração Final"],"Eventos Especiais":["Assembleia","Congresso","Visita a Betel"],"Outros":["Personalizado"] };
             const ASSIGNMENT_EMOJIS={"Presidente":"🧑‍⚖️","Dirigente de Campo":"🗺️","Indicador (Entrada)":"🚪","Indicador (Auditório)":"🏛️","Limpeza":"🧹","Áudio":"🔊","Vídeo":"📽️","Condutor":"🎤","Leitura da Bíblia":"📖","Estudo Bíblico da Congregação (Leitor)":"🤓","Estudo Bíblico da Congregação (Dirigente)":"🧑‍🏫","Discurso Público":"🗣️","Discurso (Nossa vida Cristã)":"💖","Tesouros (Discurso 10 minutos)":"💎","Joias Espirituais":"✨","Faça seu melhor no ministério":"💪","Estudo de A Sentinela (Leitor)":"👀","Estudo de A Sentinela (Dirigente)":"🧐","Oração Final":"🙏","Assembleia":"🏟️","Congresso":"🧑‍🤝‍🧑","Celebração":"🍷","Visita a Betel":"🏢"};
             const MEMORIAL_DATES={ 2026:'2026-04-02', 2027:'2027-03-22', 2028:'2028-04-08', 2029:'2029-03-28', 2030:'2030-04-16', 2031:'2031-04-06'}; const MEMORIAL_TYPE_NAME="Celebração";
             let appData={assignments:[],frequency:{}};let calendarWeekOffset=0;
 
-            function loadAppData(){const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY);if(s){try{const p=JSON.parse(s);appData.assignments=Array.isArray(p.assignments)?p.assignments:[];appData.frequency=typeof p.frequency==='object'&&p.frequency!==null?p.frequency:{};}catch(e){appData={assignments:[],frequency:{}};}}else{appData={assignments:[],frequency:{}};}}
-            function saveAppData(){try{localStorage.setItem(ASSIGNMENTS_STORAGE_KEY,JSON.stringify(appData));}catch(e){alert("Falha salvar!");}}
+            function loadAppData(){ const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY); if(s){try{const p=JSON.parse(s); appData.assignments=Array.isArray(p.assignments)?p.assignments:[]; appData.frequency=typeof p.frequency==='object'&&p.frequency!==null?p.frequency:{};} catch(e){appData={assignments:[],frequency:{}};}} else{appData={assignments:[],frequency:{}};}}
+            function saveAppData(){ try{localStorage.setItem(ASSIGNMENTS_STORAGE_KEY,JSON.stringify(appData));} catch(e){alert("Falha salvar!");}}
             function getEmojiForType(t){return ASSIGNMENT_EMOJIS[t]||'';}
             function formatDate(d,o={day:'2-digit',month:'2-digit',year:'numeric'}){if(!d)return '';try{const dt=new Date(`${d}T00:00:00`);return new Intl.DateTimeFormat('pt-BR',o).format(dt);}catch(e){const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}}
             function dateToYyyyMmDd(d){const dt=new Date(d);return`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`;}
@@ -71,39 +72,66 @@
 
             function ensureAutomaticMemorial() {
                 const todayStr = getTodayDateString(); const currentYear = new Date().getFullYear();
-                let targetYear = currentYear; let memorialDateStr = MEMORIAL_DATES[targetYear]; let changesMade = false;
-                if(!memorialDateStr || (memorialDateStr && todayStr > memorialDateStr)){ targetYear++; memorialDateStr = MEMORIAL_DATES[targetYear]; }
-                if(!memorialDateStr){console.warn(`Data da Celebração não definida para ${targetYear}. Removendo automáticas.`); const nonAuto = appData.assignments.filter(a => !(a.id && a.id.startsWith('memorial-auto-'))); if(appData.assignments.length !== nonAuto.length){ appData.assignments = nonAuto; saveAppData();} return;}
+                let targetYear = currentYear; let memorialDateStr = MEMORIAL_DATES[targetYear]; let didChange = false;
 
-                const automaticId = `memorial-auto-${targetYear}`;
-                const existingCorrectIndex = appData.assignments.findIndex(a => a.id === automaticId);
-                let currentCompletionStatus = false; // Padrão para nova entrada
-
-                // Guarda status concluído se existir, ANTES de filtrar
-                if (existingCorrectIndex !== -1) {
-                     currentCompletionStatus = appData.assignments[existingCorrectIndex].completed;
+                // Find the correct year and date for the memorial
+                if (!memorialDateStr || (memorialDateStr && todayStr > memorialDateStr)) {
+                    targetYear++; memorialDateStr = MEMORIAL_DATES[targetYear];
                 }
 
-                 // Filtra mantendo SÓ as NÃO automáticas e verifica se precisa salvar essa filtragem
-                 const initialLength = appData.assignments.length;
-                 appData.assignments = appData.assignments.filter(a => !(a.id && a.id.startsWith('memorial-auto-')));
-                 if (appData.assignments.length < initialLength) changesMade = true; // Marcamos se removemos alguma
+                if (!memorialDateStr) { // No valid future date found
+                    console.warn(`Data da Celebração não encontrada para ${targetYear} ou anos seguintes.`);
+                    // Remove any existing automatic memorials if no valid future one exists
+                    const initialLength = appData.assignments.length;
+                    appData.assignments = appData.assignments.filter(a => !(a.isAutomatic || (a.id && a.id.startsWith('memorial-auto-'))));
+                    if (appData.assignments.length !== initialLength) saveAppData();
+                    return;
+                }
 
-                 // Cria a entrada automática definitiva com o status de conclusão preservado
-                 const memorialAssignment = {
-                     id: automaticId, type: MEMORIAL_TYPE_NAME, date: memorialDateStr,
-                     notes: "Celebração da morte de Cristo.", completed: currentCompletionStatus, isAutomatic: true
-                 };
+                const automaticId = `memorial-auto-${targetYear}`;
+                let currentMemorial = null;
+                let oldMemorialIndices = [];
 
-                 // Adiciona a definitiva de volta
-                 appData.assignments.push(memorialAssignment);
+                // Iterate through existing assignments
+                appData.assignments.forEach((a, index) => {
+                    if (a.id && a.id.startsWith('memorial-auto-')) {
+                        if (a.id === automaticId) {
+                            currentMemorial = a; // Found the one for the target year
+                        } else {
+                            oldMemorialIndices.push(index); // Mark old ones for removal
+                        }
+                    }
+                });
 
-                 // Só salva se houve remoção ou se é a primeira vez adicionando
-                 if (changesMade || initialLength === 0) {
+                 // Remove old memorials precisely by index (iterate backwards)
+                if (oldMemorialIndices.length > 0) {
+                    oldMemorialIndices.sort((a, b) => b - a); // Sort indices descending
+                    oldMemorialIndices.forEach(index => appData.assignments.splice(index, 1));
+                    didChange = true;
+                 }
+
+                 // Check if the correct memorial needs to be added or updated
+                 if (!currentMemorial) {
+                     // Add the new one if it wasn't found
+                     const newMemorial = { id: automaticId, type: MEMORIAL_TYPE_NAME, date: memorialDateStr, notes: "Celebração da morte de Cristo.", completed: false, isAutomatic: true };
+                     appData.assignments.push(newMemorial);
+                     didChange = true;
+                 } else {
+                    // If found, ensure its data is correct (e.g., if date calculation logic changes)
+                    if (currentMemorial.date !== memorialDateStr || currentMemorial.type !== MEMORIAL_TYPE_NAME || !currentMemorial.isAutomatic) {
+                         currentMemorial.date = memorialDateStr;
+                         currentMemorial.type = MEMORIAL_TYPE_NAME;
+                         currentMemorial.isAutomatic = true;
+                         didChange = true;
+                    }
+                    // Note: We DON'T reset currentMemorial.completed here, it persists if the user marked it.
+                 }
+
+                 // Save only if changes occurred
+                 if (didChange) {
                      saveAppData();
                  }
-            }
-
+             }
 
             function updateDropdownOrder(){const select=assignmentTypeInput;const currentSelection=select.value;select.innerHTML='<option value="" disabled selected>Selecione</option>';let allOptions=[];for(const g in BASE_ASSIGNMENT_OPTIONS){BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(o!=='Personalizado'){allOptions.push({value:o,text:o,group:g,freq:appData.frequency[o]||0});}});}allOptions.sort((a,b)=>(b.freq!==a.freq)?b.freq-a.freq:a.text.localeCompare(b.text));const topFreq=allOptions.slice(0,TOP_N_FREQUENT).filter(o=>o.freq>0).map(o=>o.value);const addedFreq=new Set();if(topFreq.length>0){const fg=document.createElement('optgroup');fg.label='Mais Usados';allOptions.forEach(o=>{if(topFreq.includes(o.value)){const op=document.createElement('option');op.value=o.value;op.textContent=`${getEmojiForType(o.value)} ${o.value==='Assembleia'?'Assembleia (3d)':o.text}`;fg.appendChild(op);addedFreq.add(o.value);}});if(fg.childElementCount>0)select.appendChild(fg);}for(const g in BASE_ASSIGNMENT_OPTIONS){const grp=document.createElement('optgroup');grp.label=g;let hasOpt=false;BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(!addedFreq.has(o)&&o!=='Personalizado'){const op=document.createElement('option');op.value=o;op.textContent=`${getEmojiForType(o)} ${o==='Assembleia'?'Assembleia (3d)':o}`;grp.appendChild(op);hasOpt=true;}});if(g==='Outros'){const custOpt=document.createElement('option');custOpt.value='Personalizado';custOpt.textContent='Personalizado';grp.appendChild(custOpt);hasOpt=true;}if(hasOpt){select.appendChild(grp);}}select.value=currentSelection||"";if(!select.value){select.querySelector('option[disabled]').selected=true;}select.dispatchEvent(new Event('change'));}
             function renderWeeklyCalendar(){weeklyCalendarGrid.innerHTML='';const today=new Date();const baseWeek=new Date(today);baseWeek.setDate(today.getDate()+(calendarWeekOffset*7));const dow=(baseWeek.getDay()+6)%7;const start=new Date(baseWeek);start.setDate(baseWeek.getDate()-dow);start.setHours(0,0,0,0);const end=new Date(start);end.setDate(start.getDate()+6);if(calendarWeekOffset===0){calendarWeekLabel.textContent="Esta Semana";}else if(calendarWeekOffset===1){calendarWeekLabel.textContent="Próxima Semana";}else if(calendarWeekOffset===-1){calendarWeekLabel.textContent="Semana Anterior";}else{calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'2-digit'})}-${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'2-digit'})}`;}const hds=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];hds.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});for(let i=0;i<7;i++){const c=new Date(start);c.setDate(start.getDate()+i);const ds=dateToYyyyMmDd(c);const ce=document.createElement('div');ce.className='day-cell';if(calendarWeekOffset===0&&ds===dateToYyyyMmDd(new Date()))ce.classList.add('today');const n=document.createElement('span');n.className='day-number';n.textContent=c.getDate();ce.appendChild(n);const ul=document.createElement('ul');ul.className='day-assignments';ce.appendChild(ul);const ta=appData.assignments.filter(a=>a.date===ds&&!a.completed);ta.forEach(a=>{const li=document.createElement('li');li.className='assignment-marker';li.textContent=getEmojiForType(a.type)+' '+a.type;li.title=li.textContent;ul.appendChild(li);});weeklyCalendarGrid.appendChild(ce);}}
@@ -118,7 +146,7 @@
             function handleSaveEdit(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1)return;const a=appData.assignments[idx];if(a.isAutomatic)return;const nd=modalEditDateInput.value;const nn=modalEditNotesInput.value.trim();const todayS=getTodayDateString();if(!nd||!/^\d{4}-\d{2}-\d{2}$/.test(nd)){alert("Data inválida.");modalEditDateInput.focus();return;}if(nd<todayS){alert("Data passada?");modalEditDateInput.focus();return;}a.date=nd;a.notes=nn;saveAppData();renderAssignments();renderUpcomingList();renderWeeklyCalendar();hideActionModal();}
              // REMOVIDO Confirm
              function deleteAssignment(id){ const a=appData.assignments.find(x=>x.id==id); if(!a || a.isAutomatic) return; appData.assignments=appData.assignments.filter(x=>x.id!=id); saveAppData(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar();}
-            function handleDeleteRequest(){ const id = modalAssignmentIdInput.value; deleteAssignment(id); hideActionModal();}
+             function handleDeleteRequest(){ const id=modalAssignmentIdInput.value; deleteAssignment(id); hideActionModal();}
 
             assignmentsListContainer.addEventListener('click',(e)=>{const i=e.target.closest('.assignment-item');if(i&&i.dataset.id){showActionModal(i.dataset.id);}});actionModal.addEventListener('click',(e)=>{if(e.target===actionModal){hideActionModal();}});document.getElementById('modalBtnComplete').addEventListener('click',handleCompleteToggle);document.getElementById('modalBtnEdit').addEventListener('click',handleEditRequest);document.getElementById('modalBtnDelete').addEventListener('click',handleDeleteRequest);document.getElementById('modalBtnCancel').addEventListener('click',hideActionModal);document.getElementById('modalBtnSaveEdit').addEventListener('click',handleSaveEdit);document.getElementById('modalBtnCancelEdit').addEventListener('click',hideActionModal);window.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&actionModal.classList.contains('is-visible')){hideActionModal();}});window.toggleSection=(id)=>{const el=document.getElementById(id);if(el)el.classList.toggle('is-open');};assignmentTypeInput.addEventListener('change',()=>{if(assignmentTypeInput.value==='Personalizado'){customTypeGroup.style.display='flex';customAssignmentTypeInput.required=true;setTimeout(()=>customAssignmentTypeInput.focus(),50);}else{customTypeGroup.style.display='none';customAssignmentTypeInput.required=false;customAssignmentTypeInput.value='';}});assignmentForm.addEventListener('submit',addAssignment);prevWeekBtn.addEventListener('click',()=>{calendarWeekOffset--;renderWeeklyCalendar();});nextWeekBtn.addEventListener('click',()=>{calendarWeekOffset++;renderWeeklyCalendar();});
             function initializeApp(){ loadAppData(); ensureAutomaticMemorial(); updateDropdownOrder(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar(); assignmentTypeInput.dispatchEvent(new Event('change')); }
