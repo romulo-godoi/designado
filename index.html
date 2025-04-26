@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        /* --- CSS Completo --- */
         :root {
             --bg-color: #0d0d10; --surface-color: #1c1c21; --surface-lighter-color: #25252b;
             --border-color: #333338; --completed-item-bg: #101012; --body-outer-bg: #030304;
@@ -54,14 +53,14 @@
         #themeToggleBtn { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); background:none; border: none; color: var(--text-secondary-color); font-size: 1.3em; cursor: pointer; padding: 5px; line-height: 1; opacity: 0.8; transition: color var(--transition-speed-fast), opacity var(--transition-speed-fast); z-index: 11;} #themeToggleBtn:hover { opacity: 1; }
 
         .content-scroll { flex-grow:1; overflow-y:auto; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); } .content-scroll::-webkit-scrollbar { width: 8px; } .content-scroll::-webkit-scrollbar-track { background: var(--scrollbar-track); } .content-scroll::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 4px; border: 2px solid var(--bg-color); }
-        .dashboard-section, .collapsible-section { border-bottom: 1px solid var(--border-color); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .dashboard-section { padding: 20px; background-color: var(--surface-color); position: relative; /* Tooltip positioning context */ }
+        .dashboard-section, .collapsible-section { border-bottom: 1px solid var(--border-color); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .dashboard-section { padding: 20px; background-color: var(--surface-color); position: relative; }
         .section-header h2, .dashboard-section > h3 { font-size: 0.8em; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary-color); margin: 15px 0 8px 0; padding-bottom: 5px; border-bottom: 1px solid var(--border-color); transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .section-header h2 { color: var(--accent-primary-color); margin: 0; padding: 0; border-bottom: none; flex-grow: 1; font-weight: 600; letter-spacing: 1px; transition: color var(--transition-speed-med); }
         #weeklyCalendarContainer > h3 { text-align: center; color: var(--accent-alt-color); border-bottom: none; margin-bottom: 8px; font-weight: 600; letter-spacing: 1px; transition: color var(--transition-speed-med);}
-        .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } .calendar-nav button { background: none; border: 1px solid var(--border-color); color: var(--text-secondary-color); padding: 4px 10px; border-radius: var(--border-radius-inner); font-size: 0.8em; cursor: pointer; transition: all var(--transition-speed-fast); } .calendar-nav button:hover:not(:disabled) { background-color: var(--accent-primary-color); color: #fff; border-color: var(--accent-primary-color); transform: translateY(-1px); } .calendar-nav button:active:not(:disabled) { transform: scale(0.97); } .calendar-nav button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; background-color: transparent !important; border-color: var(--border-color); transform: none !important; } #calendarWeekLabel { font-size: 1em; font-weight: 600; color: var(--accent-alt-color); flex-grow: 1; text-align: center; transition: color var(--transition-speed-med);}
+        .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } .calendar-nav button { background: none; border: 1px solid var(--border-color); color: var(--text-secondary-color); padding: 4px 10px; border-radius: var(--border-radius-inner); font-size: 0.8em; cursor: pointer; transition: all var(--transition-speed-fast); } .calendar-nav button:hover:not(:disabled) { background-color: var(--accent-primary-color); color: #fff; border-color: var(--accent-primary-color); transform: translateY(-1px); } .calendar-nav button:active:not(:disabled) { transform: scale(0.97); } .calendar-nav button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; background-color: transparent !important; border-color: var(--border-color); transform: none !important; color: var(--text-secondary-color) !important;} #calendarWeekLabel { font-size: 1em; font-weight: 600; color: var(--accent-alt-color); flex-grow: 1; text-align: center; transition: color var(--transition-speed-med);}
         #upcomingListContainer > h3 { color: var(--text-secondary-color); }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; } .day-header{font-size:0.7em;text-align:center;color:var(--text-secondary-color);padding-bottom:5px;font-weight:500;text-transform:uppercase;border-bottom:1px solid var(--border-color);margin-bottom:5px; transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .day-cell{font-size:0.8em;text-align:center;background-color:var(--bg-color);border-radius:var(--border-radius-inner);padding:8px 4px;min-height:65px;display:flex;flex-direction:column;align-items:center;border:1px solid transparent; transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast), border-color var(--transition-speed-fast); position: relative; /* Tooltip */ } .day-cell:hover { background-color: var(--surface-lighter-color); transform: scale(1.03);} .day-cell.today{border-color:var(--accent-alt-color);background-color:var(--surface-lighter-color); box-shadow: 0 0 8px color-mix(in srgb, var(--accent-alt-color) 30%, transparent); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med), box-shadow var(--transition-speed-med); } .day-number{font-weight:600;margin-bottom:4px;color:var(--text-primary-color);transition: color var(--transition-speed-med);} .day-cell.today .day-number{color:var(--accent-alt-color);} .day-assignments{list-style:none;padding:0;width:100%;}
-        .assignment-marker{display:block;font-size:0.7em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background-color:var(--accent-secondary-color);color:var(--text-primary-color);padding:3px 5px;margin-top:4px;border-radius:4px;text-align:center; /* Center text now */ box-shadow: 0 1px 2px rgba(0,0,0,0.15); cursor: pointer; transition: background-color var(--transition-speed-med), color var(--transition-speed-med); font-weight: 500; /* Make it slightly bolder */ }
-        body.light-theme .assignment-marker { color: var(--bg-color); /* Darker text on marker for light theme */ }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; } .day-header{font-size:0.7em;text-align:center;color:var(--text-secondary-color);padding-bottom:5px;font-weight:500;text-transform:uppercase;border-bottom:1px solid var(--border-color);margin-bottom:5px; transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .day-cell{font-size:0.8em;text-align:center;background-color:var(--bg-color);border-radius:var(--border-radius-inner);padding:8px 4px;min-height:65px;display:flex;flex-direction:column;align-items:center;border:1px solid transparent; transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast), border-color var(--transition-speed-fast); position: relative; } .day-cell:hover { background-color: var(--surface-lighter-color); transform: scale(1.03);} .day-cell.today{border-color:var(--accent-alt-color);background-color:var(--surface-lighter-color); box-shadow: 0 0 8px color-mix(in srgb, var(--accent-alt-color) 30%, transparent); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med), box-shadow var(--transition-speed-med); } .day-number{font-weight:600;margin-bottom:4px;color:var(--text-primary-color);transition: color var(--transition-speed-med);} .day-cell.today .day-number{color:var(--accent-alt-color);} .day-assignments{list-style:none;padding:0;width:100%;}
+        .assignment-marker{display:block;font-size:0.7em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background-color:var(--accent-secondary-color);color:var(--text-primary-color);padding:3px 5px;margin-top:4px;border-radius:4px;text-align:center; box-shadow: 0 1px 2px rgba(0,0,0,0.15); cursor: pointer; transition: background-color var(--transition-speed-med), color var(--transition-speed-med); font-weight: 500; }
+        body.light-theme .assignment-marker { color: var(--bg-color); }
         #upcomingList{list-style:none;padding:0;} .upcoming-item{display:flex;justify-content:space-between;align-items:center;font-size:0.9em;padding:10px 5px;border-bottom:1px dashed var(--border-color); transition: background-color var(--transition-speed-fast), border-color var(--transition-speed-med); } .upcoming-item:last-child{border-bottom:none;} .upcoming-item:hover { background-color: color-mix(in srgb, var(--text-primary-color) 3%, transparent); } .upcoming-item .date{color:var(--text-secondary-color);font-size:0.9em;white-space:nowrap;margin-left:10px; transition: color var(--transition-speed-med);} .upcoming-item .type{font-weight:500; transition: color var(--transition-speed-med);}
         .collapsible-section{background-color:var(--surface-color); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .section-header{padding:18px 20px;cursor:pointer;transition: background-color var(--transition-speed-fast), box-shadow var(--transition-speed-fast);position:relative;z-index:1; display: flex; align-items: center;} .section-header:hover{background-color:var(--surface-lighter-color); box-shadow: inset 0 0 10px rgba(0,0,0,0.1); } .section-header i{font-size:0.9em;transition:transform var(--transition-speed-med) ease-out;color:var(--accent-primary-color);flex-shrink:0; margin-left: 10px;} .collapsible-section.is-open .section-header i{transform:rotate(90deg);} .section-content{max-height:0;overflow:hidden;transition: max-height var(--transition-speed-med) ease-out, padding var(--transition-speed-med) ease-out, border-top var(--transition-speed-med);padding:0 20px;background-color:var(--surface-lighter-color); border-top: 1px solid transparent; transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .collapsible-section.is-open .section-content{max-height:2000px;padding:25px;transition:max-height var(--transition-speed-slow) ease-in-out, padding var(--transition-speed-slow) ease-in-out, border-top var(--transition-speed-slow); border-top: 1px solid var(--border-color); } #listSection.is-open .section-content{background-color:var(--bg-color);padding:0;}
         #assignmentForm{display:flex;flex-direction:column;gap:18px;} .form-group{display:flex;flex-direction:column;} .form-group#customTypeGroup{display:none;margin-top:-5px;padding-left:15px;border-left:3px solid var(--accent-primary-color);padding-top:10px; margin-left: 5px;} .form-group#customTypeGroup label{font-size:0.8em;} label{margin-bottom:6px;font-weight:500;font-size:0.85em;color:var(--text-secondary-color);letter-spacing: 0.5px; transition: color var(--transition-speed-med);} select,input[type="date"],input[type="text"]{padding:14px 16px;background-color:var(--input-bg);border:1px solid var(--border-color);border-radius:var(--border-radius-inner);color:var(--text-primary-color);font-family:inherit;font-size:1rem;width:100%;transition: all var(--transition-speed-fast); box-shadow: var(--input-shadow); } select:hover, input:hover { border-color: var(--text-secondary-color); } select:focus,input:focus{outline:none;border-color:var(--accent-primary-color);background-color: var(--input-focus-bg); box-shadow: var(--input-focus-shadow);} select option,select optgroup{background-color:var(--bg-color);color:var(--text-primary-color);font-weight:normal;} select optgroup{padding:6px 0; font-weight: 600;} select optgroup.frequent-group{font-style:normal;font-weight:bold;color:var(--accent-primary-color);} input[type="date"]{color: var(--text-secondary-color); } input[type="date"]:focus, input[type="date"]:valid { color: var(--text-primary-color); } input[type="date"]::-webkit-calendar-picker-indicator{filter:var(--date-picker-indicator-filter);cursor:pointer;opacity:0.7;transition:opacity var(--transition-speed-fast), filter var(--transition-speed-fast);} input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1;} button[type="submit"]{padding:15px 20px;background:linear-gradient(45deg, var(--accent-primary-color), var(--accent-secondary-color));color:#fff;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-size:1.05rem;font-weight:600;text-align:center;width:100%;margin-top:8px;transition: all var(--transition-speed-fast); box-shadow: 0 3px 8px rgba(0,0,0,0.2);} button[type="submit"]:hover{opacity:0.9; box-shadow: 0 5px 12px color-mix(in srgb, var(--accent-primary-color) 30%, transparent); } button[type="submit"]:active{transform:scale(0.97); box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
@@ -92,7 +91,7 @@
 
         .modal-overlay{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color: var(--modal-overlay-bg); backdrop-filter:blur(3px);justify-content:center;align-items:center;opacity:0;transition:opacity var(--transition-speed-med) ease-out;} .modal-overlay.is-visible{display:flex;opacity:1;} .modal-content{background-color:var(--surface-color);padding:30px;border-radius:var(--border-radius-inner);box-shadow:0 8px 25px rgba(0,0,0,0.3);width:90%;max-width:400px;position:relative;display:flex;flex-direction:column;gap:18px;border:1px solid var(--border-color);transform:scale(0.95);transition: transform var(--transition-speed-med) ease-out 0.1s, background-color var(--transition-speed-med), border-color var(--transition-speed-med);} .modal-overlay.is-visible .modal-content{transform:scale(1);} .modal-content h4{color:var(--accent-primary-color);margin-bottom:8px;text-align:center;font-size:1.2em;font-weight:600;word-break:break-word; transition: color var(--transition-speed-med);} .modal-content .action-buttons,.modal-content .edit-view{display:flex;flex-direction:column;gap:12px;} .modal-content button{padding:12px 18px;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-weight:600;font-size:0.95em;transition:all var(--transition-speed-fast);width:100%;text-transform:uppercase;letter-spacing:0.5px;box-shadow:0 2px 5px rgba(0,0,0,0.15);} .modal-content button:hover:not(:disabled){opacity:0.9;box-shadow:0 4px 10px rgba(0,0,0,0.2);transform:translateY(-1px);} .modal-content button:active:not(:disabled){transform:scale(0.97);box-shadow:0 1px 2px rgba(0,0,0,0.1);} .modal-content button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; transform: none !important; filter: grayscale(30%); }
         #modalBtnComplete{background-color:var(--success-color);color:#fff;} #modalBtnComplete:disabled { background-color: var(--text-secondary-color); color: var(--surface-lighter-color); cursor: not-allowed; } #modalBtnEdit{background-color:var(--accent-alt-color);color:#fff;} #modalBtnDelete{background-color:var(--error-color);color:#fff;} #modalBtnCancel,#modalBtnCancelEdit{background-color:var(--surface-lighter-color);color:var(--text-primary-color);border:1px solid var(--border-color);}
-        body.light-theme #modalBtnComplete, body.light-theme #modalBtnEdit, body.light-theme #modalBtnDelete { color: var(--bg-color); /* Dark text on colored buttons */ }
+        body.light-theme #modalBtnComplete, body.light-theme #modalBtnEdit, body.light-theme #modalBtnDelete { color: var(--bg-color); }
         body.light-theme #modalBtnComplete:disabled { background-color: #cccccc; color: #777777; }
         .edit-view{display:none;} .edit-view .form-group{width:100%;} .edit-view label{font-size:0.8em;} #modalBtnSaveEdit{background-color:var(--success-color);color:#fff;}
         body.light-theme #modalBtnSaveEdit { color: var(--bg-color); }
@@ -100,7 +99,6 @@
         .no-assignments, .no-upcoming{font-size:0.9em;text-align:center;color:var(--text-secondary-color);padding:30px 20px;font-style:italic;background:transparent; transition: color var(--transition-speed-med);} .no-assignments{padding:40px 20px;}
         #confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2000;} .confetti-piece{position:absolute;width:10px;height:15px;opacity:0.9;animation:fallFadeOut 3.5s ease-in forwards;border-radius:3px;background-image:linear-gradient(45deg,var(--accent-primary-color),var(--success-color),var(--accent-alt-color));} @keyframes fallFadeOut{0%{transform:translateY(-30px) rotate(0deg) scale(1);opacity:1;}100%{transform:translateY(110vh) rotate(1080deg) scale(0.5);opacity:0;}}
 
-        /* Tooltip */
         .calendar-tooltip { position: absolute; display: none; background-color: var(--tooltip-bg); color: var(--text-primary-color); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--border-radius-inner); font-size: 0.8em; z-index: 1010; pointer-events: none; white-space: normal; max-width: 150px; box-shadow: 0 3px 8px rgba(0,0,0,0.2); opacity: 0; transform: translateY(5px); transition: opacity 0.15s ease-out, transform 0.15s ease-out, background-color var(--transition-speed-med), color var(--transition-speed-med), border-color var(--transition-speed-med); }
         .calendar-tooltip.is-visible { display: block; opacity: 1; transform: translateY(0); }
     </style>
@@ -115,7 +113,7 @@
              <div class="dashboard-section">
                  <div id="weeklyCalendarContainer">
                      <div class="calendar-nav">
-                         <button id="prevWeekBtn" data-translate="prevWeekButton">< Ant</button> <!-- Removed disabled -->
+                         <button id="prevWeekBtn" data-translate="prevWeekButton">< Ant</button>
                          <span id="calendarWeekLabel"></span>
                          <button id="nextWeekBtn" data-translate="nextWeekButton">Próx ></button>
                      </div>
@@ -196,26 +194,23 @@
      <div id="calendar-tooltip" class="calendar-tooltip"></div>
 
     <script>
-        // Início do listener DOMContentLoaded
         document.addEventListener('DOMContentLoaded', async () => {
-            // --- i18n Setup ---
             const SUPPORTED_LANGUAGES = ['pt-BR', 'en', 'es', 'de', 'fr', 'it'];
-            const DEFAULT_LANGUAGE = 'en'; // Fallback language
+            const DEFAULT_LANGUAGE = 'en';
             const LANG_STORAGE_KEY = 'jw_assignments_language_preference';
             let translations = {};
             let currentLanguage = DEFAULT_LANGUAGE;
 
             async function loadTranslations() {
                 try {
-                    const response = await fetch('translations.json');
+                    const response = await fetch('translations.json?v=' + Date.now());
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     translations = await response.json();
-                    console.log("Translations loaded successfully.");
                 } catch (error) {
                     console.error("Could not load translations file (translations.json):", error);
-                     translations['en'] = { // Hardcoded basic English fallback
+                     translations['en'] = {
                         pageTitle: "My Assignments", loading: "Loading...", noAssignmentsAdded: "No assignments added yet.",
                         formTypeSelectOption: "Select Type", assignTypeCustom: "Custom", assignCatOther: "Other/Custom",
                         frequentAssignmentsGroup:"Most Used", upcomingTitle:"Next 7 Days", addAssignmentHeader:"Add New",
@@ -227,15 +222,17 @@
                         dayWedShort: "Wed", dayThuShort: "Thu", dayFriShort: "Fri", daySatShort: "Sat", daySunShort: "Sun",
                         calendarThisWeek: "This Week", calendarNextWeek: "Next Week", noUpcomingAssignments:"No items for {0} days.",
                         celebrationTypeName: "Memorial", celebrationNotes:"Annual", assignTypeConvention: "Convention", congressDuration: "3 days",
-                        congressDayPrefix: "Conv. (Day {0})", // Add essential assignment type fallbacks too if needed
-                        assignCatPreparation:"Preparation", assignCatMeeting:"Meeting", assignCatEvents:"Events", assignTypePresident:"Chairman",
-                         alertDateRequired: "Date is required.", alertInvalidDateFormat: "Invalid date format.",
-                         alertDateInPast: "Cannot select a past date.", alertAddCelebrationManual: "Memorial is added automatically.",
-                         alertInvalidTypeDate:"Please select a valid type and date.", alertAlreadyExists:"'{0}' already exists for {1}.",
-                         alertCustomTypeRequired:"Please enter a name for the custom type.", alertCongressExists: "Convention already scheduled starting {0}.",
-                         alertCongressDateRequired:"Select FIRST day of convention.", alertErrorAddingCongress:"Error adding convention days.",
-                         alertInvalidDate:"Invalid date.", alertDateInPastEdit:"Cannot set past date for incomplete item.",
-                         modalCompleteCelebrationFuture:"Cannot complete future Memorial."
+                        congressDayPrefix: "Conv. (Day {0})", assignCatPreparation:"Preparation", assignCatMeeting:"Meeting",
+                        assignCatEvents:"Events", assignTypePresident:"Chairman", alertDateRequired: "Date is required.",
+                        alertInvalidDateFormat: "Invalid date format.", alertDateInPast: "Cannot select a past date.",
+                        alertAddCelebrationManual: "Memorial is added automatically.", alertInvalidTypeDate:"Please select a valid type and date.",
+                        alertAlreadyExists:"'{0}' already exists for {1}.", alertCustomTypeRequired:"Please enter a name for the custom type.",
+                        alertCongressExists: "Convention already scheduled starting {0}.", alertCongressDateRequired:"Select FIRST day of convention.",
+                        alertErrorAddingCongress:"Error adding convention days.", alertInvalidDate:"Invalid date.",
+                        alertDateInPastEdit:"Cannot set past date for incomplete item.", modalCompleteCelebrationFuture:"Cannot complete future Memorial.",
+                        assignTypeFieldLeader: "Group Overseer", assignTypeAttendantEntry: "Entry Attendant", assignTypeAttendantAud: "Aud. Attendant", assignTypeCleaning: "Cleaning", assignTypeAudio: "Sound", assignTypeVideo: "Video",
+                        assignTypeConductor: "WT Conductor", assignTypeBibleReading: "Bible Reading", assignTypeCongStudyReader: "CBS Reader", assignTypeCongStudyConductor: "CBS Conductor", assignTypePublicTalk: "Public Talk", assignTypeChristianLifeTalk: "Living Talk", assignTypeTreasuresTalk: "Treasures Talk", assignTypeSpiritualGems: "Digging Gems", assignTypeMinistrySchool: "Apply Ministry", assignTypeWatchtowerReader: "WT Reader", assignTypeWatchtowerConductor: "WT Conductor", assignTypeFinalPrayer: "Final Prayer",
+                        assignTypeAssembly: "Assembly", assignTypeBethelVisit: "Bethel Visit", shortNameCongStudyReader:"CBS Read.", shortNameCongStudyConductor:"CBS Cond.", shortNameMinistrySchool:"Ministry", shortNameAttendantEntry:"Attend. Entry", shortNameAttendantAud:"Attend. Aud.", shortNameTreasuresTalk:"Treasures", shortNameChristianLifeTalk:"Living", shortNameWatchtowerReader:"WT Read.", shortNameWatchtowerConductor:"WT Cond.", shortNameConventionD1:"Conv. D1", shortNameConventionD2:"Conv. D2", shortNameConventionD3:"Conv. D3", shortNameFieldLeader:"Gr. Over.", themeToggleButton: "Toggle Theme"
                     };
                     currentLanguage = DEFAULT_LANGUAGE;
                     console.warn("Using internal English fallbacks for translations.");
@@ -257,11 +254,11 @@
 
             function _t(key, ...args) {
                 const langSet = (translations && translations[currentLanguage]) || (translations && translations[DEFAULT_LANGUAGE]) || {};
-                let translated = langSet[key] !== undefined ? langSet[key] : key; // Use key if translation missing
+                let translated = langSet[key] !== undefined ? langSet[key] : key;
                 if (args.length > 0 && typeof translated === 'string') {
                     args.forEach((arg, index) => {
                         const placeholder = new RegExp(`\\{${index}\\}`, 'g');
-                        translated = translated.replace(placeholder, arg ?? ''); // Replace with empty string if arg is null/undefined
+                        translated = translated.replace(placeholder, arg ?? '');
                     });
                 }
                 return translated;
@@ -277,19 +274,15 @@
 
              function setLanguage(lang) {
                  if (!translations || Object.keys(translations).length === 0) { console.warn("Translations not loaded, cannot change language yet."); return; }
-                if (SUPPORTED_LANGUAGES.includes(lang) && lang !== currentLanguage) { // Only proceed if changing lang
+                if (SUPPORTED_LANGUAGES.includes(lang) && lang !== currentLanguage) {
                     currentLanguage = lang;
                     localStorage.setItem(LANG_STORAGE_KEY, lang);
-                    console.log(`Language set to: ${lang}`);
-                    initializeAppLogic(); // Re-initialize all dynamic parts
+                    initializeAppLogic();
                 } else if (!SUPPORTED_LANGUAGES.includes(lang)) {
                     console.warn(`Unsupported language: ${lang}. Sticking with ${currentLanguage}`);
                 }
             }
-            // --- End i18n Setup ---
 
-
-            // --- Application Variables ---
             const assignmentForm = document.getElementById('assignmentForm');
             const assignmentTypeInput = document.getElementById('assignmentType');
             const assignmentDateInput = document.getElementById('assignmentDate');
@@ -315,19 +308,17 @@
             const confettiContainer = document.getElementById('confetti-container');
             const calendarTooltip = document.getElementById('calendar-tooltip');
             const themeToggleBtn = document.getElementById('themeToggleBtn');
-            const themeToggleIcon = themeToggleBtn?.querySelector('i'); // Safer access
+            const themeToggleIcon = themeToggleBtn?.querySelector('i');
             document.titleElement = document.querySelector('title');
 
-            // --- Application Constants ---
             const ASSIGNMENTS_STORAGE_KEY = 'jw_assignments_data_v2_multi';
             const THEME_STORAGE_KEY = 'jw_assignments_theme_preference';
             const UPCOMING_DAYS = 7;
             const TOP_N_FREQUENT = 5;
             const CONFETTI_COUNT = 50;
-            const CELEBRATION_DATES = [ { date: '2026-04-02', year: 2026 }, { date: '2027-03-22', year: 2027 }, /* Add more */ ];
+            const CELEBRATION_DATES = [ { date: '2026-04-02', year: 2026 }, { date: '2027-03-22', year: 2027 }, ];
             const INTERNAL_CELEBRATION_TYPE = "celebration";
             const INTERNAL_CONGRESS_TYPE = "convention";
-             // Make sure these keys match the keys used in translations.json
             const BASE_ASSIGNMENT_KEYS = {
                  assignCatPreparation: ["assignTypePresident", "assignTypeFieldLeader", "assignTypeAttendantEntry", "assignTypeAttendantAud", "assignTypeCleaning", "assignTypeAudio", "assignTypeVideo"],
                  assignCatMeeting: ["assignTypeConductor", "assignTypeBibleReading", "assignTypeCongStudyReader", "assignTypeCongStudyConductor", "assignTypePublicTalk", "assignTypeChristianLifeTalk", "assignTypeTreasuresTalk", "assignTypeSpiritualGems", "assignTypeMinistrySchool", "assignTypeWatchtowerReader", "assignTypeWatchtowerConductor", "assignTypeFinalPrayer"],
@@ -337,81 +328,67 @@
             const ASSIGNMENT_EMOJIS = { "assignTypePresident": "🧑‍⚖️", "assignTypeFieldLeader": "🗺️", "assignTypeAttendantEntry": "🚪", "assignTypeAttendantAud": "🏛️", "assignTypeCleaning": "🧹", "assignTypeAudio": "🔊", "assignTypeVideo": "📽️", "assignTypeConductor": "🎤", "assignTypeBibleReading": "📖", "assignTypeCongStudyReader": "🤓", "assignTypeCongStudyConductor": "🧑‍🏫", "assignTypePublicTalk": "🗣️", "assignTypeChristianLifeTalk": "💖", "assignTypeTreasuresTalk": "💎", "assignTypeSpiritualGems": "✨", "assignTypeMinistrySchool": "💪", "assignTypeWatchtowerReader": "👀", "assignTypeWatchtowerConductor": "🧐", "assignTypeFinalPrayer": "🙏", "assignTypeAssembly": "🏟️", [INTERNAL_CONGRESS_TYPE]: "🧑‍🤝‍🧑", "convention_day_1": "🧑‍🤝‍🧑", "convention_day_2": "🧑‍🤝‍🧑", "convention_day_3": "🧑‍🤝‍🧑", "assignTypeBethelVisit": "🏢", "assignTypeCustom": "❓", [INTERNAL_CELEBRATION_TYPE]: "🍷", "custom": "✨" };
             const SHORT_ASSIGNMENT_NAME_KEYS = { "assignTypeCongStudyReader": "shortNameCongStudyReader", "assignTypeCongStudyConductor": "shortNameCongStudyConductor", "assignTypeMinistrySchool": "shortNameMinistrySchool", "assignTypeAttendantEntry": "shortNameAttendantEntry", "assignTypeAttendantAud": "shortNameAttendantAud", "assignTypeTreasuresTalk": "shortNameTreasuresTalk", "assignTypeChristianLifeTalk": "shortNameChristianLifeTalk", "assignTypeWatchtowerReader": "shortNameWatchtowerReader", "assignTypeWatchtowerConductor": "shortNameWatchtowerConductor", "convention_day_1": "shortNameConventionD1", "convention_day_2": "shortNameConventionD2", "convention_day_3": "shortNameConventionD3", "assignTypeFieldLeader": "shortNameFieldLeader" };
 
-            // --- Application State ---
             let appData = { assignments: [], frequency: {} };
             let calendarWeekOffset = 0;
             let activeTooltipMarker = null;
 
-             // --- Core Functions ---
-             // Includes migration logic now
             function loadAppData(){
                  const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY);
-                 appData = { assignments: [], frequency: {} }; // Reset before loading
+                 appData = { assignments: [], frequency: {} };
                  if(s){
                      try{
                         const p=JSON.parse(s);
                         if(p && Array.isArray(p.assignments)) appData.assignments = p.assignments;
-                         if(p && typeof p.frequency === 'object' && p.frequency !== null) appData.frequency = p.frequency;
+                        if(p && typeof p.frequency === 'object' && p.frequency !== null) appData.frequency = p.frequency;
 
-                        // Data migration/validation after loading
                          appData.assignments = appData.assignments.map(a => {
-                             if (!a) return null; // Filter out null/undefined items
+                             if (!a) return null;
 
                              if (!a.internalType) {
                                  console.warn("Assignment missing internalType, attempting migration:", a.type || a.id);
                                  if (a.isCelebration) {
                                      a.internalType = INTERNAL_CELEBRATION_TYPE;
-                                 } else if (typeof a.type === 'string' && (a.type.includes('Congresso') || a.type.includes('Convention') || a.type.includes('Asamblea') || a.type.includes('Kongress') || a.type.includes('Assemblée'))) { // Wider heuristic
-                                     // Try matching based on day number if present
+                                 } else if (typeof a.type === 'string' && (a.type.includes('Congresso') || a.type.includes('Convention') || a.type.includes('Asamblea') || a.type.includes('Kongress') || a.type.includes('Assemblée'))) {
                                      if (a.type.includes('1')) a.internalType = "convention_day_1";
                                      else if (a.type.includes('2')) a.internalType = "convention_day_2";
                                      else if (a.type.includes('3')) a.internalType = "convention_day_3";
-                                      else a.internalType = "convention"; // Fallback to main key if no day match
+                                      else a.internalType = INTERNAL_CONGRESS_TYPE;
                                  } else {
-                                     // Try matching standard type based on display text (less reliable)
                                       let possibleKey = null;
-                                      // Create a temporary map of translated names -> keys
                                       const typeMap = {};
                                       for (const catKey in BASE_ASSIGNMENT_KEYS) {
                                           if (Array.isArray(BASE_ASSIGNMENT_KEYS[catKey])) {
                                                BASE_ASSIGNMENT_KEYS[catKey].forEach(typeK => {
                                                   if(typeK !== INTERNAL_CONGRESS_TYPE && typeK !== 'assignTypeCustom') {
-                                                       typeMap[_t(typeK)] = typeK; // Map translated name to key
+                                                       typeMap[_t(typeK)] = typeK;
                                                   }
                                                });
                                           }
                                       }
-                                      possibleKey = typeMap[a.type]; // Look up the old display type
-                                       a.internalType = possibleKey || `custom:${a.type || `unknown_${a.id}`}`; // Fallback to custom
+                                      possibleKey = typeMap[a.type];
+                                      a.internalType = possibleKey || `custom:${a.type || `unknown_${a.id}`}`;
                                        if (!possibleKey) console.log(` > Migrated '${a.type}' to custom type.`);
                                  }
                              }
 
-                             // Update display names based on current language using internal key
                              if (a.internalType && a.internalType !== 'unknown' && !a.internalType.startsWith('custom:')) {
                                 if (a.internalType === INTERNAL_CELEBRATION_TYPE) a.type = _t("celebrationTypeName");
                                 else if (a.internalType === 'convention_day_1') a.type = _t("congressDayPrefix", 1);
                                 else if (a.internalType === 'convention_day_2') a.type = _t("congressDayPrefix", 2);
                                 else if (a.internalType === 'convention_day_3') a.type = _t("congressDayPrefix", 3);
-                                 // Check if key exists in standard lists before translating
-                                 else if (Object.values(BASE_ASSIGNMENT_KEYS).flat().includes(a.internalType)) {
+                                else if (Object.values(BASE_ASSIGNMENT_KEYS).flat().includes(a.internalType)) {
                                      a.type = _t(a.internalType);
-                                 } else {
-                                     // console.warn("Unknown internal type for re-translation:", a.internalType);
-                                     // Leave a.type as is, or set to internal type?
                                  }
                               } else if (a.internalType && a.internalType.startsWith('custom:')) {
-                                  // If somehow display 'type' got lost for custom, restore from key
                                   if (!a.type) a.type = a.internalType.substring(7).replace(/_/g, ' ');
                               }
 
                              return a;
-                         }).filter(a => a && a.internalType !== 'unknown'); // Filter out invalid items
+                         }).filter(a => a && a.internalType !== 'unknown');
 
-                          // Ensure Celebrations are correctly flagged if only internalType was migrated
                           appData.assignments.forEach(a => { if (a.internalType === INTERNAL_CELEBRATION_TYPE) a.isCelebration = true; });
 
-                    } catch(e){ console.error("Error parsing loaded data:", e); appData = { assignments: [], frequency: {} }; /* Reset on critical error */ }
+                    } catch(e){ console.error("Error parsing loaded data:", e); appData = { assignments: [], frequency: {} }; }
                  }
             }
 
@@ -425,53 +402,45 @@
             function dateToYyyyMmDd(d){ try{ if (!(d instanceof Date)) d = new Date(d); if(isNaN(d)) throw new Error("Invalid Date obj"); const year = d.getUTCFullYear(); const month = String(d.getUTCMonth()+1).padStart(2,'0'); const day = String(d.getUTCDate()).padStart(2,'0'); return`${year}-${month}-${day}`; } catch(e) { console.error("dateToYyyyMmDd error:", e, "Input:", d); return null;} }
             function getTodayDateString(){const d=new Date(); return dateToYyyyMmDd(d);}
 
-             // --- CORRECTED formatRelativeDate function ---
              function formatRelativeDate(ds) {
-                if (!ds || !/^\d{4}-\d{2}-\d{2}$/.test(ds)) { return ds || ''; } // Basic validation
-                try { // <<< OUTER TRY BLOCK STARTS HERE
+                if (!ds || !/^\d{4}-\d{2}-\d{2}$/.test(ds)) { return ds || ''; }
+                try {
                     const today = new Date();
                     today.setUTCHours(0, 0, 0, 0);
                     const targetDate = new Date(`${ds}T00:00:00Z`);
                     if (isNaN(targetDate.getTime())) {
                         console.warn("formatRelativeDate: Invalid targetDate from input", ds);
-                        return ds; // Return original string if date is invalid
+                        return ds;
                     }
 
-                    // Check if Intl.RelativeTimeFormat is supported
                     if (typeof Intl !== 'undefined' && typeof Intl.RelativeTimeFormat !== 'undefined') {
                         const rtf = new Intl.RelativeTimeFormat(currentLanguage, { numeric: 'auto', style: 'short' });
                         const diffDays = Math.ceil((targetDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
-                        if (diffDays < -30) return formatDate(ds); // Show full date if long past
-                        if (diffDays < 0) return rtf.format(diffDays, 'day'); // "X days ago" etc.
+                        if (diffDays < -30) return formatDate(ds);
+                        if (diffDays < 0) return rtf.format(diffDays, 'day');
                         if (diffDays === 0) return _t("relativeDateToday");
                         if (diffDays === 1) return _t("relativeDateTomorrow");
 
                         if (diffDays > 1 && diffDays <= 6) {
-                            // Try showing "in X days (Weekday)"
-                            try { // <<< INNER TRY
+                            try {
                                 const weekdayFormat = new Intl.DateTimeFormat(currentLanguage, { weekday: 'short', timeZone: 'UTC' });
                                 const weekday = weekdayFormat.format(targetDate);
                                 return `${rtf.format(diffDays, 'day')} (${weekday})`;
-                            } catch (eInner) { // <<< INNER CATCH
+                            } catch (eInner) {
                                 console.warn("formatRelativeDate: Could not format weekday, falling back.", eInner);
-                                // Fallback if weekday formatting fails
                                 return rtf.format(diffDays, 'day');
-                            } // <<< INNER TRY/CATCH ENDS
+                            }
                         }
-                        // For dates further out (>6 days), just show month/day
                         return formatDate(ds, { day: '2-digit', month: 'short' });
                     } else {
-                         // Fallback if Intl.RelativeTimeFormat is not supported (older browsers)
                          return formatDate(ds);
                     }
-
-                } catch (e) { // <<< ****** CATCH BLOCK FOR OUTER TRY ******
+                } catch (e) {
                     console.error("Error in formatRelativeDate:", e, "Input:", ds);
-                    return formatDate(ds); // Fallback to default format on any unexpected error
-                } // <<< OUTER TRY/CATCH ENDS
+                    return formatDate(ds);
+                }
              }
-             // --- End CORRECTED formatRelativeDate function ---
 
 
              function updateFrequency(internalType) { if (!internalType) return; if (internalType !== 'assignTypeCustom' && !internalType.startsWith('custom:') && !internalType.startsWith('convention_day_') && internalType !== INTERNAL_CELEBRATION_TYPE) { appData.frequency[internalType] = (appData.frequency[internalType] || 0) + 1; } else if (internalType === INTERNAL_CONGRESS_TYPE) { appData.frequency[INTERNAL_CONGRESS_TYPE] = (appData.frequency[INTERNAL_CONGRESS_TYPE] || 0) + 1; }}
@@ -553,7 +522,8 @@
                 else if(calendarWeekOffset===1) calendarWeekLabel.textContent = _t("calendarNextWeek");
                 else calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'short'})} - ${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'short'})}`;
 
-                 prevWeekBtn.disabled = false; nextWeekBtn.disabled = false;
+                prevWeekBtn.disabled = (calendarWeekOffset <= 0);
+                nextWeekBtn.disabled = false;
 
                  const dayNames = [_t("dayMonShort"), _t("dayTueShort"), _t("dayWedShort"), _t("dayThuShort"), _t("dayFriShort"), _t("daySatShort"), _t("daySunShort")];
                  dayNames.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
@@ -563,7 +533,7 @@
                     const cellElement = document.createElement('div'); cellElement.className='day-cell'; if(dateStr===todayStr) cellElement.classList.add('today');
                     const numberSpan=document.createElement('span'); numberSpan.className='day-number'; numberSpan.textContent=currentDate.getUTCDate(); cellElement.appendChild(numberSpan);
                     const assignmentsUl = document.createElement('ul'); assignmentsUl.className='day-assignments'; cellElement.appendChild(assignmentsUl);
-                    const todaysAssignments = appData.assignments.filter(a => a && a.date === dateStr && !a.completed); // Add check for `a` existence
+                    const todaysAssignments = appData.assignments.filter(a => a && a.date === dateStr && !a.completed);
 
                     todaysAssignments.forEach(a => {
                         if (!a.internalType) return;
@@ -591,13 +561,13 @@
                  container.innerHTML = '';
                  if (!appData?.assignments || appData.assignments.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; return; }
 
-                const sorted = [...appData.assignments].filter(a => a && a.internalType) // Ensure item and internalType exist
+                const sorted = [...appData.assignments].filter(a => a && a.internalType)
                     .sort((a,b)=>{
-                    const timeA = a.date ? new Date(a.date+'T00:00:00Z').getTime() : (a.completed ? Infinity : -Infinity); // Handle potentially missing date
+                    const timeA = a.date ? new Date(a.date+'T00:00:00Z').getTime() : (a.completed ? Infinity : -Infinity);
                     const timeB = b.date ? new Date(b.date+'T00:00:00Z').getTime() : (b.completed ? Infinity : -Infinity);
                     if (a.completed !== b.completed) return a.completed ? 1 : -1;
-                    if (isNaN(timeA) && isNaN(timeB)) return 0; // If both dates invalid, keep order
-                    if (isNaN(timeA)) return a.completed ? 1 : -1; // Invalid dates go last if completed, first if not
+                    if (isNaN(timeA) && isNaN(timeB)) return 0;
+                    if (isNaN(timeA)) return a.completed ? 1 : -1;
                     if (isNaN(timeB)) return b.completed ? -1 : 1;
                     if (timeA !== timeB) return timeA - timeB;
                     return (a.type || "").localeCompare(b.type || "", currentLanguage);
@@ -630,16 +600,14 @@
                 const emojiMatch = displayTypeSelected.match(/^(\p{Emoji}\uFE0F?)\s+/u); let cleanDisplayTypeForAlert = emojiMatch ? displayTypeSelected.substring(emojiMatch[0].length) : displayTypeSelected;
                 cleanDisplayTypeForAlert = cleanDisplayTypeForAlert.replace(` (${_t('congressDuration')})`, '').trim();
 
-                // --- Validations ---
                 if (internalTypeSelected === INTERNAL_CELEBRATION_TYPE) { alert(_t("alertAddCelebrationManual")); return; }
                 if (!baseDateString) { alert(_t("alertDateRequired")); assignmentDateInput.focus(); return; }
                 if (!/^\d{4}-\d{2}-\d{2}$/.test(baseDateString)) { alert(_t('alertInvalidDateFormat')); assignmentDateInput.focus(); return; }
                 if (baseDateString < todayS) { alert(_t("alertDateInPast")); assignmentDateInput.focus(); return; }
 
-                // --- Type Specific Logic ---
                  if (internalTypeSelected === 'assignTypeCustom') {
                     const customName = customAssignmentTypeInput.value.trim(); if (!customName) { alert(_t("alertCustomTypeRequired")); customAssignmentTypeInput.focus(); return; }
-                    finalInternalType = 'custom:' + customName.toLowerCase().replace(/[^\p{L}\p{N}_-]+/gu, '_').substring(0, 30); // Better key sanitization
+                    finalInternalType = 'custom:' + customName.toLowerCase().replace(/[^\p{L}\p{N}_-]+/gu, '_').substring(0, 30);
                     finalDisplayType = customName; frequencyTrackingType = null;
                     const customExists = appData.assignments.some(a => a && a.type === finalDisplayType && a.date === baseDateString && !a.completed);
                     if (customExists) { alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString))); return; }
@@ -650,12 +618,11 @@
                      let addedAssignments = [];
                      for (let i = 0; i < 3; i++) { const currentDayDate = new Date(startDate); currentDayDate.setUTCDate(startDate.getUTCDate() + i); const currentDayDateString = dateToYyyyMmDd(currentDayDate); if (!currentDayDateString) { alert(_t("alertErrorAddingCongress")); return; } const dayTypeDisplay = _t('congressDayPrefix', i + 1); const dayTypeInternal = `convention_day_${i + 1}`; addedAssignments.push({ id: Date.now() + Math.random() + i, type: dayTypeDisplay, internalType: dayTypeInternal, date: currentDayDateString, notes: notes, completed: false, isCelebration: false }); }
                      appData.assignments.push(...addedAssignments); updateFrequency(INTERNAL_CONGRESS_TYPE); saveAppData(); renderAll(); resetAndCloseForm(); return;
-                 } else { // Standard type
+                 } else {
                      if (!internalTypeSelected) { alert(_t('alertInvalidTypeDate')); assignmentTypeInput.focus(); return; }
                      finalDisplayType = _t(internalTypeSelected); const exists = appData.assignments.some(a => a && a.internalType === internalTypeSelected && a.date === baseDateString && !a.completed);
                      if (exists) { alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString))); return; }
                  }
-                // --- Add Standard or Custom ---
                  const newAssignment = { id: Date.now() + Math.random(), type: finalDisplayType, internalType: finalInternalType, date: baseDateString, notes: notes, completed: false, isCelebration: false };
                  appData.assignments.push(newAssignment); if (frequencyTrackingType) { updateFrequency(frequencyTrackingType); }
                  saveAppData(); renderAll(); resetAndCloseForm();
@@ -663,7 +630,6 @@
 
              function resetAndCloseForm() { if (assignmentForm) assignmentForm.reset(); if (customTypeGroup) customTypeGroup.style.display = 'none'; if (customAssignmentTypeInput) { customAssignmentTypeInput.value = ''; customAssignmentTypeInput.required = false; } if (assignmentTypeInput) assignmentTypeInput.value = ""; toggleSection('formSection', false); }
 
-             // --- Modal & Action Functions ---
             function showActionModal(id){
                  const a=appData.assignments.find(x=>x && x.id == id);
                  if(!a || !actionModal || !modalTitle || !modalBtnComplete || !modalBtnEdit || !modalBtnDelete || !modalAssignmentIdInput ) return;
@@ -676,7 +642,7 @@
                  if (a.isCelebration){ const todayStr=getTodayDateString(); if(a.date > todayStr){ modalBtnComplete.disabled=true; modalBtnComplete.title = _t("modalCompleteCelebrationFuture"); }}
                  actionModal.classList.add('is-visible');
             }
-            function hideActionModal(){ if(actionModal) actionModal.classList.remove('is-visible'); /* Optionally clear fields: modalAssignmentIdInput.value=''; modalEditDateInput.value=''; modalEditNotesInput.value=''; */ }
+            function hideActionModal(){ if(actionModal) actionModal.classList.remove('is-visible'); }
             function handleCompleteToggle(){ const id=modalAssignmentIdInput.value; const idx=appData.assignments.findIndex(a=>a && a.id==id); if(idx===-1) return; const a=appData.assignments[idx]; if(a.isCelebration){ const todayStr=getTodayDateString(); if(a.date>todayStr){return;}} const willBeCompleted=!a.completed; appData.assignments[idx].completed=willBeCompleted; saveAppData(); renderAll(); if(willBeCompleted){triggerConfetti();} hideActionModal(); }
             function handleEditRequest(){ const id=modalAssignmentIdInput.value; const a=appData.assignments.find(x=>x && x.id==id); if(!a || a.isCelebration || a.internalType?.startsWith('convention_day_') || !modalEditDateInput || !modalEditNotesInput || !modalActionButtonsDiv || !modalEditViewDiv ) return; modalEditDateInput.value=a.date; modalEditNotesInput.value=a.notes||''; modalActionButtonsDiv.style.display='none'; modalEditViewDiv.style.display='flex'; }
             function handleSaveEdit(){ const id=modalAssignmentIdInput.value; const idx=appData.assignments.findIndex(a=>a && a.id==id); if(idx===-1 || appData.assignments[idx].isCelebration || appData.assignments[idx].internalType?.startsWith('convention_day_') || !modalEditDateInput || !modalEditNotesInput) return; const newDate=modalEditDateInput.value; const newNotes=modalEditNotesInput.value.trim(); const todayS=getTodayDateString(); if(!newDate||!/^\d{4}-\d{2}-\d{2}$/.test(newDate)){alert(_t("alertInvalidDate")); modalEditDateInput.focus(); return;} if(newDate < todayS && !appData.assignments[idx].completed){alert(_t("alertDateInPastEdit")); modalEditDateInput.focus(); return;} appData.assignments[idx].date=newDate; appData.assignments[idx].notes=newNotes; saveAppData(); renderAll(); hideActionModal(); }
@@ -684,9 +650,9 @@
             function handleDeleteRequest(){ const id = modalAssignmentIdInput.value; if (id) { deleteAssignment(id); hideActionModal(); } }
 
             function renderAll() {
-                 try { // Add safety wrapper around the whole render cycle
+                 try {
                      ensureCelebrationExists();
-                     loadAppData(); // Must load after ensureCelebration adds potential new item, and before rendering
+                     loadAppData();
                      renderAssignments();
                      renderUpcomingList();
                      renderWeeklyCalendar();
@@ -694,12 +660,10 @@
                      applyTranslationsHTML();
                  } catch (error) {
                      console.error("Critical error during renderAll:", error);
-                     // Display a user-friendly error?
                      document.body.innerHTML = `<div style="padding: 20px; text-align: center; color: var(--error-color);">Application error. Please reload. (${error.message})</div>`;
                  }
              }
 
-             // --- UI Helpers ---
              window.toggleSection = (id, forceState = null) => { const el = document.getElementById(id); if(!el) return; const headerIcon = el.querySelector('.section-header i'); const shouldOpen = forceState === null ? !el.classList.contains('is-open') : forceState; el.classList.toggle('is-open', shouldOpen); if (headerIcon) headerIcon.style.transform = shouldOpen ? 'rotate(90deg)' : 'rotate(0deg)'; };
 
              function showCalendarTooltip(markerElement) {
@@ -709,27 +673,25 @@
                  calendarTooltip.textContent = content;
                  const markerRect = markerElement.getBoundingClientRect(); const gridRect = weeklyCalendarGrid.getBoundingClientRect();
                  const dashboardSection = weeklyCalendarGrid.closest('.dashboard-section');
-                 const dashRect = dashboardSection?.getBoundingClientRect() || { top: 0, left: 0, right: window.innerWidth }; // Fallback
+                 const dashRect = dashboardSection?.getBoundingClientRect() || { top: 0, left: 0, right: window.innerWidth };
 
-                 let top = (markerRect.bottom - gridRect.top) + 5 + (dashboardSection?.scrollTop || 0); let left = (markerRect.left - gridRect.top) + (markerRect.width / 2); // Position relative to grid parent
+                 let top = (markerRect.bottom - gridRect.top) + 5 + (dashboardSection?.scrollTop || 0); let left = (markerRect.left - gridRect.top) + (markerRect.width / 2);
 
-                 calendarTooltip.style.position = 'absolute'; // Ensure it's absolute
+                 calendarTooltip.style.position = 'absolute';
                  calendarTooltip.style.top = `${top}px`; calendarTooltip.style.left = `${left}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)';
                  calendarTooltip.classList.add('is-visible'); activeTooltipMarker = markerElement;
 
-                 requestAnimationFrame(() => { // Boundary check after initial render
+                 requestAnimationFrame(() => {
                        if (!calendarTooltip.classList.contains('is-visible')) return;
                         const tooltipRect = calendarTooltip.getBoundingClientRect();
-                        // Check against the DASHBOARD section boundaries, not grid
                          const rightEdge = dashRect.right - 10; const leftEdge = dashRect.left + 10;
                         let newLeft = left; let newTransform = 'translateX(-50%) translateY(0)';
 
-                        if (tooltipRect.right > rightEdge) { newLeft = (rightEdge - dashRect.left) - (tooltipRect.width / 2); } // Adjust left based on container edge
+                        if (tooltipRect.right > rightEdge) { newLeft = (rightEdge - dashRect.left) - (tooltipRect.width / 2); }
                         else if (tooltipRect.left < leftEdge) { newLeft = (leftEdge - dashRect.left) + (tooltipRect.width / 2); }
 
-                        // Clamp final left position to stay fully within bounds (prevent tiny overflows)
-                         const maxLeft = (dashRect.right - dashRect.left) - tooltipRect.width - 10; // Max left offset within parent
-                         const minLeft = 10; // Min left offset within parent
+                         const maxLeft = (dashRect.right - dashRect.left) - tooltipRect.width - 10;
+                         const minLeft = 10;
                          if(newLeft + (tooltipRect.width * (newTransform.includes('-50%') ? 0.5 : 0)) > maxLeft + 10) newLeft = maxLeft;
                          if(newLeft - (tooltipRect.width * (newTransform.includes('-50%') ? 0.5 : 0)) < minLeft - 10) newLeft = minLeft;
 
@@ -741,12 +703,11 @@
             function hideCalendarTooltip(marker = null) { if (activeTooltipMarker && (marker === null || marker === activeTooltipMarker) && calendarTooltip) { calendarTooltip.classList.remove('is-visible'); activeTooltipMarker = null; }}
             function handleCalendarMarkerClick(event) { const marker = event.target.closest('.assignment-marker'); if (marker) { if(marker === activeTooltipMarker) { hideCalendarTooltip(marker); } else { hideCalendarTooltip(); showCalendarTooltip(marker); } } else if (!event.target.closest('.calendar-tooltip')) { hideCalendarTooltip(); }}
 
-             // --- Initialize App Logic ---
              function initializeAppLogic() {
                 if (!translations || Object.keys(translations).length === 0) { console.error("Cannot initialize: Translations not loaded."); document.body.innerHTML = `<p style='padding:20px; color:red;'>Error loading translations. Please ensure 'translations.json' exists and is valid.</p>`; return; }
                 console.log("Initializing App Logic with language:", currentLanguage);
                 try {
-                    renderAll(); // Render everything based on loaded data/language
+                    renderAll();
                      if (assignmentTypeInput) assignmentTypeInput.dispatchEvent(new Event('change'));
                     toggleSection('formSection', false); toggleSection('listSection', true);
                 } catch(error) {
@@ -755,7 +716,6 @@
                 }
             }
 
-            // --- Global Event Listeners (Setup once) ---
              function setupEventListeners() {
                 if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
                 if (actionModal) actionModal.addEventListener('click',(e)=>{if(e.target===actionModal){hideActionModal();}});
@@ -768,27 +728,26 @@
                 window.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&actionModal?.classList.contains('is-visible')){hideActionModal();}});
                 if (assignmentTypeInput) assignmentTypeInput.addEventListener('change',()=>{ const isCustom = assignmentTypeInput.value === 'assignTypeCustom'; if (customTypeGroup) customTypeGroup.style.display = isCustom ? 'flex' : 'none'; if(customAssignmentTypeInput){ customAssignmentTypeInput.required = isCustom; if(isCustom){ setTimeout(()=>customAssignmentTypeInput.focus(),50); } else { customAssignmentTypeInput.value=''; }} });
                 if (assignmentForm) assignmentForm.addEventListener('submit',addAssignment);
-                if (prevWeekBtn) prevWeekBtn.addEventListener('click', () => { calendarWeekOffset--; renderWeeklyCalendar(); });
+                if (prevWeekBtn) prevWeekBtn.addEventListener('click', () => { if (calendarWeekOffset > 0) { calendarWeekOffset--; renderWeeklyCalendar(); }});
                 if (nextWeekBtn) nextWeekBtn.addEventListener('click', () => { calendarWeekOffset++; renderWeeklyCalendar(); });
                 if (weeklyCalendarGrid) weeklyCalendarGrid.addEventListener('click', handleCalendarMarkerClick);
             }
 
 
-            // --- Initial App Load Sequence ---
              async function initializeApp() {
                  console.log("Starting App Initialization...");
-                 loadThemePreference(); // Non-critical, visual only
+                 loadThemePreference();
                  currentLanguage = getBestInitialLanguage();
                  console.log("Initial language determined:", currentLanguage);
-                 await loadTranslations(); // Crucial step, wait for it
-                 setupEventListeners();   // Setup listeners after elements are known
-                 initializeAppLogic();    // Render UI based on translations/data
+                 await loadTranslations();
+                 setupEventListeners();
+                 initializeAppLogic();
                  console.log("App Initialized.");
              }
 
-            initializeApp(); // Start the entire process
+            initializeApp();
 
-        }); // --- FIM do listener DOMContentLoaded ---
+        });
     </script>
 </body>
 </html>
