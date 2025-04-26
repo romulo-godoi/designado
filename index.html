@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        /* --- CSS OMITIDO PARA BREVIDADE (Igual ao original) --- */
+        /* --- CSS Completo --- */
         :root {
             --bg-color: #0d0d10; --surface-color: #1c1c21; --surface-lighter-color: #25252b;
             --border-color: #333338; --completed-item-bg: #101012; --body-outer-bg: #030304;
@@ -52,8 +52,6 @@
         header.main-header { background: var(--header-bg-gradient); padding:18px 20px; border-bottom:1px solid var(--border-color); flex-shrink:0; text-align:center; z-index: 10; position: relative; display: flex; justify-content: center; align-items: center; transition: background var(--transition-speed-med), border-color var(--transition-speed-med); }
         header.main-header h1 { color:var(--accent-primary-color); font-size: 1.4em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: color var(--transition-speed-med); }
         #themeToggleBtn { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); background:none; border: none; color: var(--text-secondary-color); font-size: 1.3em; cursor: pointer; padding: 5px; line-height: 1; opacity: 0.8; transition: color var(--transition-speed-fast), opacity var(--transition-speed-fast); z-index: 11;} #themeToggleBtn:hover { opacity: 1; }
-        /* Adicione um espaço para o seletor de idioma se for adicioná-lo */
-        /* #languageSelector { position: absolute; top: 50%; left: 15px; transform: translateY(-50%); z-index: 11; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-secondary-color); padding: 2px 5px; border-radius: 4px; font-size: 0.8em; } */
 
         .content-scroll { flex-grow:1; overflow-y:auto; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); } .content-scroll::-webkit-scrollbar { width: 8px; } .content-scroll::-webkit-scrollbar-track { background: var(--scrollbar-track); } .content-scroll::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 4px; border: 2px solid var(--bg-color); }
         .dashboard-section, .collapsible-section { border-bottom: 1px solid var(--border-color); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .dashboard-section { padding: 20px; background-color: var(--surface-color); position: relative; /* Tooltip positioning context */ }
@@ -88,7 +86,6 @@
         .assignment-item.is-completed .assignment-emoji { filter: grayscale(80%); opacity: 0.7; transform: scale(1);}
         .assignment-item.is-completed .assignment-type { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--text-secondary-color); }
         .assignment-notes { font-size: 0.75em; color: var(--text-secondary-color); margin-top: 4px; font-style: italic; }
-        /* *** IMPROVED LIGHT THEME READABILITY ON COLORED ITEMS *** */
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-type { color: #1a1a1e; font-weight: 600; }
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-date,
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-notes { color: #3d3d41; }
@@ -111,8 +108,6 @@
 <body>
      <div class="mobile-view-container">
          <header class="main-header">
-             <!-- Se precisar de um seletor de idioma: -->
-             <!-- <select id="languageSelector"></select> -->
              <h1 data-translate="pageTitle">Minhas Designações</h1>
              <button id="themeToggleBtn" data-translate-title="themeToggleButton"><i class="fas fa-sun"></i></button>
          </header>
@@ -201,6 +196,7 @@
      <div id="calendar-tooltip" class="calendar-tooltip"></div>
 
     <script>
+        // Coloque todo o JavaScript aqui, incluindo i18n, lógica do aplicativo e manipuladores de eventos
         document.addEventListener('DOMContentLoaded', async () => {
             // --- i18n Setup ---
             const SUPPORTED_LANGUAGES = ['pt-BR', 'en', 'es', 'de', 'fr', 'it'];
@@ -240,6 +236,8 @@
                 let translated = langSet[key] || key; // Fallback to key if not found
                 if (args.length > 0) {
                     args.forEach((arg, index) => {
+                        // Regex atualizado para tratar chaves com ou sem números: \{([0-9]+|[a-zA-Z_]+)\}
+                        // Por enquanto, vamos manter simples com números: \{(\d+)\}
                         const placeholder = new RegExp(`\\{${index}\\}`, 'g');
                         translated = translated.replace(placeholder, arg);
                     });
@@ -315,144 +313,155 @@
             const UPCOMING_DAYS = 7; const TOP_N_FREQUENT = 5; const CONFETTI_COUNT = 50;
             const CELEBRATION_DATES = [ { date: '2026-04-02', year: 2026 }, { date: '2027-03-22', year: 2027 }, ];
 
-            // Use INTERNAL, UNTRANSLATED keys here
-            const INTERNAL_CELEBRATION_TYPE = "Celebração"; // For logic/storage
+            const INTERNAL_CELEBRATION_TYPE = "celebration"; // Use a neutral internal key
+            const INTERNAL_CONGRESS_TYPE = "convention"; // Use a neutral internal key
             const BASE_ASSIGNMENT_KEYS = {
                  assignCatPreparation: ["assignTypePresident", "assignTypeFieldLeader", "assignTypeAttendantEntry", "assignTypeAttendantAud", "assignTypeCleaning", "assignTypeAudio", "assignTypeVideo"],
                  assignCatMeeting: ["assignTypeConductor", "assignTypeBibleReading", "assignTypeCongStudyReader", "assignTypeCongStudyConductor", "assignTypePublicTalk", "assignTypeChristianLifeTalk", "assignTypeTreasuresTalk", "assignTypeSpiritualGems", "assignTypeMinistrySchool", "assignTypeWatchtowerReader", "assignTypeWatchtowerConductor", "assignTypeFinalPrayer"],
-                 assignCatEvents: ["assignTypeAssembly", "assignTypeConvention", "assignTypeBethelVisit"],
+                 assignCatEvents: ["assignTypeAssembly", INTERNAL_CONGRESS_TYPE, "assignTypeBethelVisit"], // Put convention key here
                  assignCatOther: ["assignTypeCustom"]
             };
-            const INTERNAL_CONGRESS_TYPE = "Congresso"; // For logic/storage
-            const ASSIGNMENT_EMOJIS = { "assignTypePresident": "🧑‍⚖️", "assignTypeFieldLeader": "🗺️", "assignTypeAttendantEntry": "🚪", "assignTypeAttendantAud": "🏛️", "assignTypeCleaning": "🧹", "assignTypeAudio": "🔊", "assignTypeVideo": "📽️", "assignTypeConductor": "🎤", "assignTypeBibleReading": "📖", "assignTypeCongStudyReader": "🤓", "assignTypeCongStudyConductor": "🧑‍🏫", "assignTypePublicTalk": "🗣️", "assignTypeChristianLifeTalk": "💖", "assignTypeTreasuresTalk": "💎", "assignTypeSpiritualGems": "✨", "assignTypeMinistrySchool": "💪", "assignTypeWatchtowerReader": "👀", "assignTypeWatchtowerConductor": "🧐", "assignTypeFinalPrayer": "🙏", "assignTypeAssembly": "🏟️", "assignTypeConvention": "🧑‍🤝‍🧑", "assignTypeBethelVisit": "🏢", "assignTypeCustom": "❓", [INTERNAL_CELEBRATION_TYPE]: "🍷", [INTERNAL_CONGRESS_TYPE]: "🧑‍🤝‍🧑" };
+             // Map Internal Keys to Emojis
+            const ASSIGNMENT_EMOJIS = { "assignTypePresident": "🧑‍⚖️", "assignTypeFieldLeader": "🗺️", "assignTypeAttendantEntry": "🚪", "assignTypeAttendantAud": "🏛️", "assignTypeCleaning": "🧹", "assignTypeAudio": "🔊", "assignTypeVideo": "📽️", "assignTypeConductor": "🎤", "assignTypeBibleReading": "📖", "assignTypeCongStudyReader": "🤓", "assignTypeCongStudyConductor": "🧑‍🏫", "assignTypePublicTalk": "🗣️", "assignTypeChristianLifeTalk": "💖", "assignTypeTreasuresTalk": "💎", "assignTypeSpiritualGems": "✨", "assignTypeMinistrySchool": "💪", "assignTypeWatchtowerReader": "👀", "assignTypeWatchtowerConductor": "🧐", "assignTypeFinalPrayer": "🙏", "assignTypeAssembly": "🏟️", [INTERNAL_CONGRESS_TYPE]: "🧑‍🤝‍🧑", // Convention emoji
+                "convention_day_1": "🧑‍🤝‍🧑", "convention_day_2": "🧑‍🤝‍🧑", "convention_day_3": "🧑‍🤝‍🧑", // Emoji for specific days
+                "assignTypeBethelVisit": "🏢", "assignTypeCustom": "❓", [INTERNAL_CELEBRATION_TYPE]: "🍷", // Celebration emoji
+                "custom": "❓" // Default emoji for custom types startign with 'custom:'
+             };
              // Keys are INTERNAL types, values are keys for short names in translations
-            const SHORT_ASSIGNMENT_NAME_KEYS = { "assignTypeCongStudyReader": "shortNameCongStudyReader", "assignTypeCongStudyConductor": "shortNameCongStudyConductor", "assignTypeMinistrySchool": "shortNameMinistrySchool", "assignTypeAttendantEntry": "shortNameAttendantEntry", "assignTypeAttendantAud": "shortNameAttendantAud", "assignTypeTreasuresTalk": "shortNameTreasuresTalk", "assignTypeChristianLifeTalk": "shortNameChristianLifeTalk", "assignTypeWatchtowerReader": "shortNameWatchtowerReader", "assignTypeWatchtowerConductor": "shortNameWatchtowerConductor", "Congresso (Dia 1)": "shortNameConventionD1", "Congresso (Dia 2)": "shortNameConventionD2", "Congresso (Dia 3)": "shortNameConventionD3", "assignTypeFieldLeader": "shortNameFieldLeader" };
+            const SHORT_ASSIGNMENT_NAME_KEYS = { "assignTypeCongStudyReader": "shortNameCongStudyReader", "assignTypeCongStudyConductor": "shortNameCongStudyConductor", "assignTypeMinistrySchool": "shortNameMinistrySchool", "assignTypeAttendantEntry": "shortNameAttendantEntry", "assignTypeAttendantAud": "shortNameAttendantAud", "assignTypeTreasuresTalk": "shortNameTreasuresTalk", "assignTypeChristianLifeTalk": "shortNameChristianLifeTalk", "assignTypeWatchtowerReader": "shortNameWatchtowerReader", "assignTypeWatchtowerConductor": "shortNameWatchtowerConductor", "convention_day_1": "shortNameConventionD1", // Short names for specific days
+                "convention_day_2": "shortNameConventionD2", "convention_day_3": "shortNameConventionD3", "assignTypeFieldLeader": "shortNameFieldLeader" };
 
             let appData = { assignments: [], frequency: {} }; let calendarWeekOffset = 0; let activeTooltipMarker = null;
 
-            function loadAppData(){ const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY); if(s){try{const p=JSON.parse(s); appData.assignments=Array.isArray(p.assignments)?p.assignments:[]; appData.frequency=typeof p.frequency==='object'&&p.frequency!==null?p.frequency:{}; appData.assignments=appData.assignments.filter(a => a.internalType !== INTERNAL_CELEBRATION_TYPE || a.isCelebration); } catch(e){console.error("Error loading data:", e); appData={assignments:[],frequency:{}};}} else{appData={assignments:[],frequency:{}};}}
+            function loadAppData(){ const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY); if(s){try{const p=JSON.parse(s); appData.assignments=Array.isArray(p.assignments)?p.assignments:[]; appData.frequency=typeof p.frequency==='object'&&p.frequency!==null?p.frequency:{}; // Migration/Validation: ensure all assignments have an internalType if they are old format appData.assignments = appData.assignments.map(a => { if (!a.internalType && a.type && !a.isCelebration && !a.type.startsWith("Congresso")) { // Guess internal type from old display type if possible // This needs a robust mapping back or store internalType always console.warn("Found assignment without internalType:", a); // Add a default or try to map } if (a.isCelebration && !a.internalType) { a.internalType = INTERNAL_CELEBRATION_TYPE; // Assign internal type to old celebrations } // Update Celebration/Congress display names based on current language and internal type if (a.internalType === INTERNAL_CELEBRATION_TYPE) a.type = _t("celebrationTypeName"); else if (a.internalType === 'convention_day_1') a.type = _t("congressDayPrefix", 1); else if (a.internalType === 'convention_day_2') a.type = _t("congressDayPrefix", 2); else if (a.internalType === 'convention_day_3') a.type = _t("congressDayPrefix", 3); // Other types might need update too if they were saved with translated name? Needs careful handling return a; }); appData.assignments=appData.assignments.filter(a => a.internalType !== INTERNAL_CELEBRATION_TYPE || a.isCelebration); } catch(e){console.error("Error loading data:", e); appData={assignments:[],frequency:{}};}} else{appData={assignments:[],frequency:{}};}}
             function saveAppData(){ try{localStorage.setItem(ASSIGNMENTS_STORAGE_KEY,JSON.stringify(appData));} catch(e){console.error("Failed to save data:", e);}}
             function loadThemePreference() { const savedTheme = localStorage.getItem(THEME_STORAGE_KEY); if (savedTheme === 'light') { document.body.classList.add('light-theme'); themeToggleIcon.classList.remove('fa-sun'); themeToggleIcon.classList.add('fa-moon'); } else { document.body.classList.remove('light-theme'); themeToggleIcon.classList.remove('fa-moon'); themeToggleIcon.classList.add('fa-sun'); } }
             function saveThemePreference(theme) { localStorage.setItem(THEME_STORAGE_KEY, theme); }
             function toggleTheme() { if (document.body.classList.contains('light-theme')) { document.body.classList.remove('light-theme'); themeToggleIcon.classList.remove('fa-moon'); themeToggleIcon.classList.add('fa-sun'); saveThemePreference('dark'); } else { document.body.classList.add('light-theme'); themeToggleIcon.classList.remove('fa-sun'); themeToggleIcon.classList.add('fa-moon'); saveThemePreference('light'); } }
-            function getEmojiForInternalType(internalType){return ASSIGNMENT_EMOJIS[internalType]||'❓';} // Use internal type for emoji lookup
+            function getEmojiForInternalType(internalType){ return ASSIGNMENT_EMOJIS[internalType] || ASSIGNMENT_EMOJIS['custom'] ||'❓'; } // Use internal type for emoji lookup
             function formatDate(d,o={day:'2-digit',month:'2-digit',year:'numeric'}){if(!d)return '';try{const dt=new Date(`${d}T00:00:00Z`);return new Intl.DateTimeFormat(currentLanguage,{...o,timeZone:'UTC'}).format(dt);}catch(e){console.error("Date format error:",e);const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}} // Use currentLanguage
             function dateToYyyyMmDd(d){const dt=new Date(d);return`${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,'0')}-${String(dt.getUTCDate()).padStart(2,'0')}`;}
             function getTodayDateString(){const d=new Date(); return dateToYyyyMmDd(d);}
-            function formatRelativeDate(ds) { try { const today = new Date(); today.setUTCHours(0, 0, 0, 0); const targetDate = new Date(`${ds}T00:00:00Z`); if (isNaN(targetDate.getTime())) return ds; const rtf = new Intl.RelativeTimeFormat(currentLanguage, { numeric: 'auto', style: 'short' }); const diffDays = Math.ceil((targetDate - today) / (1000 * 60 * 60 * 24)); if (diffDays < 0) return formatDate(ds); if (diffDays === 0) return _t("relativeDateToday"); // Use _t for "Today" etc. if (diffDays === 1) return _t("relativeDateTomorrow"); if (diffDays > 1 && diffDays <= 6) { return rtf.format(diffDays, 'day'); } // Use Intl for "in X days" / "next weekday" - this handles future weeks better return formatDate(ds, { day: '2-digit', month: 'short' }); } catch (e) { console.error("Relative date error:", e); return formatDate(ds); } }
-            function updateFrequency(internalType) { if (internalType && internalType !== 'assignTypeCustom' && !internalType.startsWith('Congresso (Dia') && internalType !== INTERNAL_CELEBRATION_TYPE) { appData.frequency[internalType] = (appData.frequency[internalType] || 0) + 1; } else if (internalType === INTERNAL_CONGRESS_TYPE) { appData.frequency[INTERNAL_CONGRESS_TYPE] = (appData.frequency[INTERNAL_CONGRESS_TYPE] || 0) + 1; } }
-            function triggerConfetti(){/* ... Confetti code unchanged ... */}
+            function formatRelativeDate(ds) { try { const today = new Date(); today.setUTCHours(0, 0, 0, 0); const targetDate = new Date(`${ds}T00:00:00Z`); if (isNaN(targetDate.getTime())) return ds; const rtf = new Intl.RelativeTimeFormat(currentLanguage, { numeric: 'auto', style: 'short' }); const diffDays = Math.ceil((targetDate - today) / (1000 * 60 * 60 * 24)); if (diffDays < -30) return formatDate(ds); // Show full date if long past if (diffDays < 0) return rtf.format(diffDays, 'day'); // "X days ago" if (diffDays === 0) return _t("relativeDateToday"); if (diffDays === 1) return _t("relativeDateTomorrow"); if (diffDays > 1 && diffDays <= 6) { const targetDay = targetDate.getUTCDay(); const todayDay = today.getUTCDay(); // If within the same week or next few days, show relative days/weekday const dayNames = [_t("daySunShort"),_t("dayMonShort"), _t("dayTueShort"), _t("dayWedShort"), _t("dayThuShort"), _t("dayFriShort"), _t("daySatShort")]; return `${rtf.format(diffDays, 'day')} (${dayNames[targetDay]})`; } return formatDate(ds, { day: '2-digit', month: 'short' }); } catch (e) { console.error("Relative date error:", e); return formatDate(ds); } }
+             function updateFrequency(internalType) {
+                 if (!internalType) return;
+                // Use internal, language-neutral keys for frequency tracking
+                 if (internalType !== 'assignTypeCustom' && !internalType.startsWith('custom:') && !internalType.startsWith('convention_day_') && internalType !== INTERNAL_CELEBRATION_TYPE) {
+                    appData.frequency[internalType] = (appData.frequency[internalType] || 0) + 1;
+                } else if (internalType === INTERNAL_CONGRESS_TYPE) { // Only track the main 'convention' key once per 3-day addition
+                    appData.frequency[INTERNAL_CONGRESS_TYPE] = (appData.frequency[INTERNAL_CONGRESS_TYPE] || 0) + 1;
+                }
+            }
+             function triggerConfetti(){const c=['var(--accent-primary-color)','var(--accent-alt-color)','var(--success-color)','var(--error-color)','var(--list-color-1)','var(--list-color-3)','var(--list-color-5)'];for(let i=0;i<CONFETTI_COUNT;i++){const p=document.createElement('div');p.classList.add('confetti-piece');p.style.background=c[Math.floor(Math.random()*c.length)];p.style.left=Math.random()*100+'vw';p.style.top=-10-Math.random()*30+'px';p.style.animationDuration=2.5+Math.random()*1.5+'s';p.style.animationDelay=Math.random()*0.5+'s';p.style.transform=`rotate(${Math.random()*360}deg) scale(${0.8+Math.random()*0.4})`;confettiContainer.appendChild(p);setTimeout(()=>{p.remove();},4500);}}
 
             function getNextCelebrationDate(todayStr) { const today = new Date(todayStr + 'T00:00:00Z'); for (const cel of CELEBRATION_DATES) { const celDate = new Date(cel.date + 'T00:00:00Z'); if (celDate >= today) { return cel; } } return CELEBRATION_DATES[CELEBRATION_DATES.length - 1] || null; }
-            function ensureCelebrationExists() { const todayStr = getTodayDateString(); const nextCelebration = getNextCelebrationDate(todayStr); let existingCelebrationIndex = appData.assignments.findIndex(a => a.isCelebration); let needsSave = false; if (!nextCelebration) { return; } const celebrationId = `celebration-${nextCelebration.year}`; if (existingCelebrationIndex !== -1) { const current = appData.assignments[existingCelebrationIndex]; if (current.date !== nextCelebration.date || current.id !== celebrationId) { current.date = nextCelebration.date; current.id = celebrationId; current.internalType = INTERNAL_CELEBRATION_TYPE; // Ensure internal type current.type = _t("celebrationTypeName"); // Update display type if (!current.id.endsWith(String(nextCelebration.year))) { current.completed = false; } needsSave = true; } else if (current.type !== _t("celebrationTypeName")) { current.type = _t("celebrationTypeName"); needsSave = true; // Update display type on language change } } else { const newCelebration = { id: celebrationId, type: _t("celebrationTypeName"), // Display type from translation internalType: INTERNAL_CELEBRATION_TYPE, // Consistent internal type date: nextCelebration.date, notes: _t("celebrationNotes"), completed: false, isCelebration: true }; appData.assignments.push(newCelebration); needsSave = true; } if (needsSave) { saveAppData(); } }
+            function ensureCelebrationExists() { const todayStr = getTodayDateString(); const nextCelebration = getNextCelebrationDate(todayStr); let existingCelebrationIndex = appData.assignments.findIndex(a => a.isCelebration); let needsSave = false; if (!nextCelebration) { return; } const celebrationId = `celebration-${nextCelebration.year}`; if (existingCelebrationIndex !== -1) { const current = appData.assignments[existingCelebrationIndex]; if (current.date !== nextCelebration.date || current.id !== celebrationId || current.internalType !== INTERNAL_CELEBRATION_TYPE) { current.date = nextCelebration.date; current.id = celebrationId; current.internalType = INTERNAL_CELEBRATION_TYPE; current.type = _t("celebrationTypeName"); if (!current.id.endsWith(String(nextCelebration.year))) { current.completed = false; } needsSave = true; } else if (current.type !== _t("celebrationTypeName")) { current.type = _t("celebrationTypeName"); needsSave = true; } } else { const newCelebration = { id: celebrationId, type: _t("celebrationTypeName"), internalType: INTERNAL_CELEBRATION_TYPE, date: nextCelebration.date, notes: _t("celebrationNotes"), completed: false, isCelebration: true }; appData.assignments.push(newCelebration); needsSave = true; } if (needsSave) { saveAppData(); } }
 
-             function updateDropdownOrder() {
-                const select = assignmentTypeInput;
-                const currentSelection = select.value; // Store the *internal key* selected
-                select.innerHTML = `<option value="" disabled selected>${_t("formTypeSelectOption")}</option>`; // Translate default option
+            function updateDropdownOrder() {
+                 const select = assignmentTypeInput;
+                 const currentSelection = select.value;
+                 select.innerHTML = `<option value="" disabled selected>${_t("formTypeSelectOption")}</option>`;
 
-                let allOptions = [];
-                for (const categoryKey in BASE_ASSIGNMENT_KEYS) {
-                    BASE_ASSIGNMENT_KEYS[categoryKey].forEach(typeKey => {
-                         if (typeKey !== 'assignTypeCustom') { // Exclude custom key itself
-                            allOptions.push({
-                                internalValue: typeKey, // Store the non-translatable key
-                                displayText: `${getEmojiForInternalType(typeKey)} ${_t(typeKey)}`, // Translate the display text
-                                categoryKey: categoryKey,
-                                freq: appData.frequency[typeKey] || 0
-                            });
-                        }
-                    });
+                 let allOptions = [];
+                 for (const categoryKey in BASE_ASSIGNMENT_KEYS) {
+                     BASE_ASSIGNMENT_KEYS[categoryKey].forEach(typeKey => {
+                         // Handle normal types and the main Convention key
+                         if (typeKey !== 'assignTypeCustom') {
+                             let displayText;
+                             if (typeKey === INTERNAL_CONGRESS_TYPE) {
+                                 displayText = `${getEmojiForInternalType(typeKey)} ${_t('assignTypeConvention')} (${_t('congressDuration')})`; // Specific text for group option
+                             } else {
+                                 displayText = `${getEmojiForInternalType(typeKey)} ${_t(typeKey)}`; // Standard translation
+                             }
+                             allOptions.push({
+                                 internalValue: typeKey,
+                                 displayText: displayText,
+                                 categoryKey: categoryKey,
+                                 freq: appData.frequency[typeKey] || 0
+                             });
+                         }
+                     });
                  }
-                 // Add Congress (uses INTERNAL_CONGRESS_TYPE for frequency)
-                 const congressKey = INTERNAL_CONGRESS_TYPE; // This is the base key
-                 allOptions.push({
-                    internalValue: congressKey, // Key for 'Congresso' group
-                    displayText: `${getEmojiForInternalType(congressKey)} ${_t('assignTypeConvention')} (${_t('congressDuration')})`,
-                    categoryKey: 'assignCatEvents', // Put it in events
-                    freq: appData.frequency[congressKey] || 0
-                 });
 
-                allOptions.sort((a, b) => (b.freq !== a.freq) ? b.freq - a.freq : a.displayText.localeCompare(b.displayText, currentLanguage)); // Sort by translated text
+                 allOptions.sort((a, b) => (b.freq !== a.freq) ? b.freq - a.freq : a.displayText.localeCompare(b.displayText, currentLanguage));
 
-                const topFreqInternalValues = allOptions.slice(0, TOP_N_FREQUENT).filter(o => o.freq > 0).map(o => o.internalValue);
-                const addedFreq = new Set();
+                 const topFreqInternalValues = allOptions.slice(0, TOP_N_FREQUENT).filter(o => o.freq > 0).map(o => o.internalValue);
+                 const addedFreq = new Set();
 
-                if (topFreqInternalValues.length > 0) {
-                    const fg = document.createElement('optgroup');
-                    fg.label = _t("frequentAssignmentsGroup"); // Translate "Mais Usados"
-                    fg.className = 'frequent-group'; // Keep class for potential styling
-                    allOptions.forEach(o => {
-                        if (topFreqInternalValues.includes(o.internalValue)) {
-                            const op = document.createElement('option');
-                            op.value = o.internalValue; // Use the internal key as value
-                            op.textContent = o.displayText;
-                            fg.appendChild(op);
-                            addedFreq.add(o.internalValue);
-                        }
-                    });
-                    if (fg.childElementCount > 0) select.appendChild(fg);
-                }
+                 if (topFreqInternalValues.length > 0) {
+                     const fg = document.createElement('optgroup');
+                     fg.label = _t("frequentAssignmentsGroup");
+                     fg.className = 'frequent-group';
+                     allOptions.forEach(o => {
+                         if (topFreqInternalValues.includes(o.internalValue)) {
+                             const op = document.createElement('option');
+                             op.value = o.internalValue;
+                             op.textContent = o.displayText;
+                             fg.appendChild(op);
+                             addedFreq.add(o.internalValue);
+                         }
+                     });
+                     if (fg.childElementCount > 0) select.appendChild(fg);
+                 }
 
-                for (const categoryKey in BASE_ASSIGNMENT_KEYS) {
-                    const grp = document.createElement('optgroup');
-                    grp.label = _t(categoryKey); // Translate category names
-                    let hasOpt = false;
+                 for (const categoryKey in BASE_ASSIGNMENT_KEYS) {
+                     const grp = document.createElement('optgroup');
+                     grp.label = _t(categoryKey);
+                     let hasOpt = false;
 
-                    // Sort options within the category by translated display text
-                    const categoryOptions = allOptions
-                        .filter(o => o.categoryKey === categoryKey && !addedFreq.has(o.internalValue))
-                        .sort((a, b) => a.displayText.localeCompare(b.displayText, currentLanguage));
+                     const categoryOptions = allOptions
+                         .filter(o => o.categoryKey === categoryKey && !addedFreq.has(o.internalValue))
+                         .sort((a, b) => a.displayText.localeCompare(b.displayText, currentLanguage));
 
-                    categoryOptions.forEach(o => {
-                         // Use the already prepared options
+                     categoryOptions.forEach(o => {
                          const op = document.createElement('option');
-                         op.value = o.internalValue; // Use internal key as value
+                         op.value = o.internalValue;
                          op.textContent = o.displayText;
                          grp.appendChild(op);
                          hasOpt = true;
-                    });
+                     });
 
-                    if (categoryKey === 'assignCatOther') { // Special handling for 'Other' -> Custom
-                        const custOpt = document.createElement('option');
-                        custOpt.value = 'assignTypeCustom'; // Keep internal key consistent
-                        custOpt.textContent = _t('assignTypeCustom'); // Translate "Personalizado"
-                        grp.appendChild(custOpt);
-                        hasOpt = true;
-                    }
+                     if (categoryKey === 'assignCatOther') { // Special handling for 'Other' -> Custom
+                         const custOpt = document.createElement('option');
+                         custOpt.value = 'assignTypeCustom'; // Keep internal key consistent
+                         custOpt.textContent = `${getEmojiForInternalType('assignTypeCustom')} ${_t('assignTypeCustom')}`; // Translate "Personalizado" + Emoji
+                         grp.appendChild(custOpt);
+                         hasOpt = true;
+                     }
 
-                    if (hasOpt) { select.appendChild(grp); }
-                }
-
-                // Restore previous selection if possible
-                select.value = currentSelection || "";
-                if (!select.value && select.options.length > 1) {
-                     select.options[0].selected = true; // Select the placeholder if nothing else is selected
+                     if (hasOpt) { select.appendChild(grp); }
                  }
-                select.dispatchEvent(new Event('change')); // Trigger change to show/hide custom input
+
+                 select.value = currentSelection || "";
+                 if (!select.value && select.options.length > 1) {
+                      select.options[0].selected = true;
+                  }
+                 select.dispatchEvent(new Event('change'));
              }
 
              function renderWeeklyCalendar(){
                  weeklyCalendarGrid.innerHTML=''; hideCalendarTooltip();
                  const today=new Date(); today.setUTCHours(0,0,0,0);
                  const baseWeek=new Date(today); baseWeek.setUTCDate(today.getUTCDate()+(calendarWeekOffset*7));
-                 const dow=(baseWeek.getUTCDay()+6)%7; // Assuming Monday is first day (0=Mon, 6=Sun)
+                  // Adjust start day based on locale? (e.g., Sunday start in US) - For now, keep Monday start
+                 const dow=(baseWeek.getUTCDay() + 6) % 7; // 0 = Monday, 6 = Sunday
                  const start=new Date(baseWeek); start.setUTCDate(baseWeek.getUTCDate()-dow); start.setUTCHours(0,0,0,0);
                  const end=new Date(start); end.setUTCDate(start.getUTCDate()+6);
 
                  if(calendarWeekOffset===0){calendarWeekLabel.textContent = _t("calendarThisWeek");}
                  else if(calendarWeekOffset===1){calendarWeekLabel.textContent = _t("calendarNextWeek");}
-                 else {calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'2-digit'})} - ${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'2-digit'})}`;}
+                 else {calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'short'})} - ${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'short'})}`;}
 
-                 prevWeekBtn.disabled = (calendarWeekOffset <= 0);
+                 prevWeekBtn.disabled = (calendarWeekOffset <= -52); // Limit past scrolling?
+                 nextWeekBtn.disabled = (calendarWeekOffset >= 52); // Limit future scrolling?
 
-                 // Get translated short day names
+
                  const dayNames = [_t("dayMonShort"), _t("dayTueShort"), _t("dayWedShort"), _t("dayThuShort"), _t("dayFriShort"), _t("daySatShort"), _t("daySunShort")];
                  dayNames.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
 
                  for(let i=0;i<7;i++){
                     const currentDate = new Date(start); currentDate.setUTCDate(start.getUTCDate()+i); const dateStr = dateToYyyyMmDd(currentDate);
-                    const cellElement = document.createElement('div'); cellElement.className='day-cell'; if(calendarWeekOffset===0 && dateStr===getTodayDateString()) cellElement.classList.add('today');
+                    const cellElement = document.createElement('div'); cellElement.className='day-cell'; if(dateStr===getTodayDateString()) cellElement.classList.add('today'); // Highlight actual current day regardless of offset
                     const numberSpan=document.createElement('span'); numberSpan.className='day-number'; numberSpan.textContent=currentDate.getUTCDate(); cellElement.appendChild(numberSpan);
                     const assignmentsUl = document.createElement('ul'); assignmentsUl.className='day-assignments'; cellElement.appendChild(assignmentsUl);
 
@@ -460,48 +469,277 @@
                     todaysAssignments.forEach(a => {
                         const li = document.createElement('li');
                         li.className = 'assignment-marker';
-                        // Get translated short name or full name if no short version exists
-                        const shortNameKey = SHORT_ASSIGNMENT_NAME_KEYS[a.type] || a.internalType; // Use display type key first, then internal if specific congress day etc.
-                        const shortName = shortNameKey ? _t(shortNameKey) : a.type; // Fallback to displayed type
-                        li.textContent = shortName;
-                        li.dataset.fullName = a.type; // Store full *display* name for tooltip
+                        // Get translated short name using internal key or full name if no short version exists
+                        const shortNameKey = SHORT_ASSIGNMENT_NAME_KEYS[a.internalType]; // Use INTERNAL key to look up short name key
+                         const shortName = shortNameKey ? _t(shortNameKey) : (a.type || _t(a.internalType)); // Use translated short name, or fallback to display type, or fallback to translated internal key
+                         li.textContent = shortName;
+                        li.dataset.fullName = a.type || _t(a.internalType); // Store full *display* name for tooltip
                         if (a.notes) { li.dataset.notes = a.notes; }
-                         li.dataset.internalType = a.internalType; // Store internal type if needed for tooltip emoji
+                         li.dataset.internalType = a.internalType; // Store internal type for tooltip emoji
                         assignmentsUl.appendChild(li);
                     });
                     weeklyCalendarGrid.appendChild(cellElement);
                  }
             }
-            function renderUpcomingList(){upcomingList.innerHTML='';const today=new Date();today.setUTCHours(0,0,0,0);const cutoff=new Date(today);cutoff.setUTCDate(today.getUTCDate()+UPCOMING_DAYS);const upcoming=appData.assignments.filter(a=>{try{const d=new Date(a.date+'T00:00:00Z');return !isNaN(d)&&d>=today&&d<cutoff&&!a.completed;}catch(e){return false;}}).sort((a,b)=>new Date(a.date+'T00:00:00Z')-new Date(b.date+'T00:00:00Z'));if(upcoming.length===0){upcomingList.innerHTML=`<li class="no-upcoming">${_t("noUpcomingAssignments", UPCOMING_DAYS)}</li>`;}else{upcoming.forEach(a=>{const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=getEmojiForInternalType(a.internalType)+' '+a.type;const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li);});}}
-            function renderAssignments() { const container = assignmentsListContainer; container.innerHTML = ''; if (appData.assignments.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; return; } const sorted = [...appData.assignments].sort((a,b)=>{ if (a.completed !== b.completed) return a.completed ? 1 : -1; try { return new Date(a.date+'T00:00:00Z') - new Date(b.date+'T00:00:00Z'); } catch (e) { return 0; } }); sorted.forEach(a => { const li = document.createElement('li'); li.className = 'assignment-item'; li.dataset.id = a.id; if (a.isCelebration) li.dataset.iscelebration = "true"; if (a.completed) li.classList.add('is-completed'); const emojiSpan = document.createElement('span'); emojiSpan.className = 'assignment-emoji'; emojiSpan.textContent = getEmojiForInternalType(a.internalType); li.appendChild(emojiSpan); const typeSpan = document.createElement('span'); typeSpan.className = 'assignment-type'; typeSpan.textContent = a.type; li.appendChild(typeSpan); const dateSpan = document.createElement('span'); dateSpan.className = 'assignment-date'; dateSpan.textContent = formatRelativeDate(a.date); li.appendChild(dateSpan); if (a.notes && !a.isCelebration) { const notesSpan = document.createElement('span'); notesSpan.className = 'assignment-notes'; notesSpan.textContent = `(${a.notes})`; li.appendChild(notesSpan); } else if (a.isCelebration && a.date){ const yearSpan = document.createElement('span'); yearSpan.className = 'assignment-notes'; try { yearSpan.textContent = `(${new Date(a.date + 'T00:00:00Z').getUTCFullYear()})`; li.appendChild(yearSpan); } catch (e) {} } li.addEventListener('click', (e) => { const item = e.currentTarget; if (item.dataset.id) { showActionModal(item.dataset.id); } }); container.appendChild(li); }); if (container.children.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; } }
-            function addAssignment(event){event.preventDefault();const internalTypeSelected = assignmentTypeInput.value; // Get the internal, untranslatable key const displayTypeSelected = assignmentTypeInput.options[assignmentTypeInput.selectedIndex]?.textContent || internalTypeSelected; // Get the text shown to user (includes emoji) const baseDateString=assignmentDateInput.value;const notes=assignmentNotesInput.value.trim();let finalInternalType = internalTypeSelected; let finalDisplayType = displayTypeSelected.startsWith('❓') || displayTypeSelected.startsWith('🧑‍⚖️') || displayTypeSelected.startsWith('🗺️') ? displayTypeSelected.substring(displayTypeSelected.indexOf(' ')+1) : displayTypeSelected ; // Remove emoji from start if exists let frequencyTrackingType = internalTypeSelected; const todayS=getTodayDateString();if(internalTypeSelected === INTERNAL_CELEBRATION_TYPE){alert(_t("alertAddCelebrationManual"));return;}if(baseDateString && baseDateString < todayS){alert(_t("alertDateInPast"));assignmentDateInput.focus();return;} if(internalTypeSelected !== 'assignTypeCustom' && internalTypeSelected !== INTERNAL_CONGRESS_TYPE){ const exists = appData.assignments.some(a => a.internalType === internalTypeSelected && a.date === baseDateString && !a.isCelebration); if (exists){alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString)));return;} } else if (internalTypeSelected === 'assignTypeCustom') { finalDisplayType = customAssignmentTypeInput.value.trim(); finalInternalType = 'custom:' + finalDisplayType; // Create a semi-unique internal type frequencyTrackingType = null; // Don't track frequency of custom types by default if(!finalDisplayType){alert(_t("alertCustomTypeRequired"));customAssignmentTypeInput.focus();return;} const customExists = appData.assignments.some(a => a.internalType === finalInternalType && a.date === baseDateString && !a.isCelebration); if (customExists){alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString)));return;} } else if (internalTypeSelected === INTERNAL_CONGRESS_TYPE) { // User selected "Congress (3 days)" const day1Exists = appData.assignments.some(a => a.type.startsWith(_t('congressDayPrefix', 1)) && a.date === baseDateString); if (day1Exists) {alert(_t("alertCongressExists", formatDate(baseDateString))); return;} } if(internalTypeSelected === INTERNAL_CONGRESS_TYPE){ if(!baseDateString){alert(_t("alertCongressDateRequired"));assignmentDateInput.focus();return;} const startDate=new Date(`${baseDateString}T00:00:00Z`);if(isNaN(startDate.getTime())){alert(_t('alertInvalidDate'));return;} let addedCount=0;for(let i=0;i<3;i++){ const currentDayDate=new Date(startDate);currentDayDate.setUTCDate(startDate.getUTCDate()+i);const currentDayDateString=dateToYyyyMmDd(currentDayDate);const dayTypeDisplay = _t('congressDayPrefix', i + 1); // e.g., "Congress (Day 1)" const dayTypeInternal = `convention_day_${i + 1}`; // internal key for this specific day const assignment={id:Date.now()+Math.random()+i,type: dayTypeDisplay, internalType: dayTypeInternal, date:currentDayDateString,notes:notes,completed:false, isCelebration:false};appData.assignments.push(assignment);addedCount++;}if(addedCount===3){ updateFrequency(INTERNAL_CONGRESS_TYPE); // Track the main congress event saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false); } else { alert(_t("alertErrorAddingCongress"));}return; } if (!finalInternalType || internalTypeSelected === 'assignTypeCustom' && !finalDisplayType || !baseDateString){ alert(_t('alertInvalidTypeDate')); if (!baseDateString) assignmentDateInput.focus(); else if (!finalInternalType && internalTypeSelected !== 'assignTypeCustom') assignmentTypeInput.focus(); return; } if(!/^\d{4}-\d{2}-\d{2}$/.test(baseDateString)){alert(_t('alertInvalidDateFormat'));return;}const newAssignment = { id: Date.now() + Math.random(), type: finalDisplayType, internalType: finalInternalType, date: baseDateString, notes: notes, completed: false, isCelebration: false }; appData.assignments.push(newAssignment);if (frequencyTrackingType) { updateFrequency(frequencyTrackingType); } saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false);}
-            function showActionModal(id){const a=appData.assignments.find(x=>x.id==id);if(!a)return;modalAssignmentIdInput.value=id;modalTitle.textContent=`${getEmojiForInternalType(a.internalType)} ${a.type}`;modalActionButtonsDiv.style.display='flex';modalEditViewDiv.style.display='none';modalBtnComplete.textContent = a.completed ? _t("modalUnmarkCompleteButton") : _t("modalMarkCompleteButton"); modalBtnComplete.disabled=false;modalBtnComplete.title='';modalBtnEdit.style.display = a.isCelebration ? 'none':'block';modalBtnDelete.style.display = a.isCelebration ? 'none':'block'; if (a.isCelebration){ const todayStr=getTodayDateString(); if(a.date>todayStr){modalBtnComplete.disabled=true;modalBtnComplete.title = _t("modalCompleteCelebrationFuture");}} else { modalBtnEdit.disabled = a.internalType.startsWith('convention_day_'); // Disable edit for individual Congress days? Or allow note/date edits? Let's disable for now. modalBtnDelete.disabled = a.internalType.startsWith('convention_day_'); // Disable delete for individual Congress days? Easier to delete whole block? } actionModal.classList.add('is-visible');}
+
+             function renderUpcomingList(){upcomingList.innerHTML='';const today=new Date();today.setUTCHours(0,0,0,0);const cutoff=new Date(today);cutoff.setUTCDate(today.getUTCDate()+UPCOMING_DAYS);const upcoming=appData.assignments.filter(a=>{try{const d=new Date(a.date+'T00:00:00Z');return !isNaN(d)&&d>=today&&d<cutoff&&!a.completed;}catch(e){return false;}}).sort((a,b)=>new Date(a.date+'T00:00:00Z')-new Date(b.date+'T00:00:00Z'));if(upcoming.length===0){upcomingList.innerHTML=`<li class="no-upcoming">${_t("noUpcomingAssignments", UPCOMING_DAYS)}</li>`;}else{upcoming.forEach(a=>{const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=getEmojiForInternalType(a.internalType)+' '+(a.type || _t(a.internalType));const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li);});}}
+
+             function renderAssignments() { const container = assignmentsListContainer; container.innerHTML = ''; if (appData.assignments.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; return; } const sorted = [...appData.assignments].sort((a,b)=>{ const dateA = new Date(a.date+'T00:00:00Z').getTime(); const dateB = new Date(b.date+'T00:00:00Z').getTime(); if (a.completed !== b.completed) return a.completed ? 1 : -1; // Incomplete first if (dateA !== dateB) return dateA - dateB; // Then sort by date return (a.type || "").localeCompare(b.type || "", currentLanguage); // Then by type name }); sorted.forEach(a => { const li = document.createElement('li'); li.className = 'assignment-item'; li.dataset.id = a.id; if (a.isCelebration) li.dataset.iscelebration = "true"; if (a.completed) li.classList.add('is-completed'); const emojiSpan = document.createElement('span'); emojiSpan.className = 'assignment-emoji'; emojiSpan.textContent = getEmojiForInternalType(a.internalType); li.appendChild(emojiSpan); const typeSpan = document.createElement('span'); typeSpan.className = 'assignment-type'; typeSpan.textContent = a.type || _t(a.internalType); li.appendChild(typeSpan); const dateSpan = document.createElement('span'); dateSpan.className = 'assignment-date'; dateSpan.textContent = formatRelativeDate(a.date); li.appendChild(dateSpan); if (a.notes && !a.isCelebration) { const notesSpan = document.createElement('span'); notesSpan.className = 'assignment-notes'; notesSpan.textContent = `(${a.notes})`; li.appendChild(notesSpan); } else if (a.isCelebration && a.date){ const yearSpan = document.createElement('span'); yearSpan.className = 'assignment-notes'; try { yearSpan.textContent = `(${new Date(a.date + 'T00:00:00Z').getUTCFullYear()})`; li.appendChild(yearSpan); } catch (e) {} } li.addEventListener('click', (e) => { const item = e.currentTarget; if (item.dataset.id) { showActionModal(item.dataset.id); } }); container.appendChild(li); }); if (container.children.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; } }
+
+             // --- Função addAssignment CORRIGIDA ---
+            function addAssignment(event){
+                event.preventDefault();
+                const internalTypeSelected = assignmentTypeInput.value; // Get the internal, untranslatable key
+                const selectedOptionElement = assignmentTypeInput.options[assignmentTypeInput.selectedIndex];
+                const displayTypeSelected = selectedOptionElement ? selectedOptionElement.textContent : internalTypeSelected; // Get the text shown to user
+                const baseDateString = assignmentDateInput.value;
+                const notes = assignmentNotesInput.value.trim();
+
+                let finalInternalType = internalTypeSelected;
+                // Clean display name for checks/alerts, remove emoji/duration
+                 let finalDisplayType = displayTypeSelected;
+                 const emojiMatch = displayTypeSelected.match(/^(\p{Emoji}\uFE0F?)\s+/u); // Match potential emoji at start
+                 if (emojiMatch) {
+                     finalDisplayType = finalDisplayType.substring(emojiMatch[0].length);
+                 }
+                 finalDisplayType = finalDisplayType.replace(` (${_t('congressDuration')})`, '').trim();
+
+                let frequencyTrackingType = internalTypeSelected; // Base type for freq tracking unless specified otherwise
+                const todayS = getTodayDateString();
+
+                // 1. Check for manually adding Celebration
+                if (internalTypeSelected === INTERNAL_CELEBRATION_TYPE) {
+                    alert(_t("alertAddCelebrationManual"));
+                    return;
+                }
+
+                // 2. Check for past date
+                if (baseDateString && baseDateString < todayS) {
+                    alert(_t("alertDateInPast"));
+                    assignmentDateInput.focus();
+                    return;
+                }
+
+                // 3. Handle different types
+                if (internalTypeSelected !== 'assignTypeCustom' && internalTypeSelected !== INTERNAL_CONGRESS_TYPE) {
+                    // Standard assignment type
+                    const exists = appData.assignments.some(a => a.internalType === internalTypeSelected && a.date === baseDateString && !a.isCelebration);
+                    if (exists) {
+                        alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString)));
+                        return;
+                    }
+                    // Proceed to add standard assignment later
+                } else if (internalTypeSelected === 'assignTypeCustom') {
+                    // Custom assignment type
+                    const customName = customAssignmentTypeInput.value.trim();
+                    if (!customName) {
+                        alert(_t("alertCustomTypeRequired"));
+                        customAssignmentTypeInput.focus();
+                        return;
+                    }
+                    // Make internal type reasonably unique but avoid overly long keys
+                    finalInternalType = 'custom:' + customName.toLowerCase().replace(/\s+/g, '_').substring(0, 30);
+                    finalDisplayType = customName; // Use the user-entered name for display
+                    frequencyTrackingType = null; // Don't track frequency of custom types by default
+
+                    const customExists = appData.assignments.some(a => a.type === finalDisplayType && a.date === baseDateString && !a.isCelebration); // Check custom by display name
+                    if (customExists) {
+                        alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString)));
+                        return;
+                    }
+                     // Proceed to add custom assignment later
+                } else if (internalTypeSelected === INTERNAL_CONGRESS_TYPE) {
+                    // User selected the "Convention (3 days)" option
+                    // Check if Day 1 already exists for this start date
+                    const day1InternalType = `convention_day_1`;
+                     const day1Exists = appData.assignments.some(a => a.internalType === day1InternalType && a.date === baseDateString);
+                    if (day1Exists) {
+                        alert(_t("alertCongressExists", formatDate(baseDateString)));
+                        return; // Exit if convention already starts on this day
+                    }
+
+                    // --- Add the 3 Convention Days ---
+                    if (!baseDateString) {
+                        alert(_t("alertCongressDateRequired"));
+                        assignmentDateInput.focus();
+                        return;
+                    }
+                    const startDate = new Date(`${baseDateString}T00:00:00Z`);
+                    if (isNaN(startDate.getTime())) {
+                        alert(_t('alertInvalidDate'));
+                        return;
+                    }
+
+                    let addedCount = 0;
+                    for (let i = 0; i < 3; i++) {
+                        const currentDayDate = new Date(startDate);
+                        currentDayDate.setUTCDate(startDate.getUTCDate() + i);
+                        const currentDayDateString = dateToYyyyMmDd(currentDayDate);
+                        const dayTypeDisplay = _t('congressDayPrefix', i + 1); // e.g., "Congresso (Dia 1)"
+                        const dayTypeInternal = `convention_day_${i + 1}`; // internal key for this specific day
+                        const assignment = {
+                            id: Date.now() + Math.random() + i,
+                            type: dayTypeDisplay,           // Translated display name
+                            internalType: dayTypeInternal,   // Consistent internal key
+                            date: currentDayDateString,
+                            notes: notes,
+                            completed: false,
+                            isCelebration: false
+                        };
+                        appData.assignments.push(assignment);
+                        addedCount++;
+                    }
+
+                    if (addedCount === 3) {
+                        updateFrequency(INTERNAL_CONGRESS_TYPE); // Track the main 'convention' event once
+                        saveAppData();
+                        renderAll();
+                        // updateDropdownOrder(); // renderAll calls this
+                        assignmentForm.reset();
+                        customTypeGroup.style.display = 'none';
+                        customAssignmentTypeInput.value = '';
+                        customAssignmentTypeInput.required = false;
+                        assignmentTypeInput.value = "";
+                        toggleSection('formSection', false); // Close form section
+                    } else {
+                        alert(_t("alertErrorAddingCongress"));
+                        // Consider removing partially added days if error occurs (more complex)
+                    }
+                    return; // Important: Exit function after handling Convention
+                    // --- End of Convention Logic ---
+                }
+
+                 // 4. General Validation (after specific type checks)
+                if (!finalInternalType || (internalTypeSelected === 'assignTypeCustom' && !finalDisplayType) || !baseDateString) {
+                   alert(_t('alertInvalidTypeDate'));
+                   if (!baseDateString) assignmentDateInput.focus();
+                   // else if (!finalInternalType && internalTypeSelected !== 'assignTypeCustom') assignmentTypeInput.focus(); // Logic changed for custom
+                   return;
+                }
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(baseDateString)) {
+                   alert(_t('alertInvalidDateFormat'));
+                   return;
+                }
+
+                // 5. Add Standard or Custom Assignment (if not returned earlier)
+                const newAssignment = {
+                    id: Date.now() + Math.random(),
+                    type: finalDisplayType,         // User-visible name (cleaned for custom)
+                    internalType: finalInternalType, // Consistent internal key
+                    date: baseDateString,
+                    notes: notes,
+                    completed: false,
+                    isCelebration: false
+                };
+                appData.assignments.push(newAssignment);
+
+                if (frequencyTrackingType) {
+                    updateFrequency(frequencyTrackingType); // Track frequency for standard types
+                }
+
+                saveAppData();
+                renderAll();
+                // updateDropdownOrder(); // renderAll calls this
+                assignmentForm.reset();
+                customTypeGroup.style.display = 'none';
+                customAssignmentTypeInput.value = '';
+                customAssignmentTypeInput.required = false;
+                assignmentTypeInput.value = ""; // Reset select dropdown
+                toggleSection('formSection', false); // Close form section
+            } // --- Fim da função addAssignment CORRIGIDA ---
+
+
+            function showActionModal(id){
+                const a=appData.assignments.find(x=>x.id==id);
+                if(!a) return;
+                modalAssignmentIdInput.value=id;
+                modalTitle.textContent=`${getEmojiForInternalType(a.internalType)} ${a.type || _t(a.internalType)}`; // Display name or translated internal
+                modalActionButtonsDiv.style.display='flex';
+                modalEditViewDiv.style.display='none';
+
+                modalBtnComplete.textContent = a.completed ? _t("modalUnmarkCompleteButton") : _t("modalMarkCompleteButton");
+                modalBtnComplete.disabled = false;
+                modalBtnComplete.title = '';
+
+                // Disable Edit/Delete for Celebration and specific Convention Days
+                const canEditDelete = !a.isCelebration && !a.internalType?.startsWith('convention_day_');
+
+                modalBtnEdit.style.display = canEditDelete ? 'block' : 'none';
+                modalBtnDelete.style.display = canEditDelete ? 'block' : 'none';
+                modalBtnEdit.disabled = !canEditDelete; // Explicitly disable too
+                modalBtnDelete.disabled = !canEditDelete;
+
+                 if (a.isCelebration){
+                    const todayStr=getTodayDateString();
+                    if(a.date > todayStr){
+                        modalBtnComplete.disabled=true;
+                        modalBtnComplete.title = _t("modalCompleteCelebrationFuture");
+                    }
+                 }
+                 actionModal.classList.add('is-visible');
+            }
             function hideActionModal(){actionModal.classList.remove('is-visible');modalAssignmentIdInput.value='';modalEditDateInput.value='';modalEditNotesInput.value='';}
             function handleCompleteToggle(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1)return;const a=appData.assignments[idx];if(a.isCelebration){const todayStr=getTodayDateString();if(a.date>todayStr){console.warn("Attempt to complete celebration before date.");return;}}const willBeCompleted=!a.completed;appData.assignments[idx].completed=willBeCompleted;saveAppData();renderAll();if(willBeCompleted){triggerConfetti();}hideActionModal();}
-            function handleEditRequest(){const id=modalAssignmentIdInput.value;const a=appData.assignments.find(x=>x.id==id);if(!a || a.isCelebration || a.internalType.startsWith('convention_day_'))return; modalEditDateInput.value=a.date;modalEditNotesInput.value=a.notes||'';modalActionButtonsDiv.style.display='none';modalEditViewDiv.style.display='flex';}
-            function handleSaveEdit(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1 || appData.assignments[idx].isCelebration || appData.assignments[idx].internalType.startsWith('convention_day_')) return; const newDate=modalEditDateInput.value;const newNotes=modalEditNotesInput.value.trim();const todayS=getTodayDateString();if(!newDate||!/^\d{4}-\d{2}-\d{2}$/.test(newDate)){alert(_t("alertInvalidDate"));modalEditDateInput.focus();return;}if(newDate < todayS && !appData.assignments[idx].completed){alert(_t("alertDateInPastEdit"));modalEditDateInput.focus();return;}appData.assignments[idx].date=newDate;appData.assignments[idx].notes=newNotes;saveAppData();renderAll();hideActionModal();}
-            function deleteAssignment(id){ const a = appData.assignments.find(x => x.id == id); if (!a || a.isCelebration) return; // Handle Congress days - potentially delete all 3 if one is deleted? // For now, just allow deleting non-celebration, non-congress days if (!a.internalType.startsWith('convention_day_')) { appData.assignments = appData.assignments.filter(x => x.id != id); } else { // Advanced: Find the start date and delete all 3 days // Simple: Just filter this one out - might leave orphans. // Let's go simple for now. Consider revising. appData.assignments = appData.assignments.filter(x => x.id != id); alert(_t("alertNoteDeletingCongressDay")); // Warn user maybe? } saveAppData(); renderAll();}
+            function handleEditRequest(){const id=modalAssignmentIdInput.value;const a=appData.assignments.find(x=>x.id==id);if(!a || a.isCelebration || a.internalType?.startsWith('convention_day_')) return; modalEditDateInput.value=a.date;modalEditNotesInput.value=a.notes||'';modalActionButtonsDiv.style.display='none';modalEditViewDiv.style.display='flex';}
+            function handleSaveEdit(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1 || appData.assignments[idx].isCelebration || appData.assignments[idx].internalType?.startsWith('convention_day_')) return; const newDate=modalEditDateInput.value;const newNotes=modalEditNotesInput.value.trim();const todayS=getTodayDateString();if(!newDate||!/^\d{4}-\d{2}-\d{2}$/.test(newDate)){alert(_t("alertInvalidDate"));modalEditDateInput.focus();return;}if(newDate < todayS && !appData.assignments[idx].completed){alert(_t("alertDateInPastEdit"));modalEditDateInput.focus();return;}appData.assignments[idx].date=newDate;appData.assignments[idx].notes=newNotes;saveAppData();renderAll();hideActionModal();}
+            function deleteAssignment(id){ const a = appData.assignments.find(x => x.id == id); if (!a || a.isCelebration || a.internalType?.startsWith('convention_day_')) { console.warn("Delete prevented for celebration or convention day:", id); return; } appData.assignments = appData.assignments.filter(x => x.id != id); saveAppData(); renderAll(); }
             function handleDeleteRequest(){ const id = modalAssignmentIdInput.value; deleteAssignment(id); hideActionModal();}
-            function renderAll() { ensureCelebrationExists(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar(); updateDropdownOrder(); } // Add updateDropdownOrder here too
+
+             function renderAll() {
+                 ensureCelebrationExists(); // Ensure celebration is present/updated first
+                 loadAppData(); // Reload data potentially updated by ensureCelebration or for language name updates
+                 renderAssignments();
+                 renderUpcomingList();
+                 renderWeeklyCalendar();
+                 updateDropdownOrder(); // Ensure dropdown reflects latest data/translations
+                 applyTranslationsHTML(); // Apply static translations again if elements changed
+             }
+
             window.toggleSection = (id, forceState = null) => { const el = document.getElementById(id); if(el) { if (forceState === true) el.classList.add('is-open'); else if (forceState === false) el.classList.remove('is-open'); else el.classList.toggle('is-open'); } };
 
             function showCalendarTooltip(markerElement) {
-                 const fullName = markerElement.dataset.fullName; // Already display name
+                 const fullName = markerElement.dataset.fullName;
                  const notes = markerElement.dataset.notes;
                  const internalType = markerElement.dataset.internalType;
-                 if (!fullName) return;
-                 // Use internal type to get the consistent emoji
+                 if (!internalType) return;
                  let content = getEmojiForInternalType(internalType) + ' ' + fullName;
                  if (notes) { content += ` (${notes})`; }
                  calendarTooltip.textContent = content;
                  const markerRect = markerElement.getBoundingClientRect(); const gridRect = weeklyCalendarGrid.getBoundingClientRect();
-                 let top = markerRect.bottom - gridRect.top + 5 + weeklyCalendarGrid.scrollTop; let left = markerRect.left - gridRect.left + (markerRect.width / 2);
+                 // Adjust position relative to the scroll container
+                 const scrollContainer = weeklyCalendarGrid.closest('.dashboard-section'); // Or direct parent if simpler
+                 const containerRect = scrollContainer.getBoundingClientRect();
+
+                 // Position calculation relative to the grid container itself
+                 let top = markerRect.bottom - gridRect.top + 5; // + scrollContainer.scrollTop; <- Not needed if position: relative
+                 let left = markerRect.left - gridRect.left + (markerRect.width / 2);
+
                  calendarTooltip.style.top = `${top}px`; calendarTooltip.style.left = `${left}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; calendarTooltip.classList.add('is-visible'); activeTooltipMarker = markerElement;
+
+                // Boundary check relative to the dashboard section viewport
                  const tooltipRect = calendarTooltip.getBoundingClientRect();
-                 if (tooltipRect.left < gridRect.left) { calendarTooltip.style.left = `${left + (gridRect.left - tooltipRect.left) + 5}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; }
-                 else if (tooltipRect.right > gridRect.right) { calendarTooltip.style.left = `${left - (tooltipRect.right - gridRect.right) - 5}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; }
-                 // Auto-hide timeout - maybe make this configurable or based on interaction?
-                 setTimeout(hideCalendarTooltip, 3500); // Increased time
+
+                // Ensure tooltip doesn't overflow the main dashboard container horizontally
+                const rightEdge = containerRect.right - 10; // 10px padding
+                const leftEdge = containerRect.left + 10; // 10px padding
+
+                 if (tooltipRect.right > rightEdge) {
+                     calendarTooltip.style.left = `${left - (tooltipRect.right - rightEdge)}px`;
+                      // Keep centered transform unless hitting edge:
+                      calendarTooltip.style.transform = 'translateX(-50%) translateY(0)';
+                      // If still overflows left after adjustment, clamp to left edge
+                      const finalRect = calendarTooltip.getBoundingClientRect();
+                      if(finalRect.left < leftEdge) {
+                           calendarTooltip.style.left = `${leftEdge}px`;
+                           calendarTooltip.style.transform = 'translateX(0) translateY(0)';
+                      }
+                 } else if (tooltipRect.left < leftEdge) {
+                      calendarTooltip.style.left = `${leftEdge}px`;
+                     calendarTooltip.style.transform = 'translateX(0) translateY(0)'; // Align left edge
+                 }
+
+                // Auto-hide timeout
+                 setTimeout(hideCalendarTooltip, 3500);
              }
             function hideCalendarTooltip() { calendarTooltip.classList.remove('is-visible'); activeTooltipMarker = null; }
             function handleCalendarMarkerClick(event) { const marker = event.target.closest('.assignment-marker'); if (marker) { if(marker === activeTooltipMarker) { hideCalendarTooltip(); } else { hideCalendarTooltip(); showCalendarTooltip(marker); } } else if (!event.target.closest('.calendar-tooltip')) { hideCalendarTooltip(); } }
@@ -509,10 +747,10 @@
             // --- Initialize Application Logic (Called after translations load) ---
              function initializeAppLogic() {
                  console.log("Initializing App Logic with language:", currentLanguage);
-                 loadAppData(); // Load saved assignment data
-                 ensureCelebrationExists(); // Add/update auto-celebration
-                 updateDropdownOrder(); // Populate assignment type dropdown with translations
-                 applyTranslationsHTML(); // Ensure all static text is updated again after data load potentially adds elements
+                  // loadAppData moved to renderAll to handle potential language updates to types
+                 // ensureCelebrationExists moved to renderAll
+                 // updateDropdownOrder moved to renderAll
+                 // applyTranslationsHTML moved to renderAll
                  renderAll(); // Render lists, calendar etc. using current language formatters
 
                  // Ensure event listeners related to dynamic content are setup or re-setup if needed
@@ -532,25 +770,10 @@
             window.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&actionModal.classList.contains('is-visible')){hideActionModal();}});
             assignmentTypeInput.addEventListener('change',()=>{ const isCustom = assignmentTypeInput.value === 'assignTypeCustom'; customTypeGroup.style.display = isCustom ? 'flex' : 'none'; customAssignmentTypeInput.required = isCustom; if(isCustom){ setTimeout(()=>customAssignmentTypeInput.focus(),50); } else { customAssignmentTypeInput.value=''; }});
             assignmentForm.addEventListener('submit',addAssignment);
-            prevWeekBtn.addEventListener('click', () => { if (calendarWeekOffset > 0) { calendarWeekOffset--; renderWeeklyCalendar(); } });
-            nextWeekBtn.addEventListener('click', () => { calendarWeekOffset++; renderWeeklyCalendar(); });
+            prevWeekBtn.addEventListener('click', () => { calendarWeekOffset--; renderWeeklyCalendar(); }); // Allow going further back
+            nextWeekBtn.addEventListener('click', () => { calendarWeekOffset++; renderWeeklyCalendar(); }); // Allow going further forward
             weeklyCalendarGrid.addEventListener('click', handleCalendarMarkerClick);
 
-            // Language Selector Event Listener (if you add the dropdown)
-            // const langSelector = document.getElementById('languageSelector');
-            // if (langSelector) {
-            //     SUPPORTED_LANGUAGES.forEach(lang => {
-            //         const option = document.createElement('option');
-            //         option.value = lang;
-            //         // Ideally get language name from translations: _t(`langName_${lang.replace('-', '_')}`) || lang;
-            //         option.textContent = lang; // Simple display for now
-            //         langSelector.appendChild(option);
-            //     });
-            //     langSelector.value = currentLanguage; // Set initial value
-            //     langSelector.addEventListener('change', (e) => {
-            //         setLanguage(e.target.value);
-            //     });
-            // }
 
             // --- Initial App Load ---
              async function initializeApp() {
@@ -564,7 +787,7 @@
              }
 
             initializeApp(); // Start the process
-        };
+        });
     </script>
 </body>
 </html>
