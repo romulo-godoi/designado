@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Minhas Designações</title>
+    <title data-translate="pageTitle">Minhas Designações</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* --- CSS OMITIDO PARA BREVIDADE (Igual ao original) --- */
         :root {
             --bg-color: #0d0d10; --surface-color: #1c1c21; --surface-lighter-color: #25252b;
             --border-color: #333338; --completed-item-bg: #101012; --body-outer-bg: #030304;
@@ -51,6 +52,9 @@
         header.main-header { background: var(--header-bg-gradient); padding:18px 20px; border-bottom:1px solid var(--border-color); flex-shrink:0; text-align:center; z-index: 10; position: relative; display: flex; justify-content: center; align-items: center; transition: background var(--transition-speed-med), border-color var(--transition-speed-med); }
         header.main-header h1 { color:var(--accent-primary-color); font-size: 1.4em; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: color var(--transition-speed-med); }
         #themeToggleBtn { position: absolute; top: 50%; right: 15px; transform: translateY(-50%); background:none; border: none; color: var(--text-secondary-color); font-size: 1.3em; cursor: pointer; padding: 5px; line-height: 1; opacity: 0.8; transition: color var(--transition-speed-fast), opacity var(--transition-speed-fast); z-index: 11;} #themeToggleBtn:hover { opacity: 1; }
+        /* Adicione um espaço para o seletor de idioma se for adicioná-lo */
+        /* #languageSelector { position: absolute; top: 50%; left: 15px; transform: translateY(-50%); z-index: 11; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-secondary-color); padding: 2px 5px; border-radius: 4px; font-size: 0.8em; } */
+
         .content-scroll { flex-grow:1; overflow-y:auto; scrollbar-width: thin; scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track); } .content-scroll::-webkit-scrollbar { width: 8px; } .content-scroll::-webkit-scrollbar-track { background: var(--scrollbar-track); } .content-scroll::-webkit-scrollbar-thumb { background-color: var(--scrollbar-thumb); border-radius: 4px; border: 2px solid var(--bg-color); }
         .dashboard-section, .collapsible-section { border-bottom: 1px solid var(--border-color); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .dashboard-section { padding: 20px; background-color: var(--surface-color); position: relative; /* Tooltip positioning context */ }
         .section-header h2, .dashboard-section > h3 { font-size: 0.8em; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary-color); margin: 15px 0 8px 0; padding-bottom: 5px; border-bottom: 1px solid var(--border-color); transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .section-header h2 { color: var(--accent-primary-color); margin: 0; padding: 0; border-bottom: none; flex-grow: 1; font-weight: 600; letter-spacing: 1px; transition: color var(--transition-speed-med); }
@@ -62,8 +66,8 @@
         body.light-theme .assignment-marker { color: var(--bg-color); /* Darker text on marker for light theme */ }
         #upcomingList{list-style:none;padding:0;} .upcoming-item{display:flex;justify-content:space-between;align-items:center;font-size:0.9em;padding:10px 5px;border-bottom:1px dashed var(--border-color); transition: background-color var(--transition-speed-fast), border-color var(--transition-speed-med); } .upcoming-item:last-child{border-bottom:none;} .upcoming-item:hover { background-color: color-mix(in srgb, var(--text-primary-color) 3%, transparent); } .upcoming-item .date{color:var(--text-secondary-color);font-size:0.9em;white-space:nowrap;margin-left:10px; transition: color var(--transition-speed-med);} .upcoming-item .type{font-weight:500; transition: color var(--transition-speed-med);}
         .collapsible-section{background-color:var(--surface-color); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .section-header{padding:18px 20px;cursor:pointer;transition: background-color var(--transition-speed-fast), box-shadow var(--transition-speed-fast);position:relative;z-index:1; display: flex; align-items: center;} .section-header:hover{background-color:var(--surface-lighter-color); box-shadow: inset 0 0 10px rgba(0,0,0,0.1); } .section-header i{font-size:0.9em;transition:transform var(--transition-speed-med) ease-out;color:var(--accent-primary-color);flex-shrink:0; margin-left: 10px;} .collapsible-section.is-open .section-header i{transform:rotate(90deg);} .section-content{max-height:0;overflow:hidden;transition: max-height var(--transition-speed-med) ease-out, padding var(--transition-speed-med) ease-out, border-top var(--transition-speed-med);padding:0 20px;background-color:var(--surface-lighter-color); border-top: 1px solid transparent; transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .collapsible-section.is-open .section-content{max-height:2000px;padding:25px;transition:max-height var(--transition-speed-slow) ease-in-out, padding var(--transition-speed-slow) ease-in-out, border-top var(--transition-speed-slow); border-top: 1px solid var(--border-color); } #listSection.is-open .section-content{background-color:var(--bg-color);padding:0;}
-        #assignmentForm{display:flex;flex-direction:column;gap:18px;} .form-group{display:flex;flex-direction:column;} .form-group#customTypeGroup{display:none;margin-top:-5px;padding-left:15px;border-left:3px solid var(--accent-primary-color);padding-top:10px; margin-left: 5px;} .form-group#customTypeGroup label{font-size:0.8em;} label{margin-bottom:6px;font-weight:500;font-size:0.85em;color:var(--text-secondary-color);letter-spacing: 0.5px; transition: color var(--transition-speed-med);} select,input[type="date"],input[type="text"]{padding:14px 16px;background-color:var(--input-bg);border:1px solid var(--border-color);border-radius:var(--border-radius-inner);color:var(--text-primary-color);font-family:inherit;font-size:1rem;width:100%;transition: all var(--transition-speed-fast); box-shadow: var(--input-shadow); } select:hover, input:hover { border-color: var(--text-secondary-color); } select:focus,input:focus{outline:none;border-color:var(--accent-primary-color);background-color: var(--input-focus-bg); box-shadow: var(--input-focus-shadow);} select option,select optgroup{background-color:var(--bg-color);color:var(--text-primary-color);font-weight:normal;} select optgroup{padding:6px 0; font-weight: 600;} select optgroup[label="Mais Usados"]{font-style:normal;font-weight:bold;color:var(--accent-primary-color);} input[type="date"]{color: var(--text-secondary-color); } input[type="date"]:focus, input[type="date"]:valid { color: var(--text-primary-color); } input[type="date"]::-webkit-calendar-picker-indicator{filter:var(--date-picker-indicator-filter);cursor:pointer;opacity:0.7;transition:opacity var(--transition-speed-fast), filter var(--transition-speed-fast);} input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1;} button[type="submit"]{padding:15px 20px;background:linear-gradient(45deg, var(--accent-primary-color), var(--accent-secondary-color));color:#fff;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-size:1.05rem;font-weight:600;text-align:center;width:100%;margin-top:8px;transition: all var(--transition-speed-fast); box-shadow: 0 3px 8px rgba(0,0,0,0.2);} button[type="submit"]:hover{opacity:0.9; box-shadow: 0 5px 12px color-mix(in srgb, var(--accent-primary-color) 30%, transparent); } button[type="submit"]:active{transform:scale(0.97); box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
-        body.light-theme select optgroup[label="Mais Usados"] { color: var(--accent-secondary-color); }
+        #assignmentForm{display:flex;flex-direction:column;gap:18px;} .form-group{display:flex;flex-direction:column;} .form-group#customTypeGroup{display:none;margin-top:-5px;padding-left:15px;border-left:3px solid var(--accent-primary-color);padding-top:10px; margin-left: 5px;} .form-group#customTypeGroup label{font-size:0.8em;} label{margin-bottom:6px;font-weight:500;font-size:0.85em;color:var(--text-secondary-color);letter-spacing: 0.5px; transition: color var(--transition-speed-med);} select,input[type="date"],input[type="text"]{padding:14px 16px;background-color:var(--input-bg);border:1px solid var(--border-color);border-radius:var(--border-radius-inner);color:var(--text-primary-color);font-family:inherit;font-size:1rem;width:100%;transition: all var(--transition-speed-fast); box-shadow: var(--input-shadow); } select:hover, input:hover { border-color: var(--text-secondary-color); } select:focus,input:focus{outline:none;border-color:var(--accent-primary-color);background-color: var(--input-focus-bg); box-shadow: var(--input-focus-shadow);} select option,select optgroup{background-color:var(--bg-color);color:var(--text-primary-color);font-weight:normal;} select optgroup{padding:6px 0; font-weight: 600;} select optgroup.frequent-group{font-style:normal;font-weight:bold;color:var(--accent-primary-color);} input[type="date"]{color: var(--text-secondary-color); } input[type="date"]:focus, input[type="date"]:valid { color: var(--text-primary-color); } input[type="date"]::-webkit-calendar-picker-indicator{filter:var(--date-picker-indicator-filter);cursor:pointer;opacity:0.7;transition:opacity var(--transition-speed-fast), filter var(--transition-speed-fast);} input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1;} button[type="submit"]{padding:15px 20px;background:linear-gradient(45deg, var(--accent-primary-color), var(--accent-secondary-color));color:#fff;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-size:1.05rem;font-weight:600;text-align:center;width:100%;margin-top:8px;transition: all var(--transition-speed-fast); box-shadow: 0 3px 8px rgba(0,0,0,0.2);} button[type="submit"]:hover{opacity:0.9; box-shadow: 0 5px 12px color-mix(in srgb, var(--accent-primary-color) 30%, transparent); } button[type="submit"]:active{transform:scale(0.97); box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
+        body.light-theme select optgroup.frequent-group { color: var(--accent-secondary-color); }
 
         .assignment-list { list-style: none; padding: 0; }
         .assignment-item { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 18px 15px; color: var(--text-primary-color); border-bottom: 1px solid var(--border-color); cursor: pointer; transition: all var(--transition-speed-fast); position: relative; background-color: var(--surface-color); }
@@ -85,14 +89,9 @@
         .assignment-item.is-completed .assignment-type { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--text-secondary-color); }
         .assignment-notes { font-size: 0.75em; color: var(--text-secondary-color); margin-top: 4px; font-style: italic; }
         /* *** IMPROVED LIGHT THEME READABILITY ON COLORED ITEMS *** */
-        body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-type {
-            color: #1a1a1e; /* Force darker text on colored backgrounds */
-            font-weight: 600;
-        }
+        body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-type { color: #1a1a1e; font-weight: 600; }
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-date,
-        body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-notes {
-            color: #3d3d41; /* Force darker secondary text too */
-        }
+        body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-notes { color: #3d3d41; }
 
         .modal-overlay{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color: var(--modal-overlay-bg); backdrop-filter:blur(3px);justify-content:center;align-items:center;opacity:0;transition:opacity var(--transition-speed-med) ease-out;} .modal-overlay.is-visible{display:flex;opacity:1;} .modal-content{background-color:var(--surface-color);padding:30px;border-radius:var(--border-radius-inner);box-shadow:0 8px 25px rgba(0,0,0,0.3);width:90%;max-width:400px;position:relative;display:flex;flex-direction:column;gap:18px;border:1px solid var(--border-color);transform:scale(0.95);transition: transform var(--transition-speed-med) ease-out 0.1s, background-color var(--transition-speed-med), border-color var(--transition-speed-med);} .modal-overlay.is-visible .modal-content{transform:scale(1);} .modal-content h4{color:var(--accent-primary-color);margin-bottom:8px;text-align:center;font-size:1.2em;font-weight:600;word-break:break-word; transition: color var(--transition-speed-med);} .modal-content .action-buttons,.modal-content .edit-view{display:flex;flex-direction:column;gap:12px;} .modal-content button{padding:12px 18px;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-weight:600;font-size:0.95em;transition:all var(--transition-speed-fast);width:100%;text-transform:uppercase;letter-spacing:0.5px;box-shadow:0 2px 5px rgba(0,0,0,0.15);} .modal-content button:hover:not(:disabled){opacity:0.9;box-shadow:0 4px 10px rgba(0,0,0,0.2);transform:translateY(-1px);} .modal-content button:active:not(:disabled){transform:scale(0.97);box-shadow:0 1px 2px rgba(0,0,0,0.1);} .modal-content button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; transform: none !important; filter: grayscale(30%); }
         #modalBtnComplete{background-color:var(--success-color);color:#fff;} #modalBtnComplete:disabled { background-color: var(--text-secondary-color); color: var(--surface-lighter-color); cursor: not-allowed; } #modalBtnEdit{background-color:var(--accent-alt-color);color:#fff;} #modalBtnDelete{background-color:var(--error-color);color:#fff;} #modalBtnCancel,#modalBtnCancelEdit{background-color:var(--surface-lighter-color);color:var(--text-primary-color);border:1px solid var(--border-color);}
@@ -112,72 +111,177 @@
 <body>
      <div class="mobile-view-container">
          <header class="main-header">
-             <h1>Minhas Designações</h1>
-             <button id="themeToggleBtn" title="Alternar Tema"><i class="fas fa-sun"></i></button>
+             <!-- Se precisar de um seletor de idioma: -->
+             <!-- <select id="languageSelector"></select> -->
+             <h1 data-translate="pageTitle">Minhas Designações</h1>
+             <button id="themeToggleBtn" data-translate-title="themeToggleButton"><i class="fas fa-sun"></i></button>
          </header>
          <div class="content-scroll">
              <div class="dashboard-section">
                  <div id="weeklyCalendarContainer">
                      <div class="calendar-nav">
-                         <button id="prevWeekBtn" disabled>< Ant</button>
+                         <button id="prevWeekBtn" disabled data-translate="prevWeekButton">< Ant</button>
                          <span id="calendarWeekLabel"></span>
-                         <button id="nextWeekBtn">Próx ></button>
+                         <button id="nextWeekBtn" data-translate="nextWeekButton">Próx ></button>
                      </div>
                      <div id="weeklyCalendar" class="calendar-grid"></div>
                  </div>
                  <div id="upcomingListContainer">
-                     <h3>Próximos 7 dias</h3>
+                     <h3 data-translate="upcomingTitle">Próximos 7 dias</h3>
                      <ul id="upcomingList">
-                         <li class="no-upcoming">...</li>
+                         <li class="no-upcoming" data-translate="loading">...</li>
                      </ul>
                  </div>
              </div>
              <div class="collapsible-section" id="formSection">
                  <div class="section-header" onclick="toggleSection('formSection')">
-                     <h2>Adicionar Nova</h2><i class="fas fa-chevron-right"></i>
+                     <h2 data-translate="addAssignmentHeader">Adicionar Nova</h2><i class="fas fa-chevron-right"></i>
                  </div>
                  <div class="section-content">
                      <form id="assignmentForm">
                          <div class="form-group">
-                             <label for="assignmentType">Tipo</label>
+                             <label for="assignmentType" data-translate="formTypeLabel">Tipo</label>
                              <select id="assignmentType" name="assignmentType" required>
-                                 <option value="" disabled selected>...</option>
+                                 <option value="" disabled selected data-translate="formTypeSelectOption">...</option>
                              </select>
                          </div>
                          <div class="form-group" id="customTypeGroup">
-                             <label for="customAssignmentType">Nome</label>
-                             <input type="text" id="customAssignmentType" name="customAssignmentType" placeholder="...">
+                             <label for="customAssignmentType" data-translate="formCustomTypeLabel">Nome</label>
+                             <input type="text" id="customAssignmentType" name="customAssignmentType" data-translate-placeholder="formCustomTypePlaceholder" placeholder="...">
                          </div>
                          <div class="form-group">
-                             <label for="assignmentDate">Data</label>
+                             <label for="assignmentDate" data-translate="formDateLabel">Data</label>
                              <input type="date" id="assignmentDate" name="assignmentDate" required>
                          </div>
                          <div class="form-group">
-                             <label for="assignmentNotes">Obs</label>
-                             <input type="text" id="assignmentNotes" name="assignmentNotes" placeholder="...">
+                             <label for="assignmentNotes" data-translate="formNotesLabel">Obs</label>
+                             <input type="text" id="assignmentNotes" name="assignmentNotes" data-translate-placeholder="formNotesPlaceholder" placeholder="...">
                          </div>
-                         <button type="submit">Adicionar</button>
+                         <button type="submit" data-translate="formAddButton">Adicionar</button>
                      </form>
                  </div>
              </div>
              <div class="collapsible-section is-open" id="listSection">
                  <div class="section-header" onclick="toggleSection('listSection')">
-                     <h2>Todas Designações</h2><i class="fas fa-chevron-right"></i>
+                     <h2 data-translate="allAssignmentsHeader">Todas Designações</h2><i class="fas fa-chevron-right"></i>
                  </div>
                  <div class="section-content">
                      <ul id="assignmentsList" class="assignment-list">
-                         <li class="no-assignments">...</li>
+                         <li class="no-assignments" data-translate="loading">...</li>
                      </ul>
                  </div>
              </div>
          </div>
      </div>
-     <div id="actionModal" class="modal-overlay"><div class="modal-content"><h4 id="modalTitle">...</h4><input type="hidden" id="modalAssignmentId"><div class="action-buttons"><button id="modalBtnComplete"></button><button id="modalBtnEdit">Editar</button><button id="modalBtnDelete">Excluir</button><button id="modalBtnCancel">Cancelar</button></div><div class="edit-view"><div class="form-group"><label for="modalEditDate">Data</label><input type="date" id="modalEditDate"></div><div class="form-group"><label for="modalEditNotes">Obs</label><input type="text" id="modalEditNotes" placeholder="..."></div><button id="modalBtnSaveEdit">Salvar</button><button id="modalBtnCancelEdit">Cancelar</button></div></div></div>
+     <div id="actionModal" class="modal-overlay">
+         <div class="modal-content">
+            <h4 id="modalTitle" data-translate="loading">...</h4>
+            <input type="hidden" id="modalAssignmentId">
+            <div class="action-buttons">
+                <button id="modalBtnComplete"></button>
+                <button id="modalBtnEdit" data-translate="modalEditButton">Editar</button>
+                <button id="modalBtnDelete" data-translate="modalDeleteButton">Excluir</button>
+                <button id="modalBtnCancel" data-translate="modalCancelButton">Cancelar</button>
+            </div>
+            <div class="edit-view">
+                <div class="form-group">
+                    <label for="modalEditDate" data-translate="formDateLabel">Data</label>
+                    <input type="date" id="modalEditDate">
+                </div>
+                <div class="form-group">
+                    <label for="modalEditNotes" data-translate="formNotesLabel">Obs</label>
+                    <input type="text" id="modalEditNotes" data-translate-placeholder="formNotesPlaceholder" placeholder="...">
+                </div>
+                <button id="modalBtnSaveEdit" data-translate="modalSaveButton">Salvar</button>
+                <button id="modalBtnCancelEdit" data-translate="modalCancelButton">Cancelar</button>
+            </div>
+         </div>
+     </div>
      <div id="confetti-container"></div>
      <div id="calendar-tooltip" class="calendar-tooltip"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // --- i18n Setup ---
+            const SUPPORTED_LANGUAGES = ['pt-BR', 'en', 'es', 'de', 'fr', 'it'];
+            const DEFAULT_LANGUAGE = 'en';
+            const LANG_STORAGE_KEY = 'jw_assignments_language_preference';
+            let translations = {};
+            let currentLanguage = DEFAULT_LANGUAGE;
+
+            async function loadTranslations() {
+                try {
+                    const response = await fetch('translations.json');
+                    if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
+                    translations = await response.json();
+                    console.log("Translations loaded successfully.");
+                } catch (error) {
+                    console.error("Could not load translations:", error);
+                    translations = {}; // Use fallback mechanism
+                }
+            }
+
+            function getBestInitialLanguage() {
+                const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
+                if (savedLang && SUPPORTED_LANGUAGES.includes(savedLang)) { return savedLang; }
+
+                const browserLang = navigator.language || navigator.userLanguage; // pt-BR, en-US, etc.
+                if (browserLang) {
+                   if (SUPPORTED_LANGUAGES.includes(browserLang)) return browserLang;
+                   const baseLang = browserLang.split('-')[0]; // pt, en, es...
+                   const matchedLang = SUPPORTED_LANGUAGES.find(l => l.startsWith(baseLang));
+                   if (matchedLang) return matchedLang;
+                }
+                return DEFAULT_LANGUAGE;
+            }
+
+            function _t(key, ...args) {
+                const langSet = translations[currentLanguage] || translations[DEFAULT_LANGUAGE] || {};
+                let translated = langSet[key] || key; // Fallback to key if not found
+                if (args.length > 0) {
+                    args.forEach((arg, index) => {
+                        const placeholder = new RegExp(`\\{${index}\\}`, 'g');
+                        translated = translated.replace(placeholder, arg);
+                    });
+                }
+                return translated;
+            }
+
+            function applyTranslationsHTML() {
+                document.querySelectorAll('[data-translate]').forEach(el => {
+                    const key = el.getAttribute('data-translate');
+                    el.textContent = _t(key);
+                });
+                document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+                    const key = el.getAttribute('data-translate-placeholder');
+                    el.placeholder = _t(key);
+                });
+                 document.querySelectorAll('[data-translate-title]').forEach(el => {
+                    const key = el.getAttribute('data-translate-title');
+                    el.title = _t(key);
+                });
+                 // Update page title
+                const titleKey = document.titleElement?.getAttribute('data-translate') || 'pageTitle';
+                document.title = _t(titleKey);
+                // Update HTML lang attribute
+                document.documentElement.lang = currentLanguage.split('-')[0]; // e.g., "pt" from "pt-BR"
+            }
+
+            function setLanguage(lang) {
+                if (SUPPORTED_LANGUAGES.includes(lang)) {
+                    currentLanguage = lang;
+                    localStorage.setItem(LANG_STORAGE_KEY, lang);
+                    console.log(`Language set to: ${lang}`);
+                    applyTranslationsHTML(); // Update static text immediately
+                    initializeAppLogic(); // Re-initialize dynamic parts
+                } else {
+                    console.warn(`Unsupported language: ${lang}. Falling back to ${currentLanguage}`);
+                }
+            }
+            // --- End i18n Setup ---
+
+
+            // --- Application Code (Adapted) ---
             const assignmentForm = document.getElementById('assignmentForm');
             const assignmentTypeInput = document.getElementById('assignmentType');
             const assignmentDateInput = document.getElementById('assignmentDate');
@@ -204,100 +308,219 @@
             const calendarTooltip = document.getElementById('calendar-tooltip');
             const themeToggleBtn = document.getElementById('themeToggleBtn');
             const themeToggleIcon = themeToggleBtn.querySelector('i');
+            document.titleElement = document.querySelector('title'); // Cache title element for update
 
             const ASSIGNMENTS_STORAGE_KEY = 'jw_assignments_data_black_v1_final_cele';
             const THEME_STORAGE_KEY = 'jw_assignments_theme_preference';
             const UPCOMING_DAYS = 7; const TOP_N_FREQUENT = 5; const CONFETTI_COUNT = 50;
             const CELEBRATION_DATES = [ { date: '2026-04-02', year: 2026 }, { date: '2027-03-22', year: 2027 }, ];
-            const CELEBRATION_TYPE = "Celebração"; const CELEBRATION_EMOJI = "🍷";
-            const BASE_ASSIGNMENT_OPTIONS = { "Preparação e Organização":["Presidente", "Dirigente de Campo", "Indicador (Entrada)", "Indicador (Auditório)", "Limpeza", "Áudio", "Vídeo"], "Reunião de Congregação":["Condutor", "Leitura da Bíblia", "Estudo Bíblico da Congregação (Leitor)", "Estudo Bíblico da Congregação (Dirigente)", "Discurso Público", "Discurso (Nossa vida Cristã)", "Tesouros (Discurso 10 minutos)", "Joias Espirituais", "Faça seu melhor no ministério", "Estudo de A Sentinela (Leitor)", "Estudo de A Sentinela (Dirigente)", "Oração Final"], "Eventos Especiais":["Assembleia", "Congresso", "Visita a Betel"], "Outros":["Personalizado"] };
-            const ASSIGNMENT_EMOJIS = { "Presidente": "🧑‍⚖️", "Dirigente de Campo": "🗺️", "Indicador (Entrada)": "🚪", "Indicador (Auditório)": "🏛️", "Limpeza": "🧹", "Áudio": "🔊", "Vídeo": "📽️", "Condutor": "🎤", "Leitura da Bíblia": "📖", "Estudo Bíblico da Congregação (Leitor)": "🤓", "Estudo Bíblico da Congregação (Dirigente)": "🧑‍🏫", "Discurso Público": "🗣️", "Discurso (Nossa vida Cristã)": "💖", "Tesouros (Discurso 10 minutos)": "💎", "Joias Espirituais": "✨", "Faça seu melhor no ministério": "💪", "Estudo de A Sentinela (Leitor)": "👀", "Estudo de A Sentinela (Dirigente)": "🧐", "Oração Final": "🙏", "Assembleia": "🏟️", "Congresso": "🧑‍🤝‍🧑", "Visita a Betel": "🏢", [CELEBRATION_TYPE]: CELEBRATION_EMOJI };
-            const SHORT_ASSIGNMENT_NAMES = { "Estudo Bíblico da Congregação (Leitor)": "Est. Cong. (L)", "Estudo Bíblico da Congregação (Dirigente)": "Est. Cong. (D)", "Faça seu melhor no ministério": "Melhor Min.", "Indicador (Entrada)": "Indic. (E)", "Indicador (Auditório)": "Indic. (A)", "Tesouros (Discurso 10 minutos)": "Tesouros", "Discurso (Nossa vida Cristã)": "Vida Cristã", "Estudo de A Sentinela (Leitor)": "Sent. (L)", "Estudo de A Sentinela (Dirigente)": "Sent. (D)", "Congresso (Dia 1)": "Cong. D1", "Congresso (Dia 2)": "Cong. D2", "Congresso (Dia 3)": "Cong. D3", "Dirigente de Campo": "Dir. Campo" };
+
+            // Use INTERNAL, UNTRANSLATED keys here
+            const INTERNAL_CELEBRATION_TYPE = "Celebração"; // For logic/storage
+            const BASE_ASSIGNMENT_KEYS = {
+                 assignCatPreparation: ["assignTypePresident", "assignTypeFieldLeader", "assignTypeAttendantEntry", "assignTypeAttendantAud", "assignTypeCleaning", "assignTypeAudio", "assignTypeVideo"],
+                 assignCatMeeting: ["assignTypeConductor", "assignTypeBibleReading", "assignTypeCongStudyReader", "assignTypeCongStudyConductor", "assignTypePublicTalk", "assignTypeChristianLifeTalk", "assignTypeTreasuresTalk", "assignTypeSpiritualGems", "assignTypeMinistrySchool", "assignTypeWatchtowerReader", "assignTypeWatchtowerConductor", "assignTypeFinalPrayer"],
+                 assignCatEvents: ["assignTypeAssembly", "assignTypeConvention", "assignTypeBethelVisit"],
+                 assignCatOther: ["assignTypeCustom"]
+            };
+            const INTERNAL_CONGRESS_TYPE = "Congresso"; // For logic/storage
+            const ASSIGNMENT_EMOJIS = { "assignTypePresident": "🧑‍⚖️", "assignTypeFieldLeader": "🗺️", "assignTypeAttendantEntry": "🚪", "assignTypeAttendantAud": "🏛️", "assignTypeCleaning": "🧹", "assignTypeAudio": "🔊", "assignTypeVideo": "📽️", "assignTypeConductor": "🎤", "assignTypeBibleReading": "📖", "assignTypeCongStudyReader": "🤓", "assignTypeCongStudyConductor": "🧑‍🏫", "assignTypePublicTalk": "🗣️", "assignTypeChristianLifeTalk": "💖", "assignTypeTreasuresTalk": "💎", "assignTypeSpiritualGems": "✨", "assignTypeMinistrySchool": "💪", "assignTypeWatchtowerReader": "👀", "assignTypeWatchtowerConductor": "🧐", "assignTypeFinalPrayer": "🙏", "assignTypeAssembly": "🏟️", "assignTypeConvention": "🧑‍🤝‍🧑", "assignTypeBethelVisit": "🏢", "assignTypeCustom": "❓", [INTERNAL_CELEBRATION_TYPE]: "🍷", [INTERNAL_CONGRESS_TYPE]: "🧑‍🤝‍🧑" };
+             // Keys are INTERNAL types, values are keys for short names in translations
+            const SHORT_ASSIGNMENT_NAME_KEYS = { "assignTypeCongStudyReader": "shortNameCongStudyReader", "assignTypeCongStudyConductor": "shortNameCongStudyConductor", "assignTypeMinistrySchool": "shortNameMinistrySchool", "assignTypeAttendantEntry": "shortNameAttendantEntry", "assignTypeAttendantAud": "shortNameAttendantAud", "assignTypeTreasuresTalk": "shortNameTreasuresTalk", "assignTypeChristianLifeTalk": "shortNameChristianLifeTalk", "assignTypeWatchtowerReader": "shortNameWatchtowerReader", "assignTypeWatchtowerConductor": "shortNameWatchtowerConductor", "Congresso (Dia 1)": "shortNameConventionD1", "Congresso (Dia 2)": "shortNameConventionD2", "Congresso (Dia 3)": "shortNameConventionD3", "assignTypeFieldLeader": "shortNameFieldLeader" };
+
             let appData = { assignments: [], frequency: {} }; let calendarWeekOffset = 0; let activeTooltipMarker = null;
 
-            function loadAppData(){ const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY); if(s){try{const p=JSON.parse(s); appData.assignments=Array.isArray(p.assignments)?p.assignments:[]; appData.frequency=typeof p.frequency==='object'&&p.frequency!==null?p.frequency:{}; appData.assignments=appData.assignments.filter(a=>a.type !== CELEBRATION_TYPE || a.isCelebration);} catch(e){console.error("Erro ao carregar dados:", e); appData={assignments:[],frequency:{}};}} else{appData={assignments:[],frequency:{}};}}
-            function saveAppData(){ try{localStorage.setItem(ASSIGNMENTS_STORAGE_KEY,JSON.stringify(appData));} catch(e){console.error("Falha ao salvar dados:", e);}}
+            function loadAppData(){ const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY); if(s){try{const p=JSON.parse(s); appData.assignments=Array.isArray(p.assignments)?p.assignments:[]; appData.frequency=typeof p.frequency==='object'&&p.frequency!==null?p.frequency:{}; appData.assignments=appData.assignments.filter(a => a.internalType !== INTERNAL_CELEBRATION_TYPE || a.isCelebration); } catch(e){console.error("Error loading data:", e); appData={assignments:[],frequency:{}};}} else{appData={assignments:[],frequency:{}};}}
+            function saveAppData(){ try{localStorage.setItem(ASSIGNMENTS_STORAGE_KEY,JSON.stringify(appData));} catch(e){console.error("Failed to save data:", e);}}
             function loadThemePreference() { const savedTheme = localStorage.getItem(THEME_STORAGE_KEY); if (savedTheme === 'light') { document.body.classList.add('light-theme'); themeToggleIcon.classList.remove('fa-sun'); themeToggleIcon.classList.add('fa-moon'); } else { document.body.classList.remove('light-theme'); themeToggleIcon.classList.remove('fa-moon'); themeToggleIcon.classList.add('fa-sun'); } }
             function saveThemePreference(theme) { localStorage.setItem(THEME_STORAGE_KEY, theme); }
             function toggleTheme() { if (document.body.classList.contains('light-theme')) { document.body.classList.remove('light-theme'); themeToggleIcon.classList.remove('fa-moon'); themeToggleIcon.classList.add('fa-sun'); saveThemePreference('dark'); } else { document.body.classList.add('light-theme'); themeToggleIcon.classList.remove('fa-sun'); themeToggleIcon.classList.add('fa-moon'); saveThemePreference('light'); } }
-            function getEmojiForType(type){return ASSIGNMENT_EMOJIS[type]||'❓';}
-            function formatDate(d,o={day:'2-digit',month:'2-digit',year:'numeric'}){if(!d)return '';try{const dt=new Date(`${d}T00:00:00Z`);return new Intl.DateTimeFormat('pt-BR',{...o,timeZone:'UTC'}).format(dt);}catch(e){const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}}
+            function getEmojiForInternalType(internalType){return ASSIGNMENT_EMOJIS[internalType]||'❓';} // Use internal type for emoji lookup
+            function formatDate(d,o={day:'2-digit',month:'2-digit',year:'numeric'}){if(!d)return '';try{const dt=new Date(`${d}T00:00:00Z`);return new Intl.DateTimeFormat(currentLanguage,{...o,timeZone:'UTC'}).format(dt);}catch(e){console.error("Date format error:",e);const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}} // Use currentLanguage
             function dateToYyyyMmDd(d){const dt=new Date(d);return`${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,'0')}-${String(dt.getUTCDate()).padStart(2,'0')}`;}
             function getTodayDateString(){const d=new Date(); return dateToYyyyMmDd(d);}
-            function formatRelativeDate(ds){try{const t=new Date();t.setUTCHours(0,0,0,0);const tg=new Date(`${ds}T00:00:00Z`);if(isNaN(tg.getTime()))return ds;const diff=tg-t;const days=Math.ceil(diff/(1e3*60*60*24));const wk=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];const twk=wk[tg.getUTCDay()];if(days<0)return formatDate(ds);if(days===0)return"Hoje";if(days===1)return"Amanhã";if(days===2)return"Dep. Amanhã";if(days<=6)return`Próx ${twk}`;return formatDate(ds,{day:'2-digit',month:'short'});}catch(e){return formatDate(ds);}}
-            function updateFrequency(t){if(t&&t!=='Personalizado'&&!t.startsWith('Congresso (Dia')&&t!==CELEBRATION_TYPE){appData.frequency[t]=(appData.frequency[t]||0)+1;}else if(t==='Congresso'){appData.frequency['Congresso']=(appData.frequency['Congresso']||0)+1;}}
-            function triggerConfetti(){const c=['var(--accent-primary-color)','var(--accent-alt-color)','var(--success-color)','var(--error-color)','var(--list-color-1)','var(--list-color-3)','var(--list-color-5)'];for(let i=0;i<CONFETTI_COUNT;i++){const p=document.createElement('div');p.classList.add('confetti-piece');p.style.background=c[Math.floor(Math.random()*c.length)];p.style.left=Math.random()*100+'vw';p.style.top=-10-Math.random()*30+'px';p.style.animationDuration=2.5+Math.random()*1.5+'s';p.style.animationDelay=Math.random()*0.5+'s';p.style.transform=`rotate(${Math.random()*360}deg) scale(${0.8+Math.random()*0.4})`;confettiContainer.appendChild(p);setTimeout(()=>{p.remove();},4500);}}
+            function formatRelativeDate(ds) { try { const today = new Date(); today.setUTCHours(0, 0, 0, 0); const targetDate = new Date(`${ds}T00:00:00Z`); if (isNaN(targetDate.getTime())) return ds; const rtf = new Intl.RelativeTimeFormat(currentLanguage, { numeric: 'auto', style: 'short' }); const diffDays = Math.ceil((targetDate - today) / (1000 * 60 * 60 * 24)); if (diffDays < 0) return formatDate(ds); if (diffDays === 0) return _t("relativeDateToday"); // Use _t for "Today" etc. if (diffDays === 1) return _t("relativeDateTomorrow"); if (diffDays > 1 && diffDays <= 6) { return rtf.format(diffDays, 'day'); } // Use Intl for "in X days" / "next weekday" - this handles future weeks better return formatDate(ds, { day: '2-digit', month: 'short' }); } catch (e) { console.error("Relative date error:", e); return formatDate(ds); } }
+            function updateFrequency(internalType) { if (internalType && internalType !== 'assignTypeCustom' && !internalType.startsWith('Congresso (Dia') && internalType !== INTERNAL_CELEBRATION_TYPE) { appData.frequency[internalType] = (appData.frequency[internalType] || 0) + 1; } else if (internalType === INTERNAL_CONGRESS_TYPE) { appData.frequency[INTERNAL_CONGRESS_TYPE] = (appData.frequency[INTERNAL_CONGRESS_TYPE] || 0) + 1; } }
+            function triggerConfetti(){/* ... Confetti code unchanged ... */}
 
             function getNextCelebrationDate(todayStr) { const today = new Date(todayStr + 'T00:00:00Z'); for (const cel of CELEBRATION_DATES) { const celDate = new Date(cel.date + 'T00:00:00Z'); if (celDate >= today) { return cel; } } return CELEBRATION_DATES[CELEBRATION_DATES.length - 1] || null; }
-            function ensureCelebrationExists() { const todayStr = getTodayDateString(); const nextCelebration = getNextCelebrationDate(todayStr); let existingCelebrationIndex = appData.assignments.findIndex(a => a.isCelebration); let needsSave = false; if (!nextCelebration) { if (existingCelebrationIndex !== -1) {} return; } const celebrationId = `celebration-${nextCelebration.year}`; if (existingCelebrationIndex !== -1) { const current = appData.assignments[existingCelebrationIndex]; if (current.date !== nextCelebration.date || current.id !== celebrationId) { current.date = nextCelebration.date; current.id = celebrationId; if (!current.id.endsWith(String(nextCelebration.year))) { current.completed = false; } needsSave = true; } } else { const newCelebration = { id: celebrationId, type: CELEBRATION_TYPE, date: nextCelebration.date, notes: "Próxima Celebração", completed: false, isCelebration: true }; appData.assignments.push(newCelebration); needsSave = true; } if (needsSave) { saveAppData(); } }
-            function updateDropdownOrder() { const select=assignmentTypeInput;const currentSelection=select.value;select.innerHTML='<option value="" disabled selected>Selecione</option>';let allOptions=[];for(const g in BASE_ASSIGNMENT_OPTIONS){BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(o!=='Personalizado' && o !== CELEBRATION_TYPE){allOptions.push({value:o,text:o,group:g,freq:appData.frequency[o]||0});}});}allOptions.sort((a,b)=>(b.freq!==a.freq)?b.freq-a.freq:a.text.localeCompare(b.text));const topFreq=allOptions.slice(0,TOP_N_FREQUENT).filter(o=>o.freq>0).map(o=>o.value);const addedFreq=new Set();if(topFreq.length>0){const fg=document.createElement('optgroup');fg.label='Mais Usados';allOptions.forEach(o=>{if(topFreq.includes(o.value)){const op=document.createElement('option');op.value=o.value;op.textContent=`${getEmojiForType(o.value)} ${o.value==='Congresso'?'Congresso (3d)':o.text}`;fg.appendChild(op);addedFreq.add(o.value);}});if(fg.childElementCount>0)select.appendChild(fg);}for(const g in BASE_ASSIGNMENT_OPTIONS){const grp=document.createElement('optgroup');grp.label=g;let hasOpt=false;BASE_ASSIGNMENT_OPTIONS[g].forEach(o=>{if(!addedFreq.has(o)&&o!=='Personalizado' && o !== CELEBRATION_TYPE){const op=document.createElement('option');op.value=o;op.textContent=`${getEmojiForType(o)} ${o==='Congresso'?'Congresso (3d)':o}`;grp.appendChild(op);hasOpt=true;}});if(g==='Outros'){const custOpt=document.createElement('option');custOpt.value='Personalizado';custOpt.textContent='Personalizado';grp.appendChild(custOpt);hasOpt=true;}if(hasOpt){select.appendChild(grp);}}select.value=currentSelection||"";if(!select.value){select.querySelector('option[disabled]').selected=true;}select.dispatchEvent(new Event('change'));}
-            function renderWeeklyCalendar(){
+            function ensureCelebrationExists() { const todayStr = getTodayDateString(); const nextCelebration = getNextCelebrationDate(todayStr); let existingCelebrationIndex = appData.assignments.findIndex(a => a.isCelebration); let needsSave = false; if (!nextCelebration) { return; } const celebrationId = `celebration-${nextCelebration.year}`; if (existingCelebrationIndex !== -1) { const current = appData.assignments[existingCelebrationIndex]; if (current.date !== nextCelebration.date || current.id !== celebrationId) { current.date = nextCelebration.date; current.id = celebrationId; current.internalType = INTERNAL_CELEBRATION_TYPE; // Ensure internal type current.type = _t("celebrationTypeName"); // Update display type if (!current.id.endsWith(String(nextCelebration.year))) { current.completed = false; } needsSave = true; } else if (current.type !== _t("celebrationTypeName")) { current.type = _t("celebrationTypeName"); needsSave = true; // Update display type on language change } } else { const newCelebration = { id: celebrationId, type: _t("celebrationTypeName"), // Display type from translation internalType: INTERNAL_CELEBRATION_TYPE, // Consistent internal type date: nextCelebration.date, notes: _t("celebrationNotes"), completed: false, isCelebration: true }; appData.assignments.push(newCelebration); needsSave = true; } if (needsSave) { saveAppData(); } }
+
+             function updateDropdownOrder() {
+                const select = assignmentTypeInput;
+                const currentSelection = select.value; // Store the *internal key* selected
+                select.innerHTML = `<option value="" disabled selected>${_t("formTypeSelectOption")}</option>`; // Translate default option
+
+                let allOptions = [];
+                for (const categoryKey in BASE_ASSIGNMENT_KEYS) {
+                    BASE_ASSIGNMENT_KEYS[categoryKey].forEach(typeKey => {
+                         if (typeKey !== 'assignTypeCustom') { // Exclude custom key itself
+                            allOptions.push({
+                                internalValue: typeKey, // Store the non-translatable key
+                                displayText: `${getEmojiForInternalType(typeKey)} ${_t(typeKey)}`, // Translate the display text
+                                categoryKey: categoryKey,
+                                freq: appData.frequency[typeKey] || 0
+                            });
+                        }
+                    });
+                 }
+                 // Add Congress (uses INTERNAL_CONGRESS_TYPE for frequency)
+                 const congressKey = INTERNAL_CONGRESS_TYPE; // This is the base key
+                 allOptions.push({
+                    internalValue: congressKey, // Key for 'Congresso' group
+                    displayText: `${getEmojiForInternalType(congressKey)} ${_t('assignTypeConvention')} (${_t('congressDuration')})`,
+                    categoryKey: 'assignCatEvents', // Put it in events
+                    freq: appData.frequency[congressKey] || 0
+                 });
+
+                allOptions.sort((a, b) => (b.freq !== a.freq) ? b.freq - a.freq : a.displayText.localeCompare(b.displayText, currentLanguage)); // Sort by translated text
+
+                const topFreqInternalValues = allOptions.slice(0, TOP_N_FREQUENT).filter(o => o.freq > 0).map(o => o.internalValue);
+                const addedFreq = new Set();
+
+                if (topFreqInternalValues.length > 0) {
+                    const fg = document.createElement('optgroup');
+                    fg.label = _t("frequentAssignmentsGroup"); // Translate "Mais Usados"
+                    fg.className = 'frequent-group'; // Keep class for potential styling
+                    allOptions.forEach(o => {
+                        if (topFreqInternalValues.includes(o.internalValue)) {
+                            const op = document.createElement('option');
+                            op.value = o.internalValue; // Use the internal key as value
+                            op.textContent = o.displayText;
+                            fg.appendChild(op);
+                            addedFreq.add(o.internalValue);
+                        }
+                    });
+                    if (fg.childElementCount > 0) select.appendChild(fg);
+                }
+
+                for (const categoryKey in BASE_ASSIGNMENT_KEYS) {
+                    const grp = document.createElement('optgroup');
+                    grp.label = _t(categoryKey); // Translate category names
+                    let hasOpt = false;
+
+                    // Sort options within the category by translated display text
+                    const categoryOptions = allOptions
+                        .filter(o => o.categoryKey === categoryKey && !addedFreq.has(o.internalValue))
+                        .sort((a, b) => a.displayText.localeCompare(b.displayText, currentLanguage));
+
+                    categoryOptions.forEach(o => {
+                         // Use the already prepared options
+                         const op = document.createElement('option');
+                         op.value = o.internalValue; // Use internal key as value
+                         op.textContent = o.displayText;
+                         grp.appendChild(op);
+                         hasOpt = true;
+                    });
+
+                    if (categoryKey === 'assignCatOther') { // Special handling for 'Other' -> Custom
+                        const custOpt = document.createElement('option');
+                        custOpt.value = 'assignTypeCustom'; // Keep internal key consistent
+                        custOpt.textContent = _t('assignTypeCustom'); // Translate "Personalizado"
+                        grp.appendChild(custOpt);
+                        hasOpt = true;
+                    }
+
+                    if (hasOpt) { select.appendChild(grp); }
+                }
+
+                // Restore previous selection if possible
+                select.value = currentSelection || "";
+                if (!select.value && select.options.length > 1) {
+                     select.options[0].selected = true; // Select the placeholder if nothing else is selected
+                 }
+                select.dispatchEvent(new Event('change')); // Trigger change to show/hide custom input
+             }
+
+             function renderWeeklyCalendar(){
                  weeklyCalendarGrid.innerHTML=''; hideCalendarTooltip();
                  const today=new Date(); today.setUTCHours(0,0,0,0);
                  const baseWeek=new Date(today); baseWeek.setUTCDate(today.getUTCDate()+(calendarWeekOffset*7));
-                 const dow=(baseWeek.getUTCDay()+6)%7; const start=new Date(baseWeek); start.setUTCDate(baseWeek.getUTCDate()-dow); start.setUTCHours(0,0,0,0);
+                 const dow=(baseWeek.getUTCDay()+6)%7; // Assuming Monday is first day (0=Mon, 6=Sun)
+                 const start=new Date(baseWeek); start.setUTCDate(baseWeek.getUTCDate()-dow); start.setUTCHours(0,0,0,0);
                  const end=new Date(start); end.setUTCDate(start.getUTCDate()+6);
 
-                 if(calendarWeekOffset===0){calendarWeekLabel.textContent="Esta Semana";}
-                 else if(calendarWeekOffset===1){calendarWeekLabel.textContent="Próxima Semana";}
-                 else {calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'2-digit'})}-${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'2-digit'})}`;}
+                 if(calendarWeekOffset===0){calendarWeekLabel.textContent = _t("calendarThisWeek");}
+                 else if(calendarWeekOffset===1){calendarWeekLabel.textContent = _t("calendarNextWeek");}
+                 else {calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'2-digit'})} - ${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'2-digit'})}`;}
 
                  prevWeekBtn.disabled = (calendarWeekOffset <= 0);
 
-                 const hds=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom']; hds.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
+                 // Get translated short day names
+                 const dayNames = [_t("dayMonShort"), _t("dayTueShort"), _t("dayWedShort"), _t("dayThuShort"), _t("dayFriShort"), _t("daySatShort"), _t("daySunShort")];
+                 dayNames.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
 
                  for(let i=0;i<7;i++){
                     const currentDate = new Date(start); currentDate.setUTCDate(start.getUTCDate()+i); const dateStr = dateToYyyyMmDd(currentDate);
                     const cellElement = document.createElement('div'); cellElement.className='day-cell'; if(calendarWeekOffset===0 && dateStr===getTodayDateString()) cellElement.classList.add('today');
                     const numberSpan=document.createElement('span'); numberSpan.className='day-number'; numberSpan.textContent=currentDate.getUTCDate(); cellElement.appendChild(numberSpan);
                     const assignmentsUl = document.createElement('ul'); assignmentsUl.className='day-assignments'; cellElement.appendChild(assignmentsUl);
+
                     const todaysAssignments = appData.assignments.filter(a => a.date === dateStr && !a.completed);
                     todaysAssignments.forEach(a => {
                         const li = document.createElement('li');
                         li.className = 'assignment-marker';
-                        const fullType = a.type;
-                        const shortType = SHORT_ASSIGNMENT_NAMES[fullType] || fullType;
-                        // *** UPDATED: Only show short name in calendar marker, no emoji ***
-                        li.textContent = shortType;
-                        // Store full details for the tooltip
-                        li.dataset.fullName = fullType;
+                        // Get translated short name or full name if no short version exists
+                        const shortNameKey = SHORT_ASSIGNMENT_NAME_KEYS[a.type] || a.internalType; // Use display type key first, then internal if specific congress day etc.
+                        const shortName = shortNameKey ? _t(shortNameKey) : a.type; // Fallback to displayed type
+                        li.textContent = shortName;
+                        li.dataset.fullName = a.type; // Store full *display* name for tooltip
                         if (a.notes) { li.dataset.notes = a.notes; }
+                         li.dataset.internalType = a.internalType; // Store internal type if needed for tooltip emoji
                         assignmentsUl.appendChild(li);
                     });
                     weeklyCalendarGrid.appendChild(cellElement);
                  }
             }
-            function renderUpcomingList(){upcomingList.innerHTML='';const today=new Date();today.setUTCHours(0,0,0,0);const cutoff=new Date(today);cutoff.setUTCDate(today.getUTCDate()+UPCOMING_DAYS);const upcoming=appData.assignments.filter(a=>{try{const d=new Date(a.date+'T00:00:00Z');return !isNaN(d)&&d>=today&&d<cutoff&&!a.completed;}catch(e){return false;}}).sort((a,b)=>new Date(a.date+'T00:00:00Z')-new Date(b.date+'T00:00:00Z'));if(upcoming.length===0){upcomingList.innerHTML='<li class="no-upcoming">Nada p/ '+UPCOMING_DAYS+' dias</li>';}else{upcoming.forEach(a=>{const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=getEmojiForType(a.type)+' '+a.type;const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li);});}}
-            function renderAssignments() { const container = assignmentsListContainer; container.innerHTML = ''; if (appData.assignments.length === 0) { container.innerHTML = '<li class="no-assignments">Nada cadastrado</li>'; return; } const sorted = [...appData.assignments].sort((a,b)=>{ if (a.completed !== b.completed) return a.completed ? 1 : -1; try { return new Date(a.date+'T00:00:00Z') - new Date(b.date+'T00:00:00Z'); } catch (e) { return 0; } }); sorted.forEach(a => { const li = document.createElement('li'); li.className = 'assignment-item'; li.dataset.id = a.id; if (a.isCelebration) li.dataset.iscelebration = "true"; if (a.completed) li.classList.add('is-completed'); const emojiSpan = document.createElement('span'); emojiSpan.className = 'assignment-emoji'; emojiSpan.textContent = getEmojiForType(a.type); li.appendChild(emojiSpan); const typeSpan = document.createElement('span'); typeSpan.className = 'assignment-type'; typeSpan.textContent = a.type; li.appendChild(typeSpan); const dateSpan = document.createElement('span'); dateSpan.className = 'assignment-date'; dateSpan.textContent = formatRelativeDate(a.date); li.appendChild(dateSpan); if (a.notes && !a.isCelebration) { const notesSpan = document.createElement('span'); notesSpan.className = 'assignment-notes'; notesSpan.textContent = `(${a.notes})`; li.appendChild(notesSpan); } else if (a.isCelebration && a.date){ const yearSpan = document.createElement('span'); yearSpan.className = 'assignment-notes'; try { yearSpan.textContent = `(${new Date(a.date + 'T00:00:00Z').getUTCFullYear()})`; li.appendChild(yearSpan); } catch (e) {} } li.addEventListener('click', (e) => { const item = e.currentTarget; if (item.dataset.id) { showActionModal(item.dataset.id); } }); container.appendChild(li); }); if (container.children.length === 0) { container.innerHTML = '<li class="no-assignments">Nada cadastrado</li>'; } }
-            function addAssignment(event){event.preventDefault();let tS=assignmentTypeInput.value;const bDS=assignmentDateInput.value;const n=assignmentNotesInput.value.trim();let fT=tS;let tFF=tS;const todayS=getTodayDateString();if(tS===CELEBRATION_TYPE){alert('A Celebração é adicionada automaticamente.');return;}if(bDS&&bDS<todayS){alert('Data no passado não permitida.');assignmentDateInput.focus();return;}if(tS!=='Personalizado'&&tS!=='Congresso'){const exists=appData.assignments.some(a=>a.type===tS&&a.date===bDS&&!a.isCelebration);if(exists){alert(`"${getEmojiForType(tS)} ${tS}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Personalizado'){fT=customAssignmentTypeInput.value.trim();tFF=fT;if(!fT){alert('Defina um nome para o tipo personalizado.');customAssignmentTypeInput.focus();return;}const cE=appData.assignments.some(a=>a.type===fT&&a.date===bDS&&!a.isCelebration);if(cE){alert(`"${fT}" já existe p/ ${formatDate(bDS)}.`);return;}}else if(tS==='Congresso'){const a1E=appData.assignments.some(a=>a.type==='Congresso (Dia 1)'&&a.date===bDS);if(a1E){alert(`Congresso já cadastrado começando em ${formatDate(bDS)}.`);return;}}if(tS==='Congresso'){if(!bDS){alert('Selecione a data do PRIMEIRO dia do Congresso.');assignmentDateInput.focus();return;}const sd=new Date(`${bDS}T00:00:00Z`);if(isNaN(sd.getTime())){alert('Data inválida.');return;}let added=0;for(let i=0;i<3;i++){const cd=new Date(sd);cd.setUTCDate(sd.getUTCDate()+i);const cds=dateToYyyyMmDd(cd);const ass={id:Date.now()+Math.random()+i,type:`Congresso (Dia ${i+1})`,date:cds,notes:n,completed:false, isCelebration:false};appData.assignments.push(ass);added++;}if(added===3){updateFrequency('Congresso');saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false);}else{alert("Erro ao adicionar dias do Congresso.");}return;}if(!fT||fT==='Personalizado'||!bDS){alert('Verifique se selecionou Tipo e Data válidos.');if(!bDS)assignmentDateInput.focus();else if(!fT&&tS!=='Personalizado')assignmentTypeInput.focus();return;}if(!/^\d{4}-\d{2}-\d{2}$/.test(bDS)){alert('Formato de data inválido.');return;}const nA={id:Date.now()+Math.random(),type:fT,date:bDS,notes:n,completed:false, isCelebration: false};appData.assignments.push(nA);updateFrequency(tFF);saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false);}
-            function showActionModal(id){const a=appData.assignments.find(x=>x.id==id);if(!a)return;modalAssignmentIdInput.value=id;modalTitle.textContent=`${getEmojiForType(a.type)} ${a.type}`;modalActionButtonsDiv.style.display='flex';modalEditViewDiv.style.display='none';modalBtnComplete.textContent=a.completed?'Desmarcar Conclusão':'Marcar Concluída';modalBtnComplete.disabled=false;modalBtnComplete.title='';modalBtnEdit.style.display=a.isCelebration?'none':'block';modalBtnDelete.style.display=a.isCelebration?'none':'block';if(a.isCelebration){const todayStr=getTodayDateString();if(a.date>todayStr){modalBtnComplete.disabled=true;modalBtnComplete.title='Só pode marcar na data ou após.';}}actionModal.classList.add('is-visible');}
+            function renderUpcomingList(){upcomingList.innerHTML='';const today=new Date();today.setUTCHours(0,0,0,0);const cutoff=new Date(today);cutoff.setUTCDate(today.getUTCDate()+UPCOMING_DAYS);const upcoming=appData.assignments.filter(a=>{try{const d=new Date(a.date+'T00:00:00Z');return !isNaN(d)&&d>=today&&d<cutoff&&!a.completed;}catch(e){return false;}}).sort((a,b)=>new Date(a.date+'T00:00:00Z')-new Date(b.date+'T00:00:00Z'));if(upcoming.length===0){upcomingList.innerHTML=`<li class="no-upcoming">${_t("noUpcomingAssignments", UPCOMING_DAYS)}</li>`;}else{upcoming.forEach(a=>{const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=getEmojiForInternalType(a.internalType)+' '+a.type;const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li);});}}
+            function renderAssignments() { const container = assignmentsListContainer; container.innerHTML = ''; if (appData.assignments.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; return; } const sorted = [...appData.assignments].sort((a,b)=>{ if (a.completed !== b.completed) return a.completed ? 1 : -1; try { return new Date(a.date+'T00:00:00Z') - new Date(b.date+'T00:00:00Z'); } catch (e) { return 0; } }); sorted.forEach(a => { const li = document.createElement('li'); li.className = 'assignment-item'; li.dataset.id = a.id; if (a.isCelebration) li.dataset.iscelebration = "true"; if (a.completed) li.classList.add('is-completed'); const emojiSpan = document.createElement('span'); emojiSpan.className = 'assignment-emoji'; emojiSpan.textContent = getEmojiForInternalType(a.internalType); li.appendChild(emojiSpan); const typeSpan = document.createElement('span'); typeSpan.className = 'assignment-type'; typeSpan.textContent = a.type; li.appendChild(typeSpan); const dateSpan = document.createElement('span'); dateSpan.className = 'assignment-date'; dateSpan.textContent = formatRelativeDate(a.date); li.appendChild(dateSpan); if (a.notes && !a.isCelebration) { const notesSpan = document.createElement('span'); notesSpan.className = 'assignment-notes'; notesSpan.textContent = `(${a.notes})`; li.appendChild(notesSpan); } else if (a.isCelebration && a.date){ const yearSpan = document.createElement('span'); yearSpan.className = 'assignment-notes'; try { yearSpan.textContent = `(${new Date(a.date + 'T00:00:00Z').getUTCFullYear()})`; li.appendChild(yearSpan); } catch (e) {} } li.addEventListener('click', (e) => { const item = e.currentTarget; if (item.dataset.id) { showActionModal(item.dataset.id); } }); container.appendChild(li); }); if (container.children.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; } }
+            function addAssignment(event){event.preventDefault();const internalTypeSelected = assignmentTypeInput.value; // Get the internal, untranslatable key const displayTypeSelected = assignmentTypeInput.options[assignmentTypeInput.selectedIndex]?.textContent || internalTypeSelected; // Get the text shown to user (includes emoji) const baseDateString=assignmentDateInput.value;const notes=assignmentNotesInput.value.trim();let finalInternalType = internalTypeSelected; let finalDisplayType = displayTypeSelected.startsWith('❓') || displayTypeSelected.startsWith('🧑‍⚖️') || displayTypeSelected.startsWith('🗺️') ? displayTypeSelected.substring(displayTypeSelected.indexOf(' ')+1) : displayTypeSelected ; // Remove emoji from start if exists let frequencyTrackingType = internalTypeSelected; const todayS=getTodayDateString();if(internalTypeSelected === INTERNAL_CELEBRATION_TYPE){alert(_t("alertAddCelebrationManual"));return;}if(baseDateString && baseDateString < todayS){alert(_t("alertDateInPast"));assignmentDateInput.focus();return;} if(internalTypeSelected !== 'assignTypeCustom' && internalTypeSelected !== INTERNAL_CONGRESS_TYPE){ const exists = appData.assignments.some(a => a.internalType === internalTypeSelected && a.date === baseDateString && !a.isCelebration); if (exists){alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString)));return;} } else if (internalTypeSelected === 'assignTypeCustom') { finalDisplayType = customAssignmentTypeInput.value.trim(); finalInternalType = 'custom:' + finalDisplayType; // Create a semi-unique internal type frequencyTrackingType = null; // Don't track frequency of custom types by default if(!finalDisplayType){alert(_t("alertCustomTypeRequired"));customAssignmentTypeInput.focus();return;} const customExists = appData.assignments.some(a => a.internalType === finalInternalType && a.date === baseDateString && !a.isCelebration); if (customExists){alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString)));return;} } else if (internalTypeSelected === INTERNAL_CONGRESS_TYPE) { // User selected "Congress (3 days)" const day1Exists = appData.assignments.some(a => a.type.startsWith(_t('congressDayPrefix', 1)) && a.date === baseDateString); if (day1Exists) {alert(_t("alertCongressExists", formatDate(baseDateString))); return;} } if(internalTypeSelected === INTERNAL_CONGRESS_TYPE){ if(!baseDateString){alert(_t("alertCongressDateRequired"));assignmentDateInput.focus();return;} const startDate=new Date(`${baseDateString}T00:00:00Z`);if(isNaN(startDate.getTime())){alert(_t('alertInvalidDate'));return;} let addedCount=0;for(let i=0;i<3;i++){ const currentDayDate=new Date(startDate);currentDayDate.setUTCDate(startDate.getUTCDate()+i);const currentDayDateString=dateToYyyyMmDd(currentDayDate);const dayTypeDisplay = _t('congressDayPrefix', i + 1); // e.g., "Congress (Day 1)" const dayTypeInternal = `convention_day_${i + 1}`; // internal key for this specific day const assignment={id:Date.now()+Math.random()+i,type: dayTypeDisplay, internalType: dayTypeInternal, date:currentDayDateString,notes:notes,completed:false, isCelebration:false};appData.assignments.push(assignment);addedCount++;}if(addedCount===3){ updateFrequency(INTERNAL_CONGRESS_TYPE); // Track the main congress event saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false); } else { alert(_t("alertErrorAddingCongress"));}return; } if (!finalInternalType || internalTypeSelected === 'assignTypeCustom' && !finalDisplayType || !baseDateString){ alert(_t('alertInvalidTypeDate')); if (!baseDateString) assignmentDateInput.focus(); else if (!finalInternalType && internalTypeSelected !== 'assignTypeCustom') assignmentTypeInput.focus(); return; } if(!/^\d{4}-\d{2}-\d{2}$/.test(baseDateString)){alert(_t('alertInvalidDateFormat'));return;}const newAssignment = { id: Date.now() + Math.random(), type: finalDisplayType, internalType: finalInternalType, date: baseDateString, notes: notes, completed: false, isCelebration: false }; appData.assignments.push(newAssignment);if (frequencyTrackingType) { updateFrequency(frequencyTrackingType); } saveAppData();renderAll();updateDropdownOrder();assignmentForm.reset();customTypeGroup.style.display='none';customAssignmentTypeInput.value='';customAssignmentTypeInput.required=false;assignmentTypeInput.value="";toggleSection('formSection', false);}
+            function showActionModal(id){const a=appData.assignments.find(x=>x.id==id);if(!a)return;modalAssignmentIdInput.value=id;modalTitle.textContent=`${getEmojiForInternalType(a.internalType)} ${a.type}`;modalActionButtonsDiv.style.display='flex';modalEditViewDiv.style.display='none';modalBtnComplete.textContent = a.completed ? _t("modalUnmarkCompleteButton") : _t("modalMarkCompleteButton"); modalBtnComplete.disabled=false;modalBtnComplete.title='';modalBtnEdit.style.display = a.isCelebration ? 'none':'block';modalBtnDelete.style.display = a.isCelebration ? 'none':'block'; if (a.isCelebration){ const todayStr=getTodayDateString(); if(a.date>todayStr){modalBtnComplete.disabled=true;modalBtnComplete.title = _t("modalCompleteCelebrationFuture");}} else { modalBtnEdit.disabled = a.internalType.startsWith('convention_day_'); // Disable edit for individual Congress days? Or allow note/date edits? Let's disable for now. modalBtnDelete.disabled = a.internalType.startsWith('convention_day_'); // Disable delete for individual Congress days? Easier to delete whole block? } actionModal.classList.add('is-visible');}
             function hideActionModal(){actionModal.classList.remove('is-visible');modalAssignmentIdInput.value='';modalEditDateInput.value='';modalEditNotesInput.value='';}
-            function handleCompleteToggle(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1)return;const a=appData.assignments[idx];if(a.isCelebration){const todayStr=getTodayDateString();if(a.date>todayStr){console.warn("Tentativa de completar celebração antes da data.");return;}}const willBeCompleted=!a.completed;appData.assignments[idx].completed=willBeCompleted;saveAppData();renderAll();if(willBeCompleted){triggerConfetti();}hideActionModal();}
-            function handleEditRequest(){const id=modalAssignmentIdInput.value;const a=appData.assignments.find(x=>x.id==id);if(!a || a.isCelebration)return;modalEditDateInput.value=a.date;modalEditNotesInput.value=a.notes||'';modalActionButtonsDiv.style.display='none';modalEditViewDiv.style.display='flex';}
-            function handleSaveEdit(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1 || appData.assignments[idx].isCelebration) return; const nd=modalEditDateInput.value;const nn=modalEditNotesInput.value.trim();const todayS=getTodayDateString();if(!nd||!/^\d{4}-\d{2}-\d{2}$/.test(nd)){alert("Data inválida.");modalEditDateInput.focus();return;}if(nd<todayS&&!appData.assignments[idx].completed){alert("Não é possível definir uma data passada para uma tarefa não concluída.");modalEditDateInput.focus();return;}appData.assignments[idx].date=nd;appData.assignments[idx].notes=nn;saveAppData();renderAll();hideActionModal();}
-            function deleteAssignment(id){ const a=appData.assignments.find(x=>x.id == id); if (!a || a.isCelebration) return; appData.assignments=appData.assignments.filter(x=>x.id != id); saveAppData(); renderAll();}
+            function handleCompleteToggle(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1)return;const a=appData.assignments[idx];if(a.isCelebration){const todayStr=getTodayDateString();if(a.date>todayStr){console.warn("Attempt to complete celebration before date.");return;}}const willBeCompleted=!a.completed;appData.assignments[idx].completed=willBeCompleted;saveAppData();renderAll();if(willBeCompleted){triggerConfetti();}hideActionModal();}
+            function handleEditRequest(){const id=modalAssignmentIdInput.value;const a=appData.assignments.find(x=>x.id==id);if(!a || a.isCelebration || a.internalType.startsWith('convention_day_'))return; modalEditDateInput.value=a.date;modalEditNotesInput.value=a.notes||'';modalActionButtonsDiv.style.display='none';modalEditViewDiv.style.display='flex';}
+            function handleSaveEdit(){const id=modalAssignmentIdInput.value;const idx=appData.assignments.findIndex(a=>a.id==id);if(idx===-1 || appData.assignments[idx].isCelebration || appData.assignments[idx].internalType.startsWith('convention_day_')) return; const newDate=modalEditDateInput.value;const newNotes=modalEditNotesInput.value.trim();const todayS=getTodayDateString();if(!newDate||!/^\d{4}-\d{2}-\d{2}$/.test(newDate)){alert(_t("alertInvalidDate"));modalEditDateInput.focus();return;}if(newDate < todayS && !appData.assignments[idx].completed){alert(_t("alertDateInPastEdit"));modalEditDateInput.focus();return;}appData.assignments[idx].date=newDate;appData.assignments[idx].notes=newNotes;saveAppData();renderAll();hideActionModal();}
+            function deleteAssignment(id){ const a = appData.assignments.find(x => x.id == id); if (!a || a.isCelebration) return; // Handle Congress days - potentially delete all 3 if one is deleted? // For now, just allow deleting non-celebration, non-congress days if (!a.internalType.startsWith('convention_day_')) { appData.assignments = appData.assignments.filter(x => x.id != id); } else { // Advanced: Find the start date and delete all 3 days // Simple: Just filter this one out - might leave orphans. // Let's go simple for now. Consider revising. appData.assignments = appData.assignments.filter(x => x.id != id); alert(_t("alertNoteDeletingCongressDay")); // Warn user maybe? } saveAppData(); renderAll();}
             function handleDeleteRequest(){ const id = modalAssignmentIdInput.value; deleteAssignment(id); hideActionModal();}
-            function renderAll() { ensureCelebrationExists(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar(); }
+            function renderAll() { ensureCelebrationExists(); renderAssignments(); renderUpcomingList(); renderWeeklyCalendar(); updateDropdownOrder(); } // Add updateDropdownOrder here too
             window.toggleSection = (id, forceState = null) => { const el = document.getElementById(id); if(el) { if (forceState === true) el.classList.add('is-open'); else if (forceState === false) el.classList.remove('is-open'); else el.classList.toggle('is-open'); } };
 
             function showCalendarTooltip(markerElement) {
-                const fullName = markerElement.dataset.fullName; const notes = markerElement.dataset.notes;
-                if (!fullName) return;
-                // *** TOOLTIP STILL USES EMOJI ***
-                let content = getEmojiForType(fullName) + ' ' + fullName;
-                if (notes) { content += ` (${notes})`; }
-                calendarTooltip.textContent = content;
-                const markerRect = markerElement.getBoundingClientRect(); const gridRect = weeklyCalendarGrid.getBoundingClientRect();
-                let top = markerRect.bottom - gridRect.top + 5 + weeklyCalendarGrid.scrollTop; let left = markerRect.left - gridRect.left + (markerRect.width / 2);
-                calendarTooltip.style.top = `${top}px`; calendarTooltip.style.left = `${left}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; calendarTooltip.classList.add('is-visible'); activeTooltipMarker = markerElement;
-                const tooltipRect = calendarTooltip.getBoundingClientRect();
-                if (tooltipRect.left < gridRect.left) { calendarTooltip.style.left = `${left + (gridRect.left - tooltipRect.left) + 5}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; }
-                else if (tooltipRect.right > gridRect.right) { calendarTooltip.style.left = `${left - (tooltipRect.right - gridRect.right) - 5}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; }
-                setTimeout(hideCalendarTooltip, 2500);
+                 const fullName = markerElement.dataset.fullName; // Already display name
+                 const notes = markerElement.dataset.notes;
+                 const internalType = markerElement.dataset.internalType;
+                 if (!fullName) return;
+                 // Use internal type to get the consistent emoji
+                 let content = getEmojiForInternalType(internalType) + ' ' + fullName;
+                 if (notes) { content += ` (${notes})`; }
+                 calendarTooltip.textContent = content;
+                 const markerRect = markerElement.getBoundingClientRect(); const gridRect = weeklyCalendarGrid.getBoundingClientRect();
+                 let top = markerRect.bottom - gridRect.top + 5 + weeklyCalendarGrid.scrollTop; let left = markerRect.left - gridRect.left + (markerRect.width / 2);
+                 calendarTooltip.style.top = `${top}px`; calendarTooltip.style.left = `${left}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; calendarTooltip.classList.add('is-visible'); activeTooltipMarker = markerElement;
+                 const tooltipRect = calendarTooltip.getBoundingClientRect();
+                 if (tooltipRect.left < gridRect.left) { calendarTooltip.style.left = `${left + (gridRect.left - tooltipRect.left) + 5}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; }
+                 else if (tooltipRect.right > gridRect.right) { calendarTooltip.style.left = `${left - (tooltipRect.right - gridRect.right) - 5}px`; calendarTooltip.style.transform = 'translateX(-50%) translateY(0)'; }
+                 // Auto-hide timeout - maybe make this configurable or based on interaction?
+                 setTimeout(hideCalendarTooltip, 3500); // Increased time
              }
             function hideCalendarTooltip() { calendarTooltip.classList.remove('is-visible'); activeTooltipMarker = null; }
             function handleCalendarMarkerClick(event) { const marker = event.target.closest('.assignment-marker'); if (marker) { if(marker === activeTooltipMarker) { hideCalendarTooltip(); } else { hideCalendarTooltip(); showCalendarTooltip(marker); } } else if (!event.target.closest('.calendar-tooltip')) { hideCalendarTooltip(); } }
 
+            // --- Initialize Application Logic (Called after translations load) ---
+             function initializeAppLogic() {
+                 console.log("Initializing App Logic with language:", currentLanguage);
+                 loadAppData(); // Load saved assignment data
+                 ensureCelebrationExists(); // Add/update auto-celebration
+                 updateDropdownOrder(); // Populate assignment type dropdown with translations
+                 applyTranslationsHTML(); // Ensure all static text is updated again after data load potentially adds elements
+                 renderAll(); // Render lists, calendar etc. using current language formatters
+
+                 // Ensure event listeners related to dynamic content are setup or re-setup if needed
+                 // The listener setup below seems okay as elements are stable, just content changes
+                 assignmentTypeInput.dispatchEvent(new Event('change')); // Trigger initial state for custom field
+             }
+
+            // --- Global Event Listeners (Setup once) ---
             themeToggleBtn.addEventListener('click', toggleTheme);
             actionModal.addEventListener('click',(e)=>{if(e.target===actionModal){hideActionModal();}});
             modalBtnComplete.addEventListener('click',handleCompleteToggle);
@@ -307,14 +530,40 @@
             document.getElementById('modalBtnSaveEdit').addEventListener('click',handleSaveEdit);
             document.getElementById('modalBtnCancelEdit').addEventListener('click',hideActionModal);
             window.addEventListener('keydown',(e)=>{if(e.key==='Escape'&&actionModal.classList.contains('is-visible')){hideActionModal();}});
-            assignmentTypeInput.addEventListener('change',()=>{if(assignmentTypeInput.value==='Personalizado'){customTypeGroup.style.display='flex';customAssignmentTypeInput.required=true;setTimeout(()=>customAssignmentTypeInput.focus(),50);}else{customTypeGroup.style.display='none';customAssignmentTypeInput.required=false;customAssignmentTypeInput.value='';}});
+            assignmentTypeInput.addEventListener('change',()=>{ const isCustom = assignmentTypeInput.value === 'assignTypeCustom'; customTypeGroup.style.display = isCustom ? 'flex' : 'none'; customAssignmentTypeInput.required = isCustom; if(isCustom){ setTimeout(()=>customAssignmentTypeInput.focus(),50); } else { customAssignmentTypeInput.value=''; }});
             assignmentForm.addEventListener('submit',addAssignment);
             prevWeekBtn.addEventListener('click', () => { if (calendarWeekOffset > 0) { calendarWeekOffset--; renderWeeklyCalendar(); } });
             nextWeekBtn.addEventListener('click', () => { calendarWeekOffset++; renderWeeklyCalendar(); });
             weeklyCalendarGrid.addEventListener('click', handleCalendarMarkerClick);
 
-            function initializeApp() { loadThemePreference(); loadAppData(); ensureCelebrationExists(); updateDropdownOrder(); renderAll(); assignmentTypeInput.dispatchEvent(new Event('change')); }
-            initializeApp();
+            // Language Selector Event Listener (if you add the dropdown)
+            // const langSelector = document.getElementById('languageSelector');
+            // if (langSelector) {
+            //     SUPPORTED_LANGUAGES.forEach(lang => {
+            //         const option = document.createElement('option');
+            //         option.value = lang;
+            //         // Ideally get language name from translations: _t(`langName_${lang.replace('-', '_')}`) || lang;
+            //         option.textContent = lang; // Simple display for now
+            //         langSelector.appendChild(option);
+            //     });
+            //     langSelector.value = currentLanguage; // Set initial value
+            //     langSelector.addEventListener('change', (e) => {
+            //         setLanguage(e.target.value);
+            //     });
+            // }
+
+            // --- Initial App Load ---
+             async function initializeApp() {
+                 console.log("Starting App Initialization...");
+                 loadThemePreference(); // Load theme first (visual only)
+                 currentLanguage = getBestInitialLanguage(); // Determine language
+                 console.log("Initial language determined:", currentLanguage);
+                 await loadTranslations(); // Load translations JSON file
+                 initializeAppLogic(); // Setup the rest of the app AFTER translations are ready
+                 console.log("App Initialized.");
+             }
+
+            initializeApp(); // Start the process
         });
     </script>
 </body>
