@@ -32,6 +32,10 @@ Never miss a meeting part, service duty, or special event again! Manage everythi
 
 ---
 
+## 🚀 How To Use
+
+https://romulo-godoi.github.io/designado/
+
 ## 🛠️ Tech Stack
 
 *   HTML5
