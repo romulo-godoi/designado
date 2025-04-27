@@ -1,5 +1,5 @@
 // Version 1.1 - Added calendar transition and language switcher functionality.
-const CACHE_NAME = 'jw-assignments-cache-v1.3'; // Incremented version
+const CACHE_NAME = 'jw-assignments-cache-v1.4'; // Incremented version
 
 const urlsToCache = [
   './', // Cache the root path
