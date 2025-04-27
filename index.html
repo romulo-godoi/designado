@@ -16,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
+        /* --- :root Variables (Dark Theme Default) --- */
         :root {
             --bg-color: #0d0d10; --surface-color: #1c1c21; --surface-lighter-color: #25252b;
             --border-color: #333338; --completed-item-bg: #101012; --body-outer-bg: #030304;
@@ -30,13 +31,39 @@
             --header-bg-gradient: linear-gradient(180deg, var(--surface-color), var(--bg-color));
             --button-disabled-opacity: 0.5; --scrollbar-thumb: var(--accent-secondary-color); --scrollbar-track: transparent;
             --modal-overlay-bg: rgba(10, 10, 15, 0.8); --tooltip-bg: var(--surface-lighter-color);
-            --input-bg: var(--bg-color); --input-focus-bg: var(--surface-color); --input-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
-            --input-focus-shadow: 0 0 0 3px rgba(122,145,232,0.2), inset 0 1px 3px rgba(0,0,0,0.1);
+
+            /* --- Input Styling (Refined) --- */
+            --input-bg: var(--bg-color); /* Slightly darker than surface */
+            --input-focus-bg: var(--surface-color); /* Focus matches surface */
+            --input-border-color: var(--border-color); /* Standard border */
+            --input-hover-border-color: var(--text-secondary-color); /* Subtle hover */
+            --input-focus-border-color: var(--accent-primary-color); /* Accent focus */
+            --input-shadow: none; /* Removed inner shadow for flatter look */
+            --input-focus-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-primary-color) 30%, transparent); /* Soft focus ring */
+            --input-placeholder-color: color-mix(in srgb, var(--text-secondary-color) 70%, transparent); /* Softer placeholder */
+            --input-padding: 14px 16px; /* Consistent padding */
+            --input-border-radius: var(--border-radius-inner);
+
+            /* --- Form Section Styling --- */
+            --form-section-bg: var(--surface-lighter-color); /* Slightly lighter background when open */
+            --form-section-padding: 25px;
+            --form-section-gap: 20px; /* Slightly increased gap */
+            --form-label-color: var(--text-secondary-color);
+            --form-label-weight: 500;
+            --form-label-size: 0.8em; /* Slightly smaller label */
+            --form-label-spacing: 0.8px; /* Increased letter spacing */
+            --form-button-gradient: linear-gradient(60deg, var(--accent-primary-color), var(--accent-secondary-color)); /* Adjusted gradient angle */
+            --form-button-shadow: 0 2px 6px rgba(0,0,0,0.2); /* Softer shadow */
+            --form-button-hover-shadow: 0 4px 10px color-mix(in srgb, var(--accent-primary-color) 25%, transparent);
+            --form-button-active-scale: 0.98; /* Slightly less pronounced active scale */
+            --form-button-font-size: 1rem; /* Slightly smaller button text */
+
             --date-picker-indicator-filter: invert(0.7);
-            --assignment-date-dark-color: #c0c0c0; /* Improved contrast for date on dark theme */
-            --calendar-transition-speed: 0.25s; /* Transition speed for calendar fade */
+            --assignment-date-dark-color: #c0c0c0;
+            --calendar-transition-speed: 0.25s;
         }
 
+        /* --- :root Variables (Light Theme) --- */
         body.light-theme {
             --bg-color: #f4f4f8; --surface-color: #ffffff; --surface-lighter-color: #f0f0f2;
             --border-color: #dcdce1; --completed-item-bg: #e8e8ed; --body-outer-bg: #fdfdff;
@@ -49,12 +76,29 @@
             --header-bg-gradient: linear-gradient(180deg, var(--surface-color), var(--bg-color));
             --button-disabled-opacity: 0.6; --scrollbar-thumb: var(--accent-secondary-color); --scrollbar-track: #eee;
             --modal-overlay-bg: rgba(50, 50, 60, 0.7); --tooltip-bg: var(--surface-color);
-            --input-bg: #efeff2; --input-focus-bg: #ffffff; --input-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
-            --input-focus-shadow: 0 0 0 3px rgba(0, 110, 230, 0.2), inset 0 1px 2px rgba(0,0,0,0.05);
+
+            /* --- Input Styling (Light Theme) --- */
+            --input-bg: #f8f8fa; /* Slightly off-white */
+            --input-focus-bg: #ffffff; /* Pure white on focus */
+            --input-border-color: #e0e0e6; /* Lighter border */
+            --input-hover-border-color: #c0c0c8; /* Slightly darker hover */
+            --input-focus-border-color: var(--accent-primary-color);
+            --input-shadow: none;
+            --input-focus-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-primary-color) 25%, transparent);
+            --input-placeholder-color: color-mix(in srgb, var(--text-secondary-color) 80%, transparent);
+
+            /* --- Form Section Styling (Light Theme) --- */
+            --form-section-bg: #ffffff; /* White background when open */
+            --form-label-color: var(--text-secondary-color);
+            --form-button-gradient: linear-gradient(60deg, var(--accent-primary-color), var(--accent-secondary-color));
+            --form-button-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            --form-button-hover-shadow: 0 4px 10px color-mix(in srgb, var(--accent-primary-color) 20%, transparent);
+
             --date-picker-indicator-filter: invert(0.1);
             --assignment-date-dark-color: var(--text-secondary-color); /* Reset for light theme */
         }
 
+        /* --- Base & Layout Styles --- */
         * { box-sizing: border-box; margin: 0; padding: 0; } html { scroll-behavior: smooth; height: 100%; }
         body { font-family:var(--font-family); background-color: var(--body-outer-bg); color:var(--text-primary-color); min-height:100vh; -webkit-tap-highlight-color:transparent; position: relative; overflow-x: hidden; transition: background-color var(--transition-speed-med), color var(--transition-speed-med); }
         .mobile-view-container { background-color:var(--bg-color); width: 100%; height: 100vh; display:flex; flex-direction:column; overflow:hidden; z-index: 1; position: relative; transition: background-color var(--transition-speed-med); }
@@ -76,28 +120,98 @@
         .section-header h2, .dashboard-section > h3 { font-size: 0.8em; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; display: flex; justify-content: space-between; align-items: center; color: var(--text-secondary-color); margin: 15px 0 8px 0; padding-bottom: 5px; border-bottom: 1px solid var(--border-color); transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .section-header h2 { color: var(--accent-primary-color); margin: 0; padding: 0; border-bottom: none; flex-grow: 1; font-weight: 600; letter-spacing: 1px; transition: color var(--transition-speed-med); }
         #weeklyCalendarContainer > h3 { text-align: center; color: var(--accent-alt-color); border-bottom: none; margin-bottom: 8px; font-weight: 600; letter-spacing: 1px; transition: color var(--transition-speed-med);}
         .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; } .calendar-nav button { background: none; border: 1px solid var(--border-color); color: var(--text-secondary-color); padding: 4px 10px; border-radius: var(--border-radius-inner); font-size: 0.8em; cursor: pointer; transition: all var(--transition-speed-fast); } .calendar-nav button:hover:not(:disabled) { background-color: var(--accent-primary-color); color: #fff; border-color: var(--accent-primary-color); transform: translateY(-1px); } .calendar-nav button:active:not(:disabled) { transform: scale(0.97); } .calendar-nav button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; background-color: transparent !important; border-color: var(--border-color); transform: none !important; color: var(--text-secondary-color) !important;} #calendarWeekLabel { font-size: 1em; font-weight: 600; color: var(--accent-alt-color); flex-grow: 1; text-align: center; transition: color var(--transition-speed-med);}
-        /* Added margin-top here */
-        #upcomingListContainer > h3 {
-            color: var(--text-secondary-color);
-            text-align: center;
-            margin-top: 20px; /* Added space above the title */
-        }
-        #weeklyCalendar {
-            touch-action: pan-y; /* Allow vertical scroll, handle horizontal swipe in JS */
-            transition: opacity var(--calendar-transition-speed) ease-in-out; /* Added transition */
-            position: relative; /* Needed for potential absolute positioning of children if required */
-        }
-        #weeklyCalendar.calendar-loading {
-            opacity: 0; /* Style for fading out */
-        }
+        #upcomingListContainer > h3 { color: var(--text-secondary-color); text-align: center; margin-top: 20px; /* Added space above the title */ }
+        #weeklyCalendar { touch-action: pan-y; transition: opacity var(--calendar-transition-speed) ease-in-out; position: relative; }
+        #weeklyCalendar.calendar-loading { opacity: 0; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; } .day-header{font-size:0.7em;text-align:center;color:var(--text-secondary-color);padding-bottom:5px;font-weight:500;text-transform:uppercase;border-bottom:1px solid var(--border-color);margin-bottom:5px; transition: color var(--transition-speed-med), border-color var(--transition-speed-med);} .day-cell{font-size:0.8em;text-align:center;background-color:var(--bg-color);border-radius:var(--border-radius-inner);padding:8px 4px;min-height:65px;display:flex;flex-direction:column;align-items:center;border:1px solid transparent; transition: background-color var(--transition-speed-fast), transform var(--transition-speed-fast), border-color var(--transition-speed-fast); position: relative; } .day-cell:hover { background-color: var(--surface-lighter-color); transform: scale(1.03);} .day-cell.today{border-color:var(--accent-alt-color);background-color:var(--surface-lighter-color); box-shadow: 0 0 8px color-mix(in srgb, var(--accent-alt-color) 30%, transparent); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med), box-shadow var(--transition-speed-med); } .day-number{font-weight:600;margin-bottom:4px;color:var(--text-primary-color);transition: color var(--transition-speed-med);} .day-cell.today .day-number{color:var(--accent-alt-color);} .day-assignments{list-style:none;padding:0;width:100%;}
         .assignment-marker{display:block;font-size:0.7em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background-color:var(--accent-secondary-color);color:var(--text-primary-color);padding:3px 5px;margin-top:4px;border-radius:4px;text-align:center; box-shadow: 0 1px 2px rgba(0,0,0,0.15); cursor: pointer; transition: background-color var(--transition-speed-med), color var(--transition-speed-med); font-weight: 500; }
         body.light-theme .assignment-marker { color: var(--bg-color); }
         #upcomingList{list-style:none;padding:0;} .upcoming-item{display:flex;justify-content:space-between;align-items:center;font-size:0.9em;padding:10px 5px;border-bottom:1px dashed var(--border-color); transition: background-color var(--transition-speed-fast), border-color var(--transition-speed-med); } .upcoming-item:last-child{border-bottom:none;} .upcoming-item:hover { background-color: color-mix(in srgb, var(--text-primary-color) 3%, transparent); } .upcoming-item .date{color:var(--text-secondary-color);font-size:0.9em;white-space:nowrap;margin-left:10px; transition: color var(--transition-speed-med);} .upcoming-item .type{font-weight:500; transition: color var(--transition-speed-med);}
-        .collapsible-section{background-color:var(--surface-color); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .section-header{padding:18px 20px;cursor:pointer;transition: background-color var(--transition-speed-fast), box-shadow var(--transition-speed-fast);position:relative;z-index:1; display: flex; align-items: center;} .section-header:hover{background-color:var(--surface-lighter-color); box-shadow: inset 0 0 10px rgba(0,0,0,0.1); } .section-header i{font-size:0.9em;transition:transform var(--transition-speed-med) ease-out;color:var(--accent-primary-color);flex-shrink:0; margin-left: 10px;} .collapsible-section.is-open .section-header i{transform:rotate(90deg);} .section-content{max-height:0;overflow:hidden;transition: max-height var(--transition-speed-med) ease-out, padding var(--transition-speed-med) ease-out, border-top var(--transition-speed-med);padding:0 20px;background-color:var(--surface-lighter-color); border-top: 1px solid transparent; transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); } .collapsible-section.is-open .section-content{max-height:2000px;padding:25px;transition:max-height var(--transition-speed-slow) ease-in-out, padding var(--transition-speed-slow) ease-in-out, border-top var(--transition-speed-slow); border-top: 1px solid var(--border-color); } #listSection.is-open .section-content{background-color:var(--bg-color);padding:0;}
-        #assignmentForm{display:flex;flex-direction:column;gap:18px;} .form-group{display:flex;flex-direction:column;} .form-group#customTypeGroup{display:none;margin-top:-5px;padding-left:15px;border-left:3px solid var(--accent-primary-color);padding-top:10px; margin-left: 5px;} .form-group#customTypeGroup label{font-size:0.8em;} label{margin-bottom:6px;font-weight:500;font-size:0.85em;color:var(--text-secondary-color);letter-spacing: 0.5px; transition: color var(--transition-speed-med);} select,input[type="date"],input[type="text"]{padding:14px 16px;background-color:var(--input-bg);border:1px solid var(--border-color);border-radius:var(--border-radius-inner);color:var(--text-primary-color);font-family:inherit;font-size:1rem;width:100%;transition: all var(--transition-speed-fast); box-shadow: var(--input-shadow); } select:hover, input:hover { border-color: var(--text-secondary-color); } select:focus,input:focus{outline:none;border-color:var(--accent-primary-color);background-color: var(--input-focus-bg); box-shadow: var(--input-focus-shadow);} select option,select optgroup{background-color:var(--bg-color);color:var(--text-primary-color);font-weight:normal;} select optgroup{padding:6px 0; font-weight: 600;} select optgroup.frequent-group{font-style:normal;font-weight:bold;color:var(--accent-primary-color);} input[type="date"]{color: var(--text-secondary-color); } input[type="date"]:focus, input[type="date"]:valid { color: var(--text-primary-color); } input[type="date"]::-webkit-calendar-picker-indicator{filter:var(--date-picker-indicator-filter);cursor:pointer;opacity:0.7;transition:opacity var(--transition-speed-fast), filter var(--transition-speed-fast);} input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1;} button[type="submit"]{padding:15px 20px;background:linear-gradient(45deg, var(--accent-primary-color), var(--accent-secondary-color));color:#fff;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-size:1.05rem;font-weight:600;text-align:center;width:100%;margin-top:8px;transition: all var(--transition-speed-fast); box-shadow: 0 3px 8px rgba(0,0,0,0.2);} button[type="submit"]:hover{opacity:0.9; box-shadow: 0 5px 12px color-mix(in srgb, var(--accent-primary-color) 30%, transparent); } button[type="submit"]:active{transform:scale(0.97); box-shadow: 0 1px 3px rgba(0,0,0,0.2);}
+
+        /* --- Collapsible Section Styles --- */
+        .collapsible-section{background-color:var(--surface-color); transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); }
+        .section-header{padding:18px 20px;cursor:pointer;transition: background-color var(--transition-speed-fast), box-shadow var(--transition-speed-fast);position:relative;z-index:1; display: flex; align-items: center;}
+        .section-header:hover{background-color:var(--surface-lighter-color); box-shadow: inset 0 0 10px rgba(0,0,0,0.1); }
+        .section-header i{font-size:0.9em;transition:transform var(--transition-speed-med) ease-out;color:var(--accent-primary-color);flex-shrink:0; margin-left: 10px;}
+        .collapsible-section.is-open .section-header i{transform:rotate(90deg);}
+        .section-content{max-height:0;overflow:hidden;transition: max-height var(--transition-speed-med) ease-out, padding var(--transition-speed-med) ease-out, border-top var(--transition-speed-med);padding:0 20px;background-color:var(--surface-lighter-color); border-top: 1px solid transparent; transition: background-color var(--transition-speed-med), border-color var(--transition-speed-med); }
+        .collapsible-section.is-open .section-content{max-height:2000px;padding: var(--form-section-padding); transition:max-height var(--transition-speed-slow) ease-in-out, padding var(--transition-speed-slow) ease-in-out, border-top var(--transition-speed-slow); border-top: 1px solid var(--border-color); }
+
+        /* --- Specific Section Backgrounds --- */
+        #listSection.is-open .section-content{background-color:var(--bg-color);padding:0;} /* Keep list section background dark/light */
+        #formSection.is-open .section-content{background-color: var(--form-section-bg);} /* Use specific form background */
+
+        /* --- Form Styles (Refined) --- */
+        #assignmentForm{display:flex;flex-direction:column;gap: var(--form-section-gap);}
+        .form-group{display:flex;flex-direction:column;}
+        .form-group#customTypeGroup{display:none;margin-top:-10px; padding-left:15px;border-left:3px solid var(--accent-primary-color);padding-top:10px; margin-left: 5px; background-color: color-mix(in srgb, var(--accent-primary-color) 5%, transparent); border-radius: 0 var(--border-radius-inner) var(--border-radius-inner) 0; padding-bottom: 10px; }
+        .form-group#customTypeGroup label{font-size:0.8em; color: var(--accent-primary-color); font-weight: 600;}
+        label{margin-bottom:8px; font-weight: var(--form-label-weight); font-size: var(--form-label-size); color: var(--form-label-color); letter-spacing: var(--form-label-spacing); transition: color var(--transition-speed-med); text-transform: uppercase;}
+        select,input[type="date"],input[type="text"]{
+            padding: var(--input-padding);
+            background-color:var(--input-bg);
+            border:1px solid var(--input-border-color);
+            border-radius: var(--input-border-radius);
+            color:var(--text-primary-color);
+            font-family:inherit;
+            font-size:1rem;
+            width:100%;
+            transition: all var(--transition-speed-fast);
+            box-shadow: var(--input-shadow);
+        }
+        select::placeholder, input::placeholder {
+            color: var(--input-placeholder-color);
+            opacity: 1; /* Firefox */
+        }
+        select:-ms-input-placeholder, input:-ms-input-placeholder { /* Edge */
+            color: var(--input-placeholder-color);
+        }
+        select::-ms-input-placeholder, input::-ms-input-placeholder { /* IE 10-11 */
+            color: var(--input-placeholder-color);
+        }
+        select:hover, input:hover { border-color: var(--input-hover-border-color); }
+        select:focus,input:focus{
+            outline:none;
+            border-color: var(--input-focus-border-color);
+            background-color: var(--input-focus-bg);
+            box-shadow: var(--input-focus-shadow);
+        }
+        select option,select optgroup{background-color:var(--bg-color);color:var(--text-primary-color);font-weight:normal;}
+        select optgroup{padding:6px 0; font-weight: 600;}
+        select optgroup.frequent-group{font-style:normal;font-weight:bold;color:var(--accent-primary-color);}
+        input[type="date"]{color: var(--text-secondary-color); }
+        input[type="date"]:focus, input[type="date"]:valid { color: var(--text-primary-color); }
+        input[type="date"]::-webkit-calendar-picker-indicator{filter:var(--date-picker-indicator-filter);cursor:pointer;opacity:0.7;transition:opacity var(--transition-speed-fast), filter var(--transition-speed-fast);}
+        input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1;}
+        button[type="submit"]{
+            padding:15px 20px;
+            background: var(--form-button-gradient);
+            color:#fff;
+            border:none;
+            border-radius:var(--border-radius-inner);
+            cursor:pointer;
+            font-size: var(--form-button-font-size);
+            font-weight:600;
+            text-align:center;
+            width:100%;
+            margin-top:10px; /* Increased margin */
+            transition: all var(--transition-speed-fast);
+            box-shadow: var(--form-button-shadow);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        button[type="submit"]:hover{
+            opacity:0.9;
+            box-shadow: var(--form-button-hover-shadow);
+            transform: translateY(-1px); /* Subtle lift */
+        }
+        button[type="submit"]:active{
+            transform:scale(var(--form-button-active-scale));
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
         body.light-theme select optgroup.frequent-group { color: var(--accent-secondary-color); }
 
+        /* --- Assignment List Styles --- */
         .assignment-list { list-style: none; padding: 0; }
         .assignment-item { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 18px 15px; color: var(--text-primary-color); border-bottom: 1px solid var(--border-color); cursor: pointer; transition: all var(--transition-speed-fast); position: relative; background-color: var(--surface-color); }
         .assignment-item:last-child { border-bottom: none; }
@@ -120,19 +234,40 @@
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-type { color: #1a1a1e; font-weight: 600; }
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-date,
         body.light-theme .assignment-item:not(.is-completed):not([data-iscelebration="true"]) .assignment-notes { color: #3d3d41; }
-        /* Ensure date color reverts correctly on light theme */
         body.light-theme .assignment-item .assignment-date { color: var(--text-secondary-color); }
 
+        /* --- Modal Styles --- */
         .modal-overlay{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background-color: var(--modal-overlay-bg); backdrop-filter:blur(3px);justify-content:center;align-items:center;opacity:0;transition:opacity var(--transition-speed-med) ease-out;} .modal-overlay.is-visible{display:flex;opacity:1;} .modal-content{background-color:var(--surface-color);padding:30px;border-radius:var(--border-radius-inner);box-shadow:0 8px 25px rgba(0,0,0,0.3);width:90%;max-width:400px;position:relative;display:flex;flex-direction:column;gap:18px;border:1px solid var(--border-color);transform:scale(0.95);transition: transform var(--transition-speed-med) ease-out 0.1s, background-color var(--transition-speed-med), border-color var(--transition-speed-med);} .modal-overlay.is-visible .modal-content{transform:scale(1);} .modal-content h4{color:var(--accent-primary-color);margin-bottom:8px;text-align:center;font-size:1.2em;font-weight:600;word-break:break-word; transition: color var(--transition-speed-med);} .modal-content .action-buttons,.modal-content .edit-view{display:flex;flex-direction:column;gap:12px;} .modal-content button{padding:12px 18px;border:none;border-radius:var(--border-radius-inner);cursor:pointer;font-weight:600;font-size:0.95em;transition:all var(--transition-speed-fast);width:100%;text-transform:uppercase;letter-spacing:0.5px;box-shadow:0 2px 5px rgba(0,0,0,0.15);} .modal-content button:hover:not(:disabled){opacity:0.9;box-shadow:0 4px 10px rgba(0,0,0,0.2);transform:translateY(-1px);} .modal-content button:active:not(:disabled){transform:scale(0.97);box-shadow:0 1px 2px rgba(0,0,0,0.1);} .modal-content button:disabled { opacity: var(--button-disabled-opacity); cursor: not-allowed; transform: none !important; filter: grayscale(30%); }
         #modalBtnComplete{background-color:var(--success-color);color:#fff;} #modalBtnComplete:disabled { background-color: var(--text-secondary-color); color: var(--surface-lighter-color); cursor: not-allowed; } #modalBtnEdit{background-color:var(--accent-alt-color);color:#fff;} #modalBtnDelete{background-color:var(--error-color);color:#fff;} #modalBtnCancel,#modalBtnCancelEdit{background-color:var(--surface-lighter-color);color:var(--text-primary-color);border:1px solid var(--border-color);}
         body.light-theme #modalBtnComplete, body.light-theme #modalBtnEdit, body.light-theme #modalBtnDelete { color: var(--bg-color); }
         body.light-theme #modalBtnComplete:disabled { background-color: #cccccc; color: #777777; }
-        .edit-view{display:none;} .edit-view .form-group{width:100%;} .edit-view label{font-size:0.8em;} #modalBtnSaveEdit{background-color:var(--success-color);color:#fff;}
+        .edit-view{display:none;}
+        .edit-view .form-group{width:100%;}
+        .edit-view label{font-size:var(--form-label-size); color: var(--form-label-color); font-weight: var(--form-label-weight); letter-spacing: var(--form-label-spacing); text-transform: uppercase; margin-bottom: 8px;} /* Apply refined label style */
+        .edit-view input[type="date"], .edit-view input[type="text"] { /* Apply refined input styles */
+            padding: var(--input-padding);
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border-color);
+            border-radius: var(--input-border-radius);
+            color: var(--text-primary-color);
+            font-family: inherit;
+            font-size: 1rem;
+            width: 100%;
+            transition: all var(--transition-speed-fast);
+            box-shadow: var(--input-shadow);
+        }
+        .edit-view input:focus {
+            outline: none;
+            border-color: var(--input-focus-border-color);
+            background-color: var(--input-focus-bg);
+            box-shadow: var(--input-focus-shadow);
+        }
+        #modalBtnSaveEdit{background-color:var(--success-color);color:#fff;}
         body.light-theme #modalBtnSaveEdit { color: var(--bg-color); }
 
+        /* --- Misc Styles --- */
         .no-assignments, .no-upcoming{font-size:0.9em;text-align:center;color:var(--text-secondary-color);padding:30px 20px;font-style:italic;background:transparent; transition: color var(--transition-speed-med);} .no-assignments{padding:40px 20px;}
         #confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2000;} .confetti-piece{position:absolute;width:10px;height:15px;opacity:0.9;animation:fallFadeOut 3.5s ease-in forwards;border-radius:3px;background-image:linear-gradient(45deg,var(--accent-primary-color),var(--success-color),var(--accent-alt-color));} @keyframes fallFadeOut{0%{transform:translateY(-30px) rotate(0deg) scale(1);opacity:1;}100%{transform:translateY(110vh) rotate(1080deg) scale(0.5);opacity:0;}}
-
         .calendar-tooltip { position: absolute; display: none; background-color: var(--tooltip-bg); color: var(--text-primary-color); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--border-radius-inner); font-size: 0.8em; z-index: 1010; pointer-events: none; white-space: normal; max-width: 150px; box-shadow: 0 3px 8px rgba(0,0,0,0.2); opacity: 0; transform: translateY(5px); transition: opacity 0.15s ease-out, transform 0.15s ease-out, background-color var(--transition-speed-med), color var(--transition-speed-med), border-color var(--transition-speed-med); }
         .calendar-tooltip.is-visible { display: block; opacity: 1; transform: translateY(0); }
     </style>
@@ -175,7 +310,7 @@
                              <label for="assignmentType" data-translate="formTypeLabel">Tipo</label>
                              <select id="assignmentType" name="assignmentType" required>
                                  <option value="" disabled selected data-translate="formTypeSelectOption">...</option>
-                             </select>
+                                 </select>
                          </div>
                          <div class="form-group" id="customTypeGroup">
                              <label for="customAssignmentType" data-translate="formCustomTypeLabel">Nome</label>
@@ -233,6 +368,7 @@
      <div id="calendar-tooltip" class="calendar-tooltip"></div>
 
      <script>
+         // All JavaScript remains the same as provided in the original script
          document.addEventListener('DOMContentLoaded', async () => {
              const SUPPORTED_LANGUAGES = ['pt-BR', 'en', 'es', 'de', 'fr', 'it']; // Add more as needed
              const LANGUAGE_NAMES = { // Optional: Names for the dropdown
@@ -287,7 +423,7 @@
                          alertDateInPastEdit:"Cannot set past date for incomplete item.", modalCompleteCelebrationFuture:"Cannot complete future Memorial.",
                          assignTypeFieldLeader: "Group Overseer", assignTypeAttendantEntry: "Entry Attendant", assignTypeAttendantAud: "Aud. Attendant", assignTypeCleaning: "Cleaning", assignTypeAudio: "Sound", assignTypeVideo: "Video",
                          assignTypeConductor: "WT Conductor", assignTypeBibleReading: "Bible Reading", assignTypeCongStudyReader: "CBS Reader", assignTypeCongStudyConductor: "CBS Conductor", assignTypePublicTalk: "Public Talk", assignTypeChristianLifeTalk: "Living Talk", assignTypeTreasuresTalk: "Treasures Talk", assignTypeSpiritualGems: "Digging Gems", assignTypeMinistrySchool: "Apply Ministry", assignTypeWatchtowerReader: "WT Reader", assignTypeWatchtowerConductor: "WT Conductor", assignTypeFinalPrayer: "Final Prayer",
-                         assignTypeAssembly: "Assembly", assignTypeBethelVisit: "Bethel Visit", shortNameCongStudyReader:"CBS Read.", shortNameCongStudyConductor:"CBS Cond.", shortNameMinistrySchool:"Ministry", shortNameAttendantEntry:"Attend. Entry", shortNameAttendantAud:"Attend. Aud.", shortNameTreasuresTalk:"Treasures", shortNameChristianLifeTalk:"Living", shortNameWatchtowerReader:"WT Read.", shortNameWatchtowerConductor:"WT Cond.", shortNameConventionD1:"Conv. D1", shortNameConventionD2:"Conv. D2", shortNameConventionD3:"Conv. D3", shortNameFieldLeader:"Gr. Over.", themeToggleButton: "Toggle Theme", languageToggleButton: "Change Language"
+                         assignTypeAssembly: "Assembly", assignTypeBethelVisit: "Bethel Visit", shortNameCongStudyReader:"CBS Read.", shortNameCongStudyConductor:"CBS Cond.", shortNameMinistrySchool:"Ministry", shortNameAttendantEntry:"Attend. Entry", shortNameAttendantAud:"Attend. Aud.", shortNameTreasuresTalk:"Treasures", shortNameChristianLifeTalk:"Living", shortNameWatchtowerReader:"WT Read.", shortNameWatchtowerConductor:"WT Cond.", shortNameConventionD1:"Conv. D1", shortNameConventionD2:"Conv. D2", shortNameConventionD3:"Conv. D3", shortNameFieldLeader:"Gr. Over.", themeToggleButton: "Toggle Theme", languageToggleButton: "Change Language", formCustomTypePlaceholder: "Enter custom name", formNotesPlaceholder: "Optional notes"
                      };
                      currentLanguage = DEFAULT_LANGUAGE; // Fallback to English
                      console.warn("Using internal English fallbacks for translations.");
@@ -455,7 +591,7 @@
                                      if (a.type.includes('1')) a.internalType = "convention_day_1";
                                      else if (a.type.includes('2')) a.internalType = "convention_day_2";
                                      else if (a.type.includes('3')) a.internalType = "convention_day_3";
-                                      else a.internalType = INTERNAL_CONGRESS_TYPE; // Fallback if day number isn't clear
+                                         else a.internalType = INTERNAL_CONGRESS_TYPE; // Fallback if day number isn't clear
                                  } else {
                                      let possibleKey = null;
                                      const typeMap = {};
@@ -463,7 +599,7 @@
                                          if (Array.isArray(BASE_ASSIGNMENT_KEYS[catKey])) {
                                              BASE_ASSIGNMENT_KEYS[catKey].forEach(typeK => {
                                                  if(typeK !== INTERNAL_CONGRESS_TYPE && typeK !== 'assignTypeCustom') {
-                                                      // Use English as the base for mapping during migration if needed
+                                                     // Use English as the base for mapping during migration if needed
                                                      const baseLang = translations['en'] || {};
                                                      typeMap[baseLang[typeK] || typeK] = typeK;
                                                  }
@@ -472,7 +608,7 @@
                                      }
                                      possibleKey = typeMap[a.type] || Object.keys(typeMap).find(key => typeMap[key] === a.type); // Try matching display name back to key
                                      a.internalType = possibleKey || `custom:${a.type || `unknown_${a.id}`}`;
-                                      if (!possibleKey) console.log(` > Migrated '${a.type}' to custom type.`);
+                                         if (!possibleKey) console.log(` > Migrated '${a.type}' to custom type.`);
                                  }
                              }
                              // Ensure display 'type' matches current language based on internalType
@@ -485,11 +621,11 @@
                                      a.type = _t(a.internalType);
                                  }
                              } else if (a.internalType && a.internalType.startsWith('custom:')) {
-                                  if (!a.type) a.type = a.internalType.substring(7).replace(/_/g, ' '); // Restore type from custom internal type if missing
+                                     if (!a.type) a.type = a.internalType.substring(7).replace(/_/g, ' '); // Restore type from custom internal type if missing
                              }
                              return a;
                          }).filter(a => a && a.internalType !== 'unknown');
-                          appData.assignments.forEach(a => { if (a.internalType === INTERNAL_CELEBRATION_TYPE) a.isCelebration = true; });
+                             appData.assignments.forEach(a => { if (a.internalType === INTERNAL_CELEBRATION_TYPE) a.isCelebration = true; });
                      } catch(e){ console.error("Error parsing loaded data:", e); appData = { assignments: [], frequency: {} }; }
                  }
              }
@@ -532,8 +668,8 @@
                  }
 
                  if (isNaN(dateObj.valueOf())) {
-                    console.error("formatDate created an invalid date from:", d);
-                    return typeof d === 'string' ? d : '[Invalid Date]';
+                     console.error("formatDate created an invalid date from:", d);
+                     return typeof d === 'string' ? d : '[Invalid Date]';
                  }
 
                  try {
@@ -619,8 +755,8 @@
                          // For dates further out, show short month and day
                          return formatDate(targetDate, { day: '2-digit', month: 'short' });
                      } else {
-                          // Fallback if Intl.RelativeTimeFormat is not supported
-                          return formatDate(targetDate);
+                             // Fallback if Intl.RelativeTimeFormat is not supported
+                             return formatDate(targetDate);
                      }
                  } catch (e) {
                      console.error("Error in formatRelativeDate:", e, "Input:", ds);
@@ -700,18 +836,18 @@
                  let allOptions = [];
                   if (!BASE_ASSIGNMENT_KEYS || typeof BASE_ASSIGNMENT_KEYS !== 'object') { console.error("BASE_ASSIGNMENT_KEYS missing or invalid"); return; }
 
-                  Object.keys(BASE_ASSIGNMENT_KEYS).forEach(categoryKey => {
-                      if (Array.isArray(BASE_ASSIGNMENT_KEYS[categoryKey])) {
-                          BASE_ASSIGNMENT_KEYS[categoryKey].forEach(typeKey => {
-                              if (typeKey !== 'assignTypeCustom') {
-                                  let displayText = typeKey === INTERNAL_CONGRESS_TYPE
-                                      ? `${getEmojiForInternalType(typeKey)} ${_t('assignTypeConvention')} (${_t('congressDuration')})`
-                                      : `${getEmojiForInternalType(typeKey)} ${_t(typeKey)}`;
-                                  allOptions.push({ internalValue: typeKey, displayText: displayText, categoryKey: categoryKey, freq: appData.frequency[typeKey] || 0 });
-                              }
-                          });
-                      }
-                  });
+                   Object.keys(BASE_ASSIGNMENT_KEYS).forEach(categoryKey => {
+                       if (Array.isArray(BASE_ASSIGNMENT_KEYS[categoryKey])) {
+                           BASE_ASSIGNMENT_KEYS[categoryKey].forEach(typeKey => {
+                               if (typeKey !== 'assignTypeCustom') {
+                                   let displayText = typeKey === INTERNAL_CONGRESS_TYPE
+                                       ? `${getEmojiForInternalType(typeKey)} ${_t('assignTypeConvention')} (${_t('congressDuration')})`
+                                       : `${getEmojiForInternalType(typeKey)} ${_t(typeKey)}`;
+                                   allOptions.push({ internalValue: typeKey, displayText: displayText, categoryKey: categoryKey, freq: appData.frequency[typeKey] || 0 });
+                               }
+                           });
+                       }
+                   });
 
                  allOptions.sort((a, b) => (b.freq !== a.freq) ? b.freq - a.freq : (a.displayText || "").localeCompare(b.displayText || "", currentLanguage));
 
@@ -734,9 +870,9 @@
 
                   // Restore selection or select placeholder
                   if (currentSelection && Array.from(select.options).some(opt => opt.value === currentSelection)) {
-                     select.value = currentSelection;
+                      select.value = currentSelection;
                   } else {
-                      select.selectedIndex = 0; // Select the placeholder
+                       select.selectedIndex = 0; // Select the placeholder
                   }
                  select.dispatchEvent(new Event('change')); // Trigger change event for custom field logic
              }
@@ -1145,13 +1281,13 @@
                  if ('serviceWorker' in navigator) {
                       window.addEventListener('load', () => { // Register SW after page load
                           navigator.serviceWorker.register('./service-worker.js')
-                             .then(registration => {
-                                 console.log('ServiceWorker registrado com sucesso no escopo:', registration.scope);
-                             })
-                             .catch(error => {
-                                 console.error('Falha ao registrar o ServiceWorker:', error);
-                             });
-                     });
+                              .then(registration => {
+                                  console.log('ServiceWorker registrado com sucesso no escopo:', registration.scope);
+                              })
+                              .catch(error => {
+                                  console.error('Falha ao registrar o ServiceWorker:', error);
+                              });
+                      });
                  } else {
                       console.log('Service Worker não é suportado neste navegador.');
                  }
