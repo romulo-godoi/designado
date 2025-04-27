@@ -24,11 +24,9 @@ Never miss a meeting part, service duty, or special event again! Manage everythi
 
 ---
 
-## 📸 Screenshots
+## 📸 Screenshot
 
-![Dashboard Light](https://img8.uploadhouse.com/fileuploads/31949/31949908fc83adb8d1883fb7566245608a34b72f.jpg)
-
-![List Dark](https://img9.uploadhouse.com/fileuploads/31949/3194990910b2cd7d5eb2193dc4f043a9faef3dd8.jpg) 
+![Dashboard Light](https://img6.uploadhouse.com/fileuploads/31950/3195013669634c69e58f1843e2a09f5f92f20416.jpg)
 
 ---
 
