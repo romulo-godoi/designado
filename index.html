@@ -500,57 +500,157 @@
              function toggleTheme() { const isLight = document.body.classList.toggle('light-theme'); saveThemePreference(isLight ? 'light' : 'dark'); if (themeToggleIcon) { themeToggleIcon.classList.toggle('fa-sun', !isLight); themeToggleIcon.classList.toggle('fa-moon', isLight); }}
 
              function getEmojiForInternalType(internalType){ if (internalType?.startsWith('custom:')) return ASSIGNMENT_EMOJIS['custom'] || '✨'; return ASSIGNMENT_EMOJIS[internalType] || ASSIGNMENT_EMOJIS['assignTypeCustom'] ||'❓';}
-             function formatDate(d,o={day:'2-digit',month:'2-digit',year:'numeric'}){if(!d)return '';try{const dt=new Date(`${d}T00:00:00Z`); if(isNaN(dt)) throw new Error("Invalid date input for Date obj"); return new Intl.DateTimeFormat(currentLanguage,{...o,timeZone:'UTC'}).format(dt);}catch(e){console.error("Date format error:",e, "Input:", d); const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}}
-             function dateToYyyyMmDd(d){ try{ if (!(d instanceof Date)) d = new Date(d); if(isNaN(d)) throw new Error("Invalid Date obj"); const year = d.getUTCFullYear(); const month = String(d.getUTCMonth()+1).padStart(2,'0'); const day = String(d.getUTCDate()).padStart(2,'0'); return`${year}-${month}-${day}`; } catch(e) { console.error("dateToYyyyMmDd error:", e, "Input:", d); return null;} }
-             function getTodayDateString(){const d=new Date(); return dateToYyyyMmDd(d);}
+
+             // Use local time for date parsing and formatting
+             function parseLocalDate(dateString) {
+                 if (!dateString || !/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+                     console.warn("Invalid date string passed to parseLocalDate:", dateString);
+                     return new Date(NaN); // Return invalid date
+                 }
+                 // Split the string and create date using local time constructor
+                 const [year, month, day] = dateString.split('-').map(Number);
+                 // Note: month is 0-indexed in JavaScript Date constructor (0=Jan, 11=Dec)
+                 const date = new Date(year, month - 1, day);
+                 // Optional: Check if the created date components match the input to catch invalid dates like 2023-02-30
+                 if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+                     console.warn("Date object created with different components than input:", dateString, date);
+                     return new Date(NaN);
+                 }
+                 return date;
+             }
+
+             function formatDate(d,o={day:'2-digit',month:'2-digit',year:'numeric'}){
+                 if(!d) return '';
+                 let dateObj;
+                 if (d instanceof Date && !isNaN(d)) {
+                     dateObj = d;
+                 } else if (typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d)) {
+                     dateObj = parseLocalDate(d); // Use local parser
+                 } else {
+                     console.error("Invalid input to formatDate:", d);
+                     return String(d); // Return original string if invalid
+                 }
+
+                 if (isNaN(dateObj.valueOf())) {
+                    console.error("formatDate created an invalid date from:", d);
+                    return typeof d === 'string' ? d : '[Invalid Date]';
+                 }
+
+                 try {
+                     // Use default locale's formatter, which uses local timezone
+                     return new Intl.DateTimeFormat(currentLanguage, o).format(dateObj);
+                 } catch(e) {
+                     console.error("Date format error:", e, "Input:", d, "Date Obj:", dateObj);
+                     // Basic fallback if Intl fails
+                     const day = String(dateObj.getDate()).padStart(2,'0');
+                     const month = String(dateObj.getMonth()+1).padStart(2,'0');
+                     const year = dateObj.getFullYear();
+                     return `${day}/${month}/${year}`;
+                 }
+             }
+
+             function dateToYyyyMmDd(d){
+                 try{
+                     if (!(d instanceof Date) || isNaN(d)) {
+                         console.warn("Invalid Date object passed to dateToYyyyMmDd:", d);
+                         return null;
+                     }
+                     // Use local date components
+                     const year = d.getFullYear();
+                     const month = String(d.getMonth()+1).padStart(2,'0'); // Month is 0-indexed
+                     const day = String(d.getDate()).padStart(2,'0');
+                     return`${year}-${month}-${day}`;
+                 } catch(e) {
+                     console.error("dateToYyyyMmDd error:", e, "Input:", d);
+                     return null;
+                 }
+             }
+
+             function getTodayDateString(){
+                 // Directly use local date components
+                 const d = new Date();
+                 const year = d.getFullYear();
+                 const month = String(d.getMonth()+1).padStart(2,'0');
+                 const day = String(d.getDate()).padStart(2,'0');
+                 return`${year}-${month}-${day}`;
+             }
+
+             function getTodayAtMidnight() {
+                 const today = new Date();
+                 today.setHours(0, 0, 0, 0); // Set to local midnight
+                 return today;
+             }
 
              function formatRelativeDate(ds) {
                  if (!ds || !/^\d{4}-\d{2}-\d{2}$/.test(ds)) { return ds || ''; }
                  try {
-                     const today = new Date();
-                     today.setUTCHours(0, 0, 0, 0);
-                     const targetDate = new Date(`${ds}T00:00:00Z`);
+                     const today = getTodayAtMidnight(); // Local midnight
+                     const targetDate = parseLocalDate(ds); // Local date at midnight
+
                      if (isNaN(targetDate.getTime())) {
                          console.warn("formatRelativeDate: Invalid targetDate from input", ds);
-                         return ds;
+                         return formatDate(ds); // Format the original string if parsing fails
                      }
+
+                     // Calculate difference in days based on local midnight timestamps
+                     const diffTime = targetDate.getTime() - today.getTime();
+                     const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)); // Use Math.round for better accuracy across DST changes
 
                      if (typeof Intl !== 'undefined' && typeof Intl.RelativeTimeFormat !== 'undefined') {
                          const rtf = new Intl.RelativeTimeFormat(currentLanguage, { numeric: 'auto', style: 'short' });
-                         const diffDays = Math.ceil((targetDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
-                         if (diffDays < -30) return formatDate(ds);
+                         if (diffDays < -30) return formatDate(targetDate); // Format the date object
                          if (diffDays < 0) return rtf.format(diffDays, 'day');
                          if (diffDays === 0) return _t("relativeDateToday");
                          if (diffDays === 1) return _t("relativeDateTomorrow");
 
                          if (diffDays > 1 && diffDays <= 6) {
                              try {
-                                 const weekdayFormat = new Intl.DateTimeFormat(currentLanguage, { weekday: 'short', timeZone: 'UTC' });
+                                 // Use locale's weekday format
+                                 const weekdayFormat = new Intl.DateTimeFormat(currentLanguage, { weekday: 'short'});
                                  const weekday = weekdayFormat.format(targetDate);
+                                 // Combine relative format with weekday
                                  return `${rtf.format(diffDays, 'day')} (${weekday})`;
                              } catch (eInner) {
                                  console.warn("formatRelativeDate: Could not format weekday, falling back.", eInner);
-                                 return rtf.format(diffDays, 'day');
+                                 return rtf.format(diffDays, 'day'); // Fallback to just relative days
                              }
                          }
-                         return formatDate(ds, { day: '2-digit', month: 'short' });
+                         // For dates further out, show short month and day
+                         return formatDate(targetDate, { day: '2-digit', month: 'short' });
                      } else {
-                          return formatDate(ds);
+                          // Fallback if Intl.RelativeTimeFormat is not supported
+                          return formatDate(targetDate);
                      }
                  } catch (e) {
                      console.error("Error in formatRelativeDate:", e, "Input:", ds);
-                     return formatDate(ds);
+                     return formatDate(ds); // Fallback to simple formatting on error
                  }
              }
 
              function updateFrequency(internalType) { if (!internalType) return; if (internalType !== 'assignTypeCustom' && !internalType.startsWith('custom:') && !internalType.startsWith('convention_day_') && internalType !== INTERNAL_CELEBRATION_TYPE) { appData.frequency[internalType] = (appData.frequency[internalType] || 0) + 1; } else if (internalType === INTERNAL_CONGRESS_TYPE) { appData.frequency[INTERNAL_CONGRESS_TYPE] = (appData.frequency[INTERNAL_CONGRESS_TYPE] || 0) + 1; }}
              function triggerConfetti(){const c=['var(--accent-primary-color)','var(--accent-alt-color)','var(--success-color)','var(--error-color)','var(--list-color-1)','var(--list-color-3)','var(--list-color-5)'];if(!confettiContainer) return; for(let i=0;i<CONFETTI_COUNT;i++){const p=document.createElement('div');p.classList.add('confetti-piece');p.style.background=c[Math.floor(Math.random()*c.length)];p.style.left=Math.random()*100+'vw';p.style.top=-10-Math.random()*30+'px';p.style.animationDuration=2.5+Math.random()*1.5+'s';p.style.animationDelay=Math.random()*0.5+'s';p.style.transform=`rotate(${Math.random()*360}deg) scale(${0.8+Math.random()*0.4})`;confettiContainer.appendChild(p);setTimeout(()=>{p.remove();},4500);}}
-             function getNextCelebrationDate(todayStr) { if(!todayStr) return null; const today = new Date(todayStr + 'T00:00:00Z'); let futureCelebrations = []; for (const cel of CELEBRATION_DATES) { if (cel && cel.date) { const celDate = new Date(cel.date + 'T00:00:00Z'); if (!isNaN(celDate) && celDate >= today) { futureCelebrations.push(cel); } } } if (futureCelebrations.length > 0) { futureCelebrations.sort((a, b) => new Date(a.date + 'T00:00:00Z') - new Date(b.date + 'T00:00:00Z')); return futureCelebrations[0]; } return null; } // Return closest future date or null
+
+             function getNextCelebrationDate() {
+                 const today = getTodayAtMidnight(); // Local midnight
+                 let futureCelebrations = [];
+                 for (const cel of CELEBRATION_DATES) {
+                     if (cel && cel.date) {
+                         const celDate = parseLocalDate(cel.date); // Local date
+                         if (!isNaN(celDate) && celDate.getTime() >= today.getTime()) {
+                             futureCelebrations.push(cel);
+                         }
+                     }
+                 }
+                 if (futureCelebrations.length > 0) {
+                     futureCelebrations.sort((a, b) => parseLocalDate(a.date).getTime() - parseLocalDate(b.date).getTime());
+                     return futureCelebrations[0];
+                 }
+                 return null; // Return closest future date or null
+             }
 
              function ensureCelebrationExists() {
-                 const todayStr = getTodayDateString(); if (!todayStr) return;
-                 const nextCelebration = getNextCelebrationDate(todayStr);
+                 const nextCelebration = getNextCelebrationDate(); // Uses local time internally now
                  let needsSave = false;
 
                  if (!nextCelebration) { // No future celebrations defined, remove any existing one
@@ -652,13 +752,22 @@
                  setTimeout(() => {
                      weeklyCalendarGrid.innerHTML=''; // Clear content after fade starts
 
-                     const today=new Date(); today.setUTCHours(0,0,0,0); const baseWeek=new Date(today); baseWeek.setUTCDate(today.getUTCDate()+(calendarWeekOffset*7));
-                     const dow=(baseWeek.getUTCDay() + 6) % 7; const start=new Date(baseWeek); start.setUTCDate(baseWeek.getUTCDate()-dow); start.setUTCHours(0,0,0,0);
-                     const end=new Date(start); end.setUTCDate(start.getUTCDate()+6); const todayStr = getTodayDateString();
+                     const today = getTodayAtMidnight(); // Local midnight
+                     const baseWeek=new Date(today);
+                     baseWeek.setDate(today.getDate()+(calendarWeekOffset*7)); // Use local setDate
+
+                     const dayOfWeek = (baseWeek.getDay() + 6) % 7; // Monday as 0, Sunday as 6
+                     const start = new Date(baseWeek);
+                     start.setDate(baseWeek.getDate() - dayOfWeek); // Go back to Monday using local setDate
+                     start.setHours(0,0,0,0); // Ensure it's local midnight
+
+                     const end=new Date(start);
+                     end.setDate(start.getDate()+6); // Go to Sunday using local setDate
+                     const todayStr = dateToYyyyMmDd(today); // Use corrected local function
 
                      if(calendarWeekOffset===0) calendarWeekLabel.textContent = _t("calendarThisWeek");
                      else if(calendarWeekOffset===1) calendarWeekLabel.textContent = _t("calendarNextWeek");
-                     else calendarWeekLabel.textContent=`${formatDate(dateToYyyyMmDd(start),{day:'2-digit',month:'short'})} - ${formatDate(dateToYyyyMmDd(end),{day:'2-digit',month:'short'})}`;
+                     else calendarWeekLabel.textContent=`${formatDate(start,{day:'2-digit',month:'short'})} - ${formatDate(end,{day:'2-digit',month:'short'})}`;
 
                      prevWeekBtn.disabled = (calendarWeekOffset <= -52); // Limit going back ~1 year
                      nextWeekBtn.disabled = (calendarWeekOffset >= 52); // Limit going forward ~1 year
@@ -667,9 +776,14 @@
                      dayNames.forEach(h=>{const d=document.createElement('div');d.className='day-header';d.textContent=h;weeklyCalendarGrid.appendChild(d);});
 
                      for(let i=0;i<7;i++){
-                         const currentDate = new Date(start); currentDate.setUTCDate(start.getUTCDate()+i); const dateStr = dateToYyyyMmDd(currentDate); if (!dateStr) continue;
+                         const currentDate = new Date(start);
+                         currentDate.setDate(start.getDate()+i); // Use local setDate
+                         const dateStr = dateToYyyyMmDd(currentDate); // Use corrected local function
+                         if (!dateStr) continue;
+
                          const cellElement = document.createElement('div'); cellElement.className='day-cell'; if(dateStr===todayStr) cellElement.classList.add('today');
-                         const numberSpan=document.createElement('span'); numberSpan.className='day-number'; numberSpan.textContent=currentDate.getUTCDate(); cellElement.appendChild(numberSpan);
+                         const numberSpan=document.createElement('span'); numberSpan.className='day-number'; numberSpan.textContent=currentDate.getDate(); // Use local getDate
+                         cellElement.appendChild(numberSpan);
                          const assignmentsUl = document.createElement('ul'); assignmentsUl.className='day-assignments'; cellElement.appendChild(assignmentsUl);
                          const todaysAssignments = appData.assignments.filter(a => a && a.date === dateStr && !a.completed);
 
@@ -693,8 +807,28 @@
 
              function renderUpcomingList(){
                  if (!upcomingList) return;
-                  upcomingList.innerHTML=''; const today=new Date();today.setUTCHours(0,0,0,0); const cutoff=new Date(today); cutoff.setUTCDate(today.getUTCDate()+UPCOMING_DAYS); const todayStr = getTodayDateString();
-                  const upcoming=appData.assignments.filter(a=>{ try { const d = new Date(a.date+'T00:00:00Z'); return a && a.date && !isNaN(d) && d >= today && d < cutoff && !a.completed && a.date >= todayStr && a.internalType; } catch(e){ return false; } }).sort((a,b) => { try{ return new Date(a.date+'T00:00:00Z') - new Date(b.date+'T00:00:00Z');} catch(e) {return 0;} });
+                  upcomingList.innerHTML='';
+                  const today = getTodayAtMidnight(); // Local midnight
+                  const cutoff=new Date(today);
+                  cutoff.setDate(today.getDate()+UPCOMING_DAYS); // Use local setDate
+
+                  const upcoming=appData.assignments.filter(a=>{
+                      if (!a || !a.date || !a.internalType || a.completed) return false;
+                      try {
+                          const assignmentDateLocal = parseLocalDate(a.date); // Parse as local date
+                          if (isNaN(assignmentDateLocal.valueOf())) return false;
+                          // Compare local timestamps
+                          return assignmentDateLocal.getTime() >= today.getTime() && assignmentDateLocal.getTime() < cutoff.getTime();
+                      } catch(e){
+                          console.error("Error parsing date in renderUpcomingList:", a.date, e);
+                          return false;
+                      }
+                  }).sort((a,b) => {
+                      try{
+                          return parseLocalDate(a.date).getTime() - parseLocalDate(b.date).getTime(); // Sort by local time
+                      } catch(e) {return 0;}
+                  });
+
                   if(upcoming.length===0){upcomingList.innerHTML=`<li class="no-upcoming">${_t("noUpcomingAssignments", UPCOMING_DAYS)}</li>`;}
                   else { upcoming.forEach(a=>{ const li=document.createElement('li');li.className='upcoming-item';const t=document.createElement('span');t.className='type';t.textContent=`${getEmojiForInternalType(a.internalType)} ${a.type || _t(a.internalType)}`;const dt=document.createElement('span');dt.className='date';dt.textContent=formatRelativeDate(a.date);li.appendChild(t);li.appendChild(dt);upcomingList.appendChild(li); });}
              }
@@ -706,15 +840,21 @@
 
                  const sorted = [...appData.assignments].filter(a => a && a.internalType)
                       .sort((a,b)=>{
-                         const timeA = a.date ? new Date(a.date+'T00:00:00Z').getTime() : (a.completed ? Infinity : -Infinity);
-                         const timeB = b.date ? new Date(b.date+'T00:00:00Z').getTime() : (b.completed ? Infinity : -Infinity);
-                         if (a.completed !== b.completed) return a.completed ? 1 : -1;
-                         if (isNaN(timeA) && isNaN(timeB)) return 0;
-                         if (isNaN(timeA)) return a.completed ? 1 : -1;
-                         if (isNaN(timeB)) return b.completed ? -1 : 1;
-                         if (timeA !== timeB) return timeA - timeB;
-                         return (a.type || "").localeCompare(b.type || "", currentLanguage);
-                     });
+                          // Sort by completion status first (incomplete first)
+                          if (a.completed !== b.completed) return a.completed ? 1 : -1;
+                          // Then sort by date (ascending, using local time)
+                          const timeA = a.date ? parseLocalDate(a.date)?.getTime() : (a.completed ? Infinity : -Infinity);
+                          const timeB = b.date ? parseLocalDate(b.date)?.getTime() : (b.completed ? Infinity : -Infinity);
+
+                          if (isNaN(timeA) && isNaN(timeB)) return 0; // Both invalid dates? Keep order.
+                          if (isNaN(timeA)) return a.completed ? 1 : -1; // Invalid date goes last (if completed) or first (if not)
+                          if (isNaN(timeB)) return b.completed ? -1 : 1; // Opposite for B
+
+                          if (timeA !== timeB) return timeA - timeB; // Sort by time if valid and different
+
+                          // If dates are the same, sort by type name
+                          return (a.type || "").localeCompare(b.type || "", currentLanguage);
+                      });
 
                  if (sorted.length === 0) { container.innerHTML = `<li class="no-assignments">${_t("noAssignmentsAdded")}</li>`; return; }
 
@@ -725,7 +865,7 @@
                      const typeSpan = document.createElement('span'); typeSpan.className = 'assignment-type'; typeSpan.textContent = a.type || _t(a.internalType); li.appendChild(typeSpan);
                      const dateSpan = document.createElement('span'); dateSpan.className = 'assignment-date'; dateSpan.textContent = formatRelativeDate(a.date); li.appendChild(dateSpan);
                      if (a.notes && !a.isCelebration) { const notesSpan = document.createElement('span'); notesSpan.className = 'assignment-notes'; notesSpan.textContent = `(${a.notes})`; li.appendChild(notesSpan); }
-                     else if (a.isCelebration && a.date){ try { const year = new Date(a.date + 'T00:00:00Z').getUTCFullYear(); if (!isNaN(year)) { const yearSpan = document.createElement('span'); yearSpan.className = 'assignment-notes'; yearSpan.textContent = `(${year})`; li.appendChild(yearSpan); }} catch (e) {} }
+                     else if (a.isCelebration && a.date){ try { const dateObj = parseLocalDate(a.date); const year = dateObj.getFullYear(); if (!isNaN(year)) { const yearSpan = document.createElement('span'); yearSpan.className = 'assignment-notes'; yearSpan.textContent = `(${year})`; li.appendChild(yearSpan); }} catch (e) {} }
                      li.addEventListener('click', (e) => { const item = e.currentTarget; if (item?.dataset?.id) showActionModal(item.dataset.id); });
                      container.appendChild(li);
                  });
@@ -739,32 +879,34 @@
                  const displayTypeSelected = selectedOptionElement ? selectedOptionElement.textContent : internalTypeSelected;
                  const baseDateString = assignmentDateInput.value; const notes = assignmentNotesInput?.value.trim() || '';
                  let finalInternalType = internalTypeSelected; let finalDisplayType = displayTypeSelected; let frequencyTrackingType = internalTypeSelected;
-                 const todayS = getTodayDateString();
+                 const today = getTodayAtMidnight(); // Local midnight Date object
+                 const baseDate = parseLocalDate(baseDateString); // Local Date object
+
                  const emojiMatch = displayTypeSelected.match(/^(\p{Emoji}\uFE0F?)\s+/u); let cleanDisplayTypeForAlert = emojiMatch ? displayTypeSelected.substring(emojiMatch[0].length) : displayTypeSelected;
                  cleanDisplayTypeForAlert = cleanDisplayTypeForAlert.replace(` (${_t('congressDuration')})`, '').trim();
 
                  if (internalTypeSelected === INTERNAL_CELEBRATION_TYPE) { alert(_t("alertAddCelebrationManual")); return; }
                  if (!internalTypeSelected) { alert(_t('alertInvalidTypeDate')); assignmentTypeInput.focus(); return; } // Check type selected before date
-                 if (!baseDateString) { alert(_t("alertDateRequired")); assignmentDateInput.focus(); return; }
-                 if (!/^\d{4}-\d{2}-\d{2}$/.test(baseDateString)) { alert(_t('alertInvalidDateFormat')); assignmentDateInput.focus(); return; }
-                 if (baseDateString < todayS) { alert(_t("alertDateInPast")); assignmentDateInput.focus(); return; }
+                 if (!baseDateString || isNaN(baseDate.valueOf())) { alert(_t("alertInvalidDate")); assignmentDateInput.focus(); return; } // Check for valid date string AND valid parsed date
+                 if (baseDate.getTime() < today.getTime()) { alert(_t("alertDateInPast")); assignmentDateInput.focus(); return; } // Compare timestamps
 
                   if (internalTypeSelected === 'assignTypeCustom') {
                       const customName = customAssignmentTypeInput.value.trim(); if (!customName) { alert(_t("alertCustomTypeRequired")); customAssignmentTypeInput.focus(); return; }
                       finalInternalType = 'custom:' + customName.toLowerCase().replace(/[^\p{L}\p{N}_-]+/gu, '_').substring(0, 30);
                       finalDisplayType = customName; frequencyTrackingType = null;
                       const customExists = appData.assignments.some(a => a && a.type === finalDisplayType && a.date === baseDateString && !a.completed);
-                      if (customExists) { alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString))); return; }
+                      if (customExists) { alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDate))); return; }
                   } else if (internalTypeSelected === INTERNAL_CONGRESS_TYPE) {
                        const day1InternalType = `convention_day_1`; const day1Exists = appData.assignments.some(a => a && a.internalType === day1InternalType && a.date === baseDateString);
-                       if (day1Exists) { alert(_t("alertCongressExists", formatDate(baseDateString))); return; }
-                       const startDate = new Date(`${baseDateString}T00:00:00Z`); if (isNaN(startDate)) { alert(_t('alertInvalidDate')); return; }
+                       if (day1Exists) { alert(_t("alertCongressExists", formatDate(baseDate))); return; }
+                       const startDate = baseDate; // Already parsed as local
+                       if (isNaN(startDate.valueOf())) { alert(_t('alertInvalidDate')); return; }
                        let addedAssignments = [];
-                       for (let i = 0; i < 3; i++) { const currentDayDate = new Date(startDate); currentDayDate.setUTCDate(startDate.getUTCDate() + i); const currentDayDateString = dateToYyyyMmDd(currentDayDate); if (!currentDayDateString) { alert(_t("alertErrorAddingCongress")); return; } const dayTypeDisplay = _t('congressDayPrefix', i + 1); const dayTypeInternal = `convention_day_${i + 1}`; addedAssignments.push({ id: Date.now() + Math.random() + i, type: dayTypeDisplay, internalType: dayTypeInternal, date: currentDayDateString, notes: notes, completed: false, isCelebration: false }); }
+                       for (let i = 0; i < 3; i++) { const currentDayDate = new Date(startDate); currentDayDate.setDate(startDate.getDate() + i); const currentDayDateString = dateToYyyyMmDd(currentDayDate); if (!currentDayDateString) { alert(_t("alertErrorAddingCongress")); return; } const dayTypeDisplay = _t('congressDayPrefix', i + 1); const dayTypeInternal = `convention_day_${i + 1}`; addedAssignments.push({ id: Date.now() + Math.random() + i, type: dayTypeDisplay, internalType: dayTypeInternal, date: currentDayDateString, notes: notes, completed: false, isCelebration: false }); }
                        appData.assignments.push(...addedAssignments); updateFrequency(INTERNAL_CONGRESS_TYPE); saveAppData(); renderAll(); resetAndCloseForm(); return;
                   } else {
                        finalDisplayType = _t(internalTypeSelected); const exists = appData.assignments.some(a => a && a.internalType === internalTypeSelected && a.date === baseDateString && !a.completed);
-                       if (exists) { alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDateString))); return; }
+                       if (exists) { alert(_t("alertAlreadyExists", finalDisplayType, formatDate(baseDate))); return; }
                   }
                   const newAssignment = { id: Date.now() + Math.random(), type: finalDisplayType, internalType: finalInternalType, date: baseDateString, notes: notes, completed: false, isCelebration: false };
                   appData.assignments.push(newAssignment); if (frequencyTrackingType) { updateFrequency(frequencyTrackingType); }
@@ -782,13 +924,57 @@
                  const canEditDelete = !a.isCelebration && !a.internalType?.startsWith('convention_day_');
                  modalBtnEdit.style.display = canEditDelete ? 'block' : 'none'; modalBtnDelete.style.display = canEditDelete ? 'block' : 'none';
                  modalBtnEdit.disabled = !canEditDelete; modalBtnDelete.disabled = !canEditDelete;
-                 if (a.isCelebration){ const todayStr=getTodayDateString(); if(a.date > todayStr){ modalBtnComplete.disabled=true; modalBtnComplete.title = _t("modalCompleteCelebrationFuture"); }}
+                 if (a.isCelebration){
+                     const today = getTodayAtMidnight();
+                     const assignmentDate = parseLocalDate(a.date);
+                     if(!isNaN(assignmentDate.valueOf()) && assignmentDate.getTime() > today.getTime()){
+                         modalBtnComplete.disabled=true;
+                         modalBtnComplete.title = _t("modalCompleteCelebrationFuture");
+                     }
+                 }
                  actionModal.classList.add('is-visible');
              }
              function hideActionModal(){ if(actionModal) actionModal.classList.remove('is-visible'); }
-             function handleCompleteToggle(){ const id=modalAssignmentIdInput.value; const idx=appData.assignments.findIndex(a=>a && a.id==id); if(idx===-1) return; const a=appData.assignments[idx]; if(a.isCelebration){ const todayStr=getTodayDateString(); if(a.date>todayStr){return;}} const willBeCompleted=!a.completed; appData.assignments[idx].completed=willBeCompleted; saveAppData(); renderAll(); if(willBeCompleted){triggerConfetti();} hideActionModal(); }
+             function handleCompleteToggle(){
+                 const id=modalAssignmentIdInput.value;
+                 const idx=appData.assignments.findIndex(a=>a && a.id==id);
+                 if(idx===-1) return;
+                 const a=appData.assignments[idx];
+                 if(a.isCelebration){
+                     const today = getTodayAtMidnight();
+                     const assignmentDate = parseLocalDate(a.date);
+                     if(!isNaN(assignmentDate.valueOf()) && assignmentDate.getTime() > today.getTime()){
+                         // Prevent completing future Memorial
+                         return;
+                     }
+                 }
+                 const willBeCompleted=!a.completed;
+                 appData.assignments[idx].completed=willBeCompleted;
+                 saveAppData();
+                 renderAll();
+                 if(willBeCompleted){triggerConfetti();}
+                 hideActionModal();
+             }
              function handleEditRequest(){ const id=modalAssignmentIdInput.value; const a=appData.assignments.find(x=>x && x.id==id); if(!a || a.isCelebration || a.internalType?.startsWith('convention_day_') || !modalEditDateInput || !modalEditNotesInput || !modalActionButtonsDiv || !modalEditViewDiv ) return; modalEditDateInput.value=a.date; modalEditNotesInput.value=a.notes||''; modalActionButtonsDiv.style.display='none'; modalEditViewDiv.style.display='flex'; }
-             function handleSaveEdit(){ const id=modalAssignmentIdInput.value; const idx=appData.assignments.findIndex(a=>a && a.id==id); if(idx===-1 || appData.assignments[idx].isCelebration || appData.assignments[idx].internalType?.startsWith('convention_day_') || !modalEditDateInput || !modalEditNotesInput) return; const newDate=modalEditDateInput.value; const newNotes=modalEditNotesInput.value.trim(); const todayS=getTodayDateString(); if(!newDate||!/^\d{4}-\d{2}-\d{2}$/.test(newDate)){alert(_t("alertInvalidDate")); modalEditDateInput.focus(); return;} if(newDate < todayS && !appData.assignments[idx].completed){alert(_t("alertDateInPastEdit")); modalEditDateInput.focus(); return;} appData.assignments[idx].date=newDate; appData.assignments[idx].notes=newNotes; saveAppData(); renderAll(); hideActionModal(); }
+             function handleSaveEdit(){
+                 const id=modalAssignmentIdInput.value;
+                 const idx=appData.assignments.findIndex(a=>a && a.id==id);
+                 if(idx===-1 || appData.assignments[idx].isCelebration || appData.assignments[idx].internalType?.startsWith('convention_day_') || !modalEditDateInput || !modalEditNotesInput) return;
+
+                 const newDateString=modalEditDateInput.value;
+                 const newNotes=modalEditNotesInput.value.trim();
+                 const today = getTodayAtMidnight();
+                 const newDate = parseLocalDate(newDateString);
+
+                 if(!newDateString || isNaN(newDate.valueOf())){alert(_t("alertInvalidDate")); modalEditDateInput.focus(); return;}
+                 if(newDate.getTime() < today.getTime() && !appData.assignments[idx].completed){alert(_t("alertDateInPastEdit")); modalEditDateInput.focus(); return;}
+
+                 appData.assignments[idx].date=newDateString; // Save as string
+                 appData.assignments[idx].notes=newNotes;
+                 saveAppData();
+                 renderAll();
+                 hideActionModal();
+             }
              function deleteAssignment(id){ const aIndex = appData.assignments.findIndex(x => x && x.id == id); if (aIndex === -1) return; const a = appData.assignments[aIndex]; if (!a || a.isCelebration || a.internalType?.startsWith('convention_day_')) { return; } appData.assignments.splice(aIndex, 1); saveAppData(); renderAll(); }
              function handleDeleteRequest(){ const id = modalAssignmentIdInput.value; if (id) { deleteAssignment(id); hideActionModal(); } }
 
@@ -977,4 +1163,4 @@
          });
      </script>
 </body>
-</ht
+</html>
