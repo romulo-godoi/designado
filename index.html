@@ -61,7 +61,7 @@
             --date-picker-indicator-filter: invert(0.7);
             --assignment-date-dark-color: #c0c0c0;
             --calendar-transition-speed: 0.25s;
-        }
+         }
 
         /* --- :root Variables (Light Theme) --- */
         body.light-theme {
@@ -96,7 +96,7 @@
 
             --date-picker-indicator-filter: invert(0.1);
             --assignment-date-dark-color: var(--text-secondary-color); /* Reset for light theme */
-        }
+         }
 
         /* --- Base & Layout Styles --- */
         * { box-sizing: border-box; margin: 0; padding: 0; } html { scroll-behavior: smooth; height: 100%; }
@@ -270,7 +270,7 @@
         #confetti-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;z-index:2000;} .confetti-piece{position:absolute;width:10px;height:15px;opacity:0.9;animation:fallFadeOut 3.5s ease-in forwards;border-radius:3px;background-image:linear-gradient(45deg,var(--accent-primary-color),var(--success-color),var(--accent-alt-color));} @keyframes fallFadeOut{0%{transform:translateY(-30px) rotate(0deg) scale(1);opacity:1;}100%{transform:translateY(110vh) rotate(1080deg) scale(0.5);opacity:0;}}
         .calendar-tooltip { position: absolute; display: none; background-color: var(--tooltip-bg); color: var(--text-primary-color); border: 1px solid var(--border-color); padding: 8px 12px; border-radius: var(--border-radius-inner); font-size: 0.8em; z-index: 1010; pointer-events: none; white-space: normal; max-width: 150px; box-shadow: 0 3px 8px rgba(0,0,0,0.2); opacity: 0; transform: translateY(5px); transition: opacity 0.15s ease-out, transform 0.15s ease-out, background-color var(--transition-speed-med), color var(--transition-speed-med), border-color var(--transition-speed-med); }
         .calendar-tooltip.is-visible { display: block; opacity: 1; transform: translateY(0); }
-    </style>
+     </style>
 </head>
 <body>
      <div class="mobile-view-container">
@@ -571,7 +571,7 @@
              let touchendY = 0; // To detect vertical scroll intent
              const swipeThreshold = 50; // Minimum pixels for a swipe
 
-             // --- Core Functions (No internal comments as requested) ---
+             // --- Core Functions ---
              function loadAppData(){
                  const s=localStorage.getItem(ASSIGNMENTS_STORAGE_KEY);
                  appData = { assignments: [], frequency: {} };
@@ -1151,22 +1151,22 @@
                  calendarTooltip.classList.add('is-visible'); activeTooltipMarker = markerElement;
 
                  requestAnimationFrame(() => {
-                      if (!calendarTooltip.classList.contains('is-visible')) return;
-                      const tooltipRect = calendarTooltip.getBoundingClientRect();
-                       const rightEdge = dashRect.right - 10; const leftEdge = dashRect.left + 10;
-                      let newLeft = left; let newTransform = 'translateX(-50%) translateY(0)';
+                     if (!calendarTooltip.classList.contains('is-visible')) return;
+                     const tooltipRect = calendarTooltip.getBoundingClientRect();
+                      const rightEdge = dashRect.right - 10; const leftEdge = dashRect.left + 10;
+                     let newLeft = left; let newTransform = 'translateX(-50%) translateY(0)';
 
-                      // Check if tooltip goes off the right edge of the dashboard
-                      if ((left - (tooltipRect.width / 2) + tooltipRect.width) > (dashRect.right - dashRect.left - 10)) {
-                          newLeft = (dashRect.right - dashRect.left) - (tooltipRect.width / 2) - 10; // Align right edge
-                      }
-                      // Check if tooltip goes off the left edge of the dashboard
-                      else if ((left - (tooltipRect.width / 2)) < 10) {
-                          newLeft = (tooltipRect.width / 2) + 10; // Align left edge
-                      }
+                     // Check if tooltip goes off the right edge of the dashboard
+                     if ((left - (tooltipRect.width / 2) + tooltipRect.width) > (dashRect.right - dashRect.left - 10)) {
+                         newLeft = (dashRect.right - dashRect.left) - (tooltipRect.width / 2) - 10; // Align right edge
+                     }
+                     // Check if tooltip goes off the left edge of the dashboard
+                     else if ((left - (tooltipRect.width / 2)) < 10) {
+                         newLeft = (tooltipRect.width / 2) + 10; // Align left edge
+                     }
 
-                      calendarTooltip.style.left = `${newLeft}px`;
-                      calendarTooltip.style.transform = newTransform; // Keep centered horizontally
+                     calendarTooltip.style.left = `${newLeft}px`;
+                     calendarTooltip.style.transform = newTransform; // Keep centered horizontally
                   });
                  setTimeout(() => hideCalendarTooltip(markerElement), 3500);
              }
@@ -1267,6 +1267,43 @@
                  }
              }
 
+             // --- NEW: Function to schedule daily UI updates ---
+             function scheduleDailyUpdate() {
+                 const now = new Date();
+                 const tomorrow = new Date(now);
+                 // Set date to tomorrow
+                 tomorrow.setDate(now.getDate() + 1);
+                 // Set time to midnight (local time)
+                 tomorrow.setHours(0, 0, 0, 0);
+
+                 const msUntilMidnight = tomorrow.getTime() - now.getTime();
+
+                 console.log(`Scheduling next UI update in ${Math.round(msUntilMidnight / 1000 / 60)} minutes.`);
+
+                 // Clear any existing timer to prevent duplicates
+                 if (window.dailyUpdateTimer) {
+                     clearTimeout(window.dailyUpdateTimer);
+                 }
+
+                 // Set the timeout to run slightly after midnight
+                 window.dailyUpdateTimer = setTimeout(() => {
+                     console.log("Midnight reached! Updating UI...");
+                     try {
+                         // Re-run the core rendering logic.
+                         // initializeAppLogic() reloads data, renders all, updates dropdown, applies translations.
+                         initializeAppLogic();
+
+                         // Schedule the *next* update for the following midnight
+                         scheduleDailyUpdate();
+                     } catch (error) {
+                         console.error("Error during scheduled daily update:", error);
+                         // Optional: Retry scheduling after a delay in case of error
+                         // setTimeout(scheduleDailyUpdate, 60000); // Retry in 1 minute
+                     }
+                 }, msUntilMidnight + 1000); // Add a 1-second buffer to ensure midnight has passed
+             }
+             // --- END NEW FUNCTION ---
+
              async function initializeApp() {
                  console.log("Starting App Initialization...");
                  loadThemePreference();
@@ -1292,6 +1329,10 @@
                       console.log('Service Worker não é suportado neste navegador.');
                  }
                  // === Service Worker Registration END ===
+
+                 // --- NEW: Start the daily update timer after initial setup ---
+                 scheduleDailyUpdate();
+                 // --- END NEW ---
              }
 
              initializeApp();
