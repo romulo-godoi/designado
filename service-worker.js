@@ -1,20 +1,29 @@
 // Version 1.1 - Added calendar transition and language switcher functionality.
-const CACHE_NAME = 'jw-assignments-cache-v1.6'; // Incremented version
+// Version 1.6 - User mentioned previously
+// Version 1.7 - Added Gun.js, SEA.js, and Chart.js for P2P Log app
+const CACHE_NAME = 'pioneer-log-cache-v1.7'; // Incremented for new libraries
 
 const urlsToCache = [
   './', // Cache the root path
   './index.html', // Cache the main HTML file
   './manifest.json', // Cache the PWA manifest
   './translations.json', // Cache the translations file
-  // Make sure icon paths are correct relative to the SW file
-  './icons/icon-192x192.png', // Cache main icons
+
+  // Icons
+  './icon-192x192.png', // Adjusted path if icons are in the root like manifest
+  './icons/icon-192x192.png', // Keeping original if path varies
   './icons/icon-512x512.png',
-  // External resources (fonts, icons)
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css',
-  // Consider adding the web font files loaded by fontawesome if needed for full offline
-  // Example: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/webfonts/fa-solid-900.woff2'
-  // Check network tab in dev tools to see exact font files loaded.
+
+  // External JS libraries (NEW)
+  'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js',
+  'https://cdn.jsdelivr.net/npm/gun/gun.js',
+  'https://cdn.jsdelivr.net/npm/gun/sea.js', // For Gun security/encryption module
+
+  // External CSS resources (Fonts, Icons from previous script, if still used)
+  // Note: The Pioneer Log HTML didn't explicitly include Inter or FontAwesome.
+  // If they are used, uncomment and ensure paths are correct.
+  // 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+  // 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css',
 ];
 
 // Install event: Cache core assets
@@ -24,37 +33,27 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log(`Service Worker (${CACHE_NAME}): Cache aberto, adicionando arquivos principais:`, urlsToCache);
-        // Use cache.addAll for simpler initial caching if atomic failure is acceptable
-        // cache.addAll(urlsToCache)
-        // Or fetch individually for better error handling:
         const cachePromises = urlsToCache.map(urlToCache => {
-            // Use 'no-cache' to ensure fresh fetch during install, bypassing HTTP cache
-            return fetch(new Request(urlToCache, { cache: 'no-cache' }))
+            return fetch(new Request(urlToCache, { cache: 'no-cache' })) // Fetch fresh
                 .then(response => {
                     if (!response.ok) {
-                        // Don't cache non-200 responses during install
                         throw new Error(`Falha ao buscar ${urlToCache}: ${response.status} ${response.statusText}`);
                     }
-                    // Cache the valid response
                     return cache.put(urlToCache, response);
                 })
                 .catch(err => {
                     console.error(`Service Worker (${CACHE_NAME}): Falha ao adicionar ${urlToCache} ao cache na instalação:`, err);
-                    // Optionally decide if install should fail if a core asset is missing
-                    // throw err; // Uncomment to make install fail if any asset fails
+                    // throw err; // Uncomment to make install fail if any *critical* asset fails
                 });
         });
-        // Use Promise.allSettled if you want the SW to install even if some non-critical assets fail
-        return Promise.all(cachePromises);
+        return Promise.all(cachePromises.map(p => p.catch(e => e))); // Allow install even if some non-critical fail (but log error)
       })
       .then(() => {
-        console.log(`Service Worker (${CACHE_NAME}): Arquivos principais cacheados com sucesso (ou falhas ignoradas).`);
-        // Force the waiting service worker to become the active service worker.
+        console.log(`Service Worker (${CACHE_NAME}): Arquivos principais cacheados (ou falhas tratadas).`);
         return self.skipWaiting();
       })
       .catch(error => {
-        // This catch block will run if caches.open fails or if an error is thrown inside cachePromises and not caught
-        console.error(`Service Worker (${CACHE_NAME}): Falha geral ao cachear arquivos na instalação. Verifique todos os URLs em urlsToCache e sua conexão. Erro:`, error);
+        console.error(`Service Worker (${CACHE_NAME}): Falha geral ao cachear arquivos na instalação. Erro:`, error);
       })
   );
 });
@@ -66,7 +65,6 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          // Delete any caches that aren't the current one
           if (cacheName !== CACHE_NAME) {
             console.log(`Service Worker (${CACHE_NAME}): Removendo cache antigo:`, cacheName);
             return caches.delete(cacheName);
@@ -75,7 +73,6 @@ self.addEventListener('activate', (event) => {
       );
     }).then(() => {
       console.log(`Service Worker (${CACHE_NAME}): Ativado e caches antigos removidos.`);
-      // Tell the active service worker to take control of the page immediately.
       return self.clients.claim();
     })
   );
@@ -83,27 +80,31 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event: Serve from cache, fallback to network, cache new requests
 self.addEventListener('fetch', (event) => {
-  // Ignore non-GET requests and requests to Chrome extensions
   if (event.request.method !== 'GET' || event.request.url.startsWith('chrome-extension://')) {
     return;
   }
 
-  // Strategy: Cache first, then network for listed assets. Network first for others.
-  const isPrecached = urlsToCache.some(url => event.request.url.endsWith(url.replace('./', ''))); // Basic check if it's a core asset
+  // Check if the request URL is one of the core assets.
+  // For URLs with query parameters (like fonts.googleapis.com), matching the base URL is often sufficient.
+  const isPrecached = urlsToCache.some(cachedUrl => {
+    // Simple check for local files by ending.
+    if (cachedUrl.startsWith('./')) {
+        return event.request.url.endsWith(cachedUrl.substring(1)); // Match /index.html, not just index.html
+    }
+    // For external URLs, check if the request URL starts with the cached URL.
+    // This handles cases where CDN URLs might have query strings not included in urlsToCache.
+    return event.request.url.startsWith(cachedUrl);
+  });
+
 
   if (isPrecached) {
-      // Cache First for core assets
       event.respondWith(
           caches.match(event.request)
               .then((cachedResponse) => {
                   if (cachedResponse) {
-                      // console.log(`SW (${CACHE_NAME}): Servindo do cache: ${event.request.url}`);
                       return cachedResponse;
                   }
-                  // console.log(`SW (${CACHE_NAME}): Não encontrado no cache, buscando na rede: ${event.request.url}`);
-                  // Fallback to network if not in cache (should ideally be cached during install)
                   return fetch(event.request).then(networkResponse => {
-                      // Optional: Cache the response if fetched successfully (might happen if install failed partially)
                       if (networkResponse && networkResponse.ok) {
                           const responseToCache = networkResponse.clone();
                           caches.open(CACHE_NAME).then(cache => {
@@ -115,39 +116,35 @@ self.addEventListener('fetch', (event) => {
               })
               .catch(error => {
                   console.error(`SW (${CACHE_NAME}): Erro ao buscar (pré-cacheado): ${event.request.url}`, error);
-                  // Optionally return a fallback page/response here for offline scenarios
+                  // Potentially return a fallback for critical assets if fetch fails completely
               })
       );
   } else {
-      // Network First, then Cache for dynamic/other assets
       event.respondWith(
           fetch(event.request)
               .then((networkResponse) => {
-                  // Check if we received a valid response
                   if (networkResponse && networkResponse.ok) {
+                    // For non-precached assets, clone and cache them as they are requested.
+                    // This helps build up the cache for dynamic content or less critical assets.
                       const responseToCache = networkResponse.clone();
                       caches.open(CACHE_NAME)
                           .then((cache) => {
-                              // console.log(`SW (${CACHE_NAME}): Cacheando resposta da rede: ${event.request.url}`);
                               cache.put(event.request, responseToCache);
                           });
                   }
                   return networkResponse;
               })
               .catch(() => {
-                  // Network failed, try to serve from cache as a fallback
-                  // console.log(`SW (${CACHE_NAME}): Rede falhou, tentando cache para: ${event.request.url}`);
                   return caches.match(event.request)
                       .then(cachedResponse => {
                           if (cachedResponse) {
                               return cachedResponse;
                           }
-                          // Optional: Return a generic offline fallback if nothing is cached
                           console.warn(`SW (${CACHE_NAME}): Sem cache e sem rede para: ${event.request.url}`);
-                          // return caches.match('/offline.html'); // Example fallback page
                           return new Response("Network error and no cache available.", {
                               status: 404,
-                              statusText: "Not Found"
+                              statusText: "Not Found",
+                              headers: { 'Content-Type': 'text/plain' }
                           });
                       });
               })
